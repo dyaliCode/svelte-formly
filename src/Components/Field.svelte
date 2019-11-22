@@ -66,7 +66,7 @@
   }
 </style>
 
-{#each fields as field (field.id)}
+{#each fields as field}
   <div class="form-group">
     {#if field.label}
       <label for={field.id}>{field.label}</label>
@@ -85,8 +85,7 @@
         required={field.required}
         disabled={field.disabled}
         value={field.value}
-        on:changeValue={changeValueHander}
-        myform={myForm} />
+        on:changeValue={changeValueHander} />
     {:else if field.type == 'textarea'}
       <Textarea
         label={field.label}
@@ -97,7 +96,6 @@
         placeholder={field.placeholder}
         required={field.required}
         disabled={field.disabled}
-        options={field.options}
         on:changeValue={changeValueHander} />
     {:else if field.type == 'select'}
       <Select
@@ -106,9 +104,6 @@
         id={field.id}
         name={field.name}
         classe={field.class}
-        placeholder={field.placeholder}
-        required={field.required}
-        disabled={field.disabled}
         options={field.options}
         on:changeValue={changeValueHander} />
     {:else if field.type == 'radio'}
@@ -127,10 +122,8 @@
     {/if}
 
     <!-- Error messages -->
-    <!-- <p>{JSON.stringify($myform[name].valid)}</p> -->
     {#if $myForm[field.name].errors.length > 0}
       <div class="invalid-feedback" style="display:block">
-        <!-- <p>{JSON.stringify(fieldsToValidate[field.name].validators)}</p> -->
         {#if $myForm[field.name].errors.includes('required')}
           {field.name} is required!
         {:else if $myForm[field.name].errors.includes('min')}

@@ -3,7 +3,7 @@
   import { form } from "../Validation/";
   import { valuesForm } from "./stores.js";
 
-  //Import components.
+  // Import components.
   import Input from "./Input.svelte";
   import Textarea from "./Textarea.svelte";
   import Select from "./Select.svelte";

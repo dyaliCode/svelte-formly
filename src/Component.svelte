@@ -14,7 +14,7 @@
       validation: ["required", "min:6"]
     },
     {
-      type: "text",
+      type: "textarea",
       name: "lastname",
       value: "",
       id: "lastname",
