@@ -1,9 +1,9 @@
 {
-  "name": "@arabdevelop/svelte-formly",
+  "name": "svelte-formly",
   "svelte": "src/Component.svelte",
   "module": "dist/index.mjs",
   "main": "dist/component.min.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Kamal Sahmoud <maroc.develop@gmail.com>",
   "contributors": [
     "Kamal Sahmoud <maroc.develop@gmail.com>"
@@ -54,7 +54,8 @@
     "svelte-preprocess": "^2.15.1"
   },
   "keywords": [
-    "svelte"
+    "svelte",
+    "svelte-formly"
   ],
   "files": [
     "dist",
