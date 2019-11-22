@@ -15,14 +15,14 @@ by [@kamalkech](https://github.com/kamalkech)
 
 ## Installation
 
-npm i @arabdevelop/svelte-formly
+npm i svelte-formly
 
 ## Usage
 
 ```javascript
 <script>
   import { onDestroy } from "svelte";
-  import { Field, valuesForm } from "@arabdevelop/svelte-formly/src";
+  import { Field, valuesForm } from "svelte-formly/src";
 
   const fields = [
     {
