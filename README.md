@@ -22,7 +22,7 @@ npm i @arabdevelop/svelte-formly
 ```javascript
 <script>
   import { onDestroy } from "svelte";
-  import { Field, valuesForm } from "svelte-formly/src";
+  import { Field, valuesForm } from "@arabdevelop/svelte-formly/src";
 
   const fields = [
     {
@@ -69,8 +69,8 @@ npm i @arabdevelop/svelte-formly
 
 ```html
 <h2>{message}</h2>
-<button on:submit|preventDefault="{onSubmit}" novalidate>
+<form on:submit|preventDefault="{onSubmit}" novalidate>
   <Field {fields} />
   <button class="btn btn-primary" type="submit">Submit</button>
-</button>
+</form>
 ```

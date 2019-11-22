@@ -43,6 +43,12 @@
   onDestroy([valuesForm, myForm]);
 </script>
 
+<style>
+  .form-group {
+    margin-bottom: 10px;
+  }
+</style>
+
 {#each fields as field (field.id)}
   <div class="form-group">
     {#if field.label}
