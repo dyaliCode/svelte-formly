@@ -3,25 +3,32 @@
   import { form } from "../Validation/";
   import { valuesForm } from "./stores.js";
 
-  //Import components.
+  // Import components.
   import Input from "./Input.svelte";
   import Textarea from "./Textarea.svelte";
   import Select from "./Select.svelte";
   import Radio from "./Radio.svelte";
 
+  // Declar variables;
   export let fields = [];
   let values = [];
+  let isValidForm = true;
 
-  onMount(() => {
-    $valuesForm;
-  });
+  // Set valeurs form and status validation.
+  const setValuesForm = (isValidForm, values) => {
+    valuesForm.set({
+      isValidForm,
+      values: { ...values }
+    });
+  };
 
   // Change value
   function changeValueHander(event) {
     values[`${event.detail.name}`] = event.detail.value;
-    valuesForm.set(values);
+    setValuesForm(isValidForm, values);
   }
 
+  // Validation Form.
   let fieldsToValidate = {};
   const myForm = form(() => {
     if (fields.length > 0) {
@@ -39,7 +46,17 @@
 
     return fieldsToValidate;
   });
+  myForm.subscribe(data => {
+    isValidForm = data.valid;
+    setValuesForm(isValidForm, values);
+  });
 
+  // Lifecycle mount to subscribe.
+  onMount(() => {
+    $valuesForm;
+  });
+
+  // Lifecycle destroy to unbscribe.
   onDestroy([valuesForm, myForm]);
 </script>
 

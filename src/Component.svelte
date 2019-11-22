@@ -1,7 +1,8 @@
 <script>
   import { onMount, onDestroy } from "svelte";
-  import { valuesForm } from "./Components/stores.js";
-  import Field from "./Components/Field.svelte";
+  import { valuesForm, Field } from "./index.js";
+
+  let message = "";
 
   const fields = [
     {
@@ -29,34 +30,25 @@
     }
   ];
 
-  let values;
-
-  function onSubmit(evt) {
-    var form = evt.target;
-  }
-
-  onMount(() => {
+  function onSubmit() {
     valuesForm.subscribe(data => {
-      values = data;
+      if (data.isValidForm) {
+        message = "Congratulation! now your form is valid";
+      } else {
+        message = "Your form is not valid!";
+      }
     });
-  });
+  }
 
   onDestroy(valuesForm);
 </script>
-
-<style>
-  .card {
-    margin-top: 40px;
-    background-color: #fafafa;
-    border: solid 1px #e0e2e3;
-  }
-</style>
 
 <div class="container">
   <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
+          <h2>{message}</h2>
           <h5 class="card-title">Card title</h5>
           <form on:submit|preventDefault={onSubmit} novalidate>
             <Field {fields} />

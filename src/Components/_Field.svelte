@@ -1,54 +1,75 @@
 <script>
+  import { onMount, onDestroy } from "svelte";
+  import { form } from "../Validation/";
+  import { valuesForm } from "./stores.js";
+
+  //Import components.
   import Input from "./Input.svelte";
   import Textarea from "./Textarea.svelte";
   import Select from "./Select.svelte";
   import Radio from "./Radio.svelte";
 
-  import { onMount } from "svelte";
-  import { get } from "svelte/store";
-  import { form } from "svelte-forms";
-  import { valuesForm } from "./stores.js";
-
+  // Declar variables;
   export let fields = [];
   let values = [];
+  let isValidForm = true;
 
+  // Set valeurs form and status validation.
+  const setValuesForm = (isValidForm, values) => {
+    valuesForm.set({
+      isValidForm,
+      values: { ...values }
+    });
+  };
+
+  // Change value
   function changeValueHander(event) {
     values[`${event.detail.name}`] = event.detail.value;
-    valuesForm.set(values);
+    setValuesForm(isValidForm, values);
   }
 
-  onMount(() => {
-    $valuesForm;
-    console.log("$valuesForm", $valuesForm);
+  // Validation Form.
+  let fieldsToValidate = {};
+  const myForm = form(() => {
+    if (fields.length > 0) {
+      fields.map(field => {
+        let { validation } = field;
+        const fieldValidate = {
+          [field.name]: {
+            value: values[field.name] ? values[field.name] : "",
+            validators: validation
+          }
+        };
+        fieldsToValidate = { ...fieldsToValidate, ...fieldValidate };
+      });
+    }
+
+    return fieldsToValidate;
+  });
+  myForm.subscribe(data => {
+    isValidForm = data.valid;
+    setValuesForm(isValidForm, values);
   });
 
-  let fieldsToValidate = {};
-  if (fields.length > 0) {
-    fields.map(field => {
-      let { validation } = field;
-      const fieldValidate = {
-        [field.name]: {
-          value: values[field.name] ? values[field.name] : "",
-          validators: validation
-        }
-      };
-      fieldsToValidate = fieldValidate;
-    });
-  }
+  // Lifecycle mount to subscribe.
+  onMount(() => {
+    $valuesForm;
+  });
 
-  console.log("fieldsToValidate", fieldsToValidate);
-
-  const myForm = form(() => fieldsToValidate);
+  // Lifecycle destroy to unbscribe.
+  onDestroy([valuesForm, myForm]);
 </script>
+
+<style>
+  .form-group {
+    margin-bottom: 10px;
+  }
+</style>
 
 {#each fields as field (field.id)}
   <div class="form-group">
     {#if field.label}
       <label for={field.id}>{field.label}</label>
-    {/if}
-
-    {#if $myForm.lastname.errors.includes('min')}
-      <p>The name is invalid</p>
     {/if}
 
     {#if field.type == 'text' || field.type == 'password' || field.type == 'email' || field.type == 'number' || field.type == 'tel'}
@@ -64,7 +85,8 @@
         required={field.required}
         disabled={field.disabled}
         value={field.value}
-        on:changeValue={changeValueHander} />
+        on:changeValue={changeValueHander}
+        myform={myForm} />
     {:else if field.type == 'textarea'}
       <Textarea
         label={field.label}
@@ -103,5 +125,25 @@
         {field.description}
       </small>
     {/if}
+
+    <!-- Error messages -->
+    <!-- <p>{JSON.stringify($myform[name].valid)}</p> -->
+    {#if $myForm[field.name].errors.length > 0}
+      <div class="invalid-feedback" style="display:block">
+        <!-- <p>{JSON.stringify(fieldsToValidate[field.name].validators)}</p> -->
+        {#if $myForm[field.name].errors.includes('required')}
+          {field.name} is required!
+        {:else if $myForm[field.name].errors.includes('min')}
+          {field.name} min
+        {:else if $myForm[field.name].errors.includes('max')}
+          {field.name} max
+        {:else if $myForm[field.name].errors.includes('email')}
+          {field.name} is invalid email
+        {/if}
+      </div>
+    {:else}
+      <div class="valid-feedback">Looks good!</div>
+    {/if}
+
   </div>
 {/each}

@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="186" height="90" src="https://user-images.githubusercontent.com/218949/44782765-377e7c80-ab80-11e8-9dd8-fce0e37c235b.png" alt="Beyonk" />
+  <img width="100%" height="300" src="./logo.png" alt="Svelte Formly" />
 </p>
 
 # Svelte Formly
@@ -22,7 +22,9 @@ npm i svelte-formly
 ```javascript
 <script>
   import { onDestroy } from "svelte";
-  import { Field, valuesForm } from "svelte-formly/src";
+  import { valuesForm, Field } from "svelte-formly";
+
+  let message = "";
 
   const fields = [
     {
@@ -50,10 +52,7 @@ npm i svelte-formly
     }
   ];
 
-  let message = "";
-
-  function onSubmit(evt) {
-    var form = evt.target;
+  function onSubmit() {
     valuesForm.subscribe(data => {
       if (data.isValidForm) {
         message = "Congratulation! now your form is valid";
