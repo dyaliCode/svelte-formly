@@ -1,0 +1,81 @@
+{
+  "name": "@arabdevelop/svelte-formly",
+  "svelte": "src/Component.svelte",
+  "module": "dist/index.mjs",
+  "main": "dist/component.min.js",
+  "version": "0.0.0",
+  "author": "Kamal Sahmoud <maroc.develop@gmail.com>",
+  "contributors": [
+    "Kamal Sahmoud <maroc.develop@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arabdevelop/svelte-formly"
+  },
+  "scripts": {
+    "preinstall": "[ -z \"$NPM_TOKEN\" ] && echo 'local' || echo \"//registry.npmjs.org/:_authToken=${NPM_TOKEN}\" > .npmrc",
+    "build": "rollup -c",
+    "dev": "WATCH=true rollup -cw",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint src/**",
+    "test": "NODE_ENV=unit jest --no-cache"
+  },
+  "browserslist": [
+    "> 0.25%"
+  ],
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@beyonk/eslint-config": "^4.0.1",
+    "@hapi/code": "^6.0.0",
+    "@testing-library/dom": "^5.6.1",
+    "@testing-library/jest-dom": "^4.0.0",
+    "@testing-library/svelte": "^1.7.1",
+    "autoprefixer": "^9.6.1",
+    "dayjs": "^1.8.15",
+    "eslint": "^6.1.0",
+    "esm": "^3.2.25",
+    "fetch-mock": "^7.3.9",
+    "jest": "^24.8.0",
+    "jest-transform-svelte": "^2.0.2",
+    "jsdom": "^15.1.1",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^6.2.0",
+    "postcss": "^7.0.17",
+    "rollup": "^1.19.4",
+    "rollup-plugin-browsersync": "^1.0.0",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-svelte": "^5.0.0",
+    "rollup-plugin-terser": "^5.1.1",
+    "sass": "^1.22.10",
+    "svelte": "^3.8.0",
+    "svelte-preprocess": "^2.15.1"
+  },
+  "keywords": [
+    "svelte"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "eslintConfig": {
+    "extends": "@beyonk",
+    "plugins": [
+      "mocha"
+    ],
+    "globals": {
+      "it": true,
+      "describe": true,
+      "before": true,
+      "beforeEach": true,
+      "after": true,
+      "afterEach": true,
+      "context": true
+    }
+  },
+  "dependencies": {
+    "clsx": "^1.0.4"
+  }
+}
