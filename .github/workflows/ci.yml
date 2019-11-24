@@ -1,0 +1,44 @@
+name: svelte-formly
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+
+    - uses: actions/checkout@v1
+
+    - name: Restore cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.OS }}-yarn
+        restore-keys: |
+          ${{ runner.OS }}-yarn
+    
+    - name: Setup NodeJS
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build
+      run: yarn build
+
+    - name: Test
+      run: yarn test
+
+    - name: Publish to npm
+      uses: pascalgn/npm-publish-action@1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
