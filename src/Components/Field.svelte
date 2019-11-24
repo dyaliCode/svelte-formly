@@ -119,15 +119,17 @@
 
     <!-- Error messages -->
     {#if !isValidForm}
-      {#if $myForm[field.name].validation.errors.includes('required')}
-        {field.name} is required!
-      {:else if $myForm[field.name].validation.errors.includes('min')}
-        {field.name} min
-      {:else if $myForm[field.name].validation.errors.includes('max')}
-        {field.name} max
-      {:else if $myForm[field.name].validation.errors.includes('email')}
-        {field.name} is invalid email
-      {/if}
+      <div class="invalid-feedback" style="display:block">
+        {#if $myForm[field.name].validation.errors.includes('required')}
+          {field.name} is required!
+        {:else if $myForm[field.name].validation.errors.includes('min')}
+          {field.name} min
+        {:else if $myForm[field.name].validation.errors.includes('max')}
+          {field.name} max
+        {:else if $myForm[field.name].validation.errors.includes('email')}
+          {field.name} is invalid email
+        {/if}
+      </div>
     {:else}
       <div class="valid-feedback">Looks good!</div>
     {/if}

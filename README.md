@@ -56,17 +56,17 @@ npm i svelte-formly
       name: "gender",
       radios: [
         {
-          id: 'female',
-          value: 'female',
-          title: 'Female'
+          id: "female",
+          value: "female",
+          title: "Female"
         },
         {
-          id: 'male',
-          value: 'male',
-          title: 'Male'
+          id: "male",
+          value: "male",
+          title: "Male"
         }
       ]
-    }
+    },
     {
       type: "select",
       name: "city",
@@ -75,14 +75,12 @@ npm i svelte-formly
       validation: ["required"],
       options: [
         {
-          {
-            value: 1,
-            title: 'Agadir'
-          },
-          {
-            value: 2,
-            title: 'Casablanca'
-          }
+          value: 1,
+          title: "Agadir"
+        },
+        {
+          value: 2,
+          title: "Casablanca"
         }
       ]
     }
