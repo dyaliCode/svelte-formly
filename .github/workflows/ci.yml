@@ -5,11 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -19,9 +15,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: node_modules
-        key: ${{ runner.OS }}-yarn
+        key: ${{ runner.OS }}-npm
         restore-keys: |
-          ${{ runner.OS }}-yarn
+          ${{ runner.OS }}-npm
     
     - name: Setup NodeJS
       uses: actions/setup-node@v1
@@ -29,13 +25,13 @@ jobs:
         node-version: '10.x'
     
     - name: Install dependencies
-      run: yarn install
+      run: npm install
 
     - name: Build
-      run: yarn build
+      run: npm run build
 
     - name: Test
-      run: yarn test
+      run: npm run test
 
     - name: Publish to npm
       uses: pascalgn/npm-publish-action@1.1.0
