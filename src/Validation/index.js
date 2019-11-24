@@ -2,149 +2,66 @@ import { afterUpdate } from "svelte";
 import { writable, get } from "svelte/store";
 import * as rules from "./rules";
 
-function getValue(field) {
-  return field.value;
-}
+/**
+ * Validation fields.
+ * @param {object fields to validate} fn
+ * @param {default fields with config} storeValues
+ */
+function validateFields(fn, storeValues) {
+  let fields = fn.call();
+  let $storeValue = get(storeValues);
 
-function isPromise(obj) {
-  // Standard promise API always has a `then` method
-  return !!obj.then;
-}
-
-function validate(value, { field, validator, observable }) {
-  let valid = true;
-  let pending = false;
-  let rule;
-
-  if (typeof validator === "function") {
-    const resp = validator.call(null, value);
-
-    if (isPromise(resp)) {
-      pending = true;
-      resp.then(({ name, valid }) => {
-        observable.update(n => {
-          n[field] = n[field] || { errors: [] };
-
-          n[field].pending = false;
-          n[field].valid = valid;
-
-          if (!valid) {
-            n[field].errors.push(rule);
-          }
-
-          return n;
-        });
-      });
+  Object.keys(fields).map(key => {
+    const field = fields[key];
+    if (field.validators) {
+      const statusObjField = validate(field);
+      console.log(key, statusObjField);
+      fields[key] = { ...fields[key], ...statusObjField };
+      if (statusObjField.validation.errors.length > 0) {
+        $storeValue.valid = false;
+      }
     } else {
-      valid = resp.valid;
-      rule = resp.name;
+      fields[key] = {
+        ...fields[key],
+        validation: { errors: [], dirty: false }
+      };
     }
-  } else {
-    const params = validator.split(/:/g);
-    rule = params.shift();
-    valid = rules[rule].call(null, value, params);
-  }
+  });
 
-  return [valid, rule, pending];
+  fields = { ...fields, valid: $storeValue.valid };
+  storeValues.set(fields);
 }
 
-function field(name, config, observable, { stopAtFirstError }) {
-  const { value, validators = [] } = config;
+/**
+ * Validate field by rule.
+ * @param {configs field} field
+ */
+function validate(field) {
+  const { value, validators } = field;
   let valid = true;
-  let pending = false;
+  let rule;
   let errors = [];
 
-  for (let i = 0; i < validators.length; i++) {
-    const [isValid, rule, isPending] = validate(value, {
-      field: name,
-      validator: validators[i],
-      observable
-    });
-
-    if (!pending && isPending) {
-      pending = true;
-    }
-
-    if (!isValid) {
-      valid = false;
+  validators.map(validator => {
+    const args = validator.split(/:/g);
+    rule = args.shift();
+    valid = rules[rule].call(null, value, args);
+    console.log(rule, valid);
+    if (!valid) {
       errors = [...errors, rule];
-
-      if (stopAtFirstError) break;
-    }
-  }
-
-  return { valid, errors, pending };
-}
-
-export function bindClass(
-  node,
-  { form, name, valid = "valid", invalid = "invalid" }
-) {
-  const key = name || node.getAttribute("name");
-
-  const unsubscribe = form.subscribe(context => {
-    if (context.dirty && context[key] && context[key].valid) {
-      node.classList.add(valid);
-    } else {
-      node.classList.remove(valid);
-    }
-
-    if (context.dirty && context[key] && !context[key].valid) {
-      node.classList.add(invalid);
-    } else {
-      node.classList.remove(invalid);
     }
   });
 
-  return {
-    destroy: unsubscribe
-  };
+  return { ...field, validation: { errors, dirty: errors.length > 0 } };
 }
 
-export function form(
-  fn,
-  config = { initCheck: false, stopAtFirstError: true }
-) {
-  const storeValue = writable({ oldValues: {}, dirty: false });
-
-  afterUpdate(() => walkThroughFields(fn, storeValue, config));
-
-  walkThroughFields(fn, storeValue, config);
-
-  return storeValue;
-}
-
-function walkThroughFields(fn, observable, config) {
-  const fields = fn.call();
-  const returnedObject = { oldValues: {}, dirty: false };
-  const context = get(observable);
-
-  returnedObject.dirty = context.dirty;
-
-  Object.keys(fields).forEach(key => {
-    const value = getValue(fields[key]);
-
-    if (value !== context.oldValues[key]) {
-      returnedObject[key] = field(key, fields[key], observable, config);
-    } else {
-      returnedObject[key] = context[key];
-    }
-
-    returnedObject.oldValues[key] = value;
-
-    if (
-      !context.dirty &&
-      context.oldValues[key] !== undefined &&
-      value !== context.oldValues[key]
-    ) {
-      returnedObject.dirty = true;
-    }
-  });
-
-  returnedObject.valid = !Object.keys(returnedObject).find(f => {
-    if (["oldValues", "dirty"].includes(f)) return false;
-    return !returnedObject[f].valid;
-  });
-
-  observable.set(returnedObject);
+/**
+ * Validate fields form and store status.
+ * @param {object fields to validate} fn
+ */
+export function validator(fn) {
+  const storeValues = writable({ valid: true });
+  // validateFields(fn, storeValues);
+  afterUpdate(() => validateFields(fn, storeValues));
+  return storeValues;
 }

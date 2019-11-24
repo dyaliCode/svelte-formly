@@ -2,20 +2,14 @@
   import { createEventDispatcher, onMount } from "svelte";
   import clsx from "clsx";
 
-  export let label;
-  export let type = "text";
   export let id = "";
   export let name = "";
   export let value = "";
   export let classe = "";
-  export let placeholder = "";
-  export let required = false;
-  export let disabled = false;
-  export let min = false;
-  export let max = false;
-  export let readonly = false;
   export let rows = 4;
   export let cols = 50;
+  export let required = false;
+  export let disabled = false;
   const formControlClass = "form-control";
 
   const dispatch = createEventDispatcher();
@@ -36,7 +30,6 @@
 </script>
 
 <textarea
-  {type}
   {id}
   {name}
   class={clsx(classe, formControlClass)}
@@ -44,7 +37,7 @@
   {disabled}
   {rows}
   {cols}
-  on:input={onChangerValue} />
-
-<div class="valid-feedback">Looks good!</div>
-<div class="invalid-feedback">Please choose a {name}.</div>
+  s
+  on:input={onChangerValue}>
+  {value}
+</textarea>

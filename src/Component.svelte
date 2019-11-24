@@ -8,30 +8,45 @@
     {
       type: "text",
       name: "firstname",
-      value: "",
       id: "firstname",
-      placeholder: "Tap your first name",
-      validation: ["required", "min:6"]
+      placeholder: "Tap your first name"
+      // validation: ["required", "min:6"]
     },
     {
       type: "textarea",
-      name: "lastname",
-      value: "",
-      id: "lastname",
-      placeholder: "Tap your lastname"
+      name: "message",
+      label: "Message",
+      placeholder: "Add your message",
+      disabled: true,
+      value: "My"
     },
     {
-      type: "email",
-      name: "email",
-      value: "",
-      id: "email",
-      placeholder: "Tap your email",
-      validation: ["required", "email"]
+      type: "radio",
+      name: "ville",
+      label: "ville",
+      validation: ["required"],
+      radios: [
+        {
+          value: null,
+          title: "Any"
+        },
+        {
+          value: 1,
+          title: "Agadir",
+          id: "ville1"
+        },
+        {
+          value: 2,
+          title: "Casablanca",
+          id: "ville2"
+        }
+      ]
     }
   ];
 
   function onSubmit() {
     valuesForm.subscribe(data => {
+      console.log("data", data);
       if (data.isValidForm) {
         message = "Congratulation! now your form is valid";
       } else {

@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy } from "svelte";
-  import { form } from "../Validation/";
+  import { validator } from "../Validation/";
   import { valuesForm } from "./stores.js";
 
   // Import components.
@@ -30,13 +30,14 @@
 
   // Validation Form.
   let fieldsToValidate = {};
-  const myForm = form(() => {
+  const myForm = validator(() => {
     if (fields.length > 0) {
       fields.map(field => {
         let { validation } = field;
+        const value = field.value ? field.value : "";
         const fieldValidate = {
           [field.name]: {
-            value: values[field.name] ? values[field.name] : "",
+            value: values[field.name] ? values[field.name] : value,
             validators: validation
           }
         };
@@ -74,41 +75,36 @@
 
     {#if field.type == 'text' || field.type == 'password' || field.type == 'email' || field.type == 'number' || field.type == 'tel'}
       <Input
-        label={field.label}
         type={field.type}
         id={field.id}
         name={field.name}
+        value={field.value}
         classe={field.class}
         placeholder={field.placeholder}
         min={field.min}
         max={field.max}
-        required={field.required}
         disabled={field.disabled}
-        value={field.value}
         on:changeValue={changeValueHander} />
     {:else if field.type == 'textarea'}
       <Textarea
-        label={field.label}
-        type={field.type}
         id={field.id}
         name={field.name}
+        value={field.value}
         classe={field.class}
-        placeholder={field.placeholder}
-        required={field.required}
+        rows={field.rows}
+        cols={field.cols}
         disabled={field.disabled}
         on:changeValue={changeValueHander} />
     {:else if field.type == 'select'}
       <Select
-        label={field.label}
-        type={field.type}
         id={field.id}
         name={field.name}
         classe={field.class}
+        disabled={field.readonly}
         options={field.options}
         on:changeValue={changeValueHander} />
     {:else if field.type == 'radio'}
       <Radio
-        label={field.label}
         name={field.name}
         radios={field.radios}
         aligne={field.aligne}
@@ -122,18 +118,16 @@
     {/if}
 
     <!-- Error messages -->
-    {#if $myForm[field.name].errors.length > 0}
-      <div class="invalid-feedback" style="display:block">
-        {#if $myForm[field.name].errors.includes('required')}
-          {field.name} is required!
-        {:else if $myForm[field.name].errors.includes('min')}
-          {field.name} min
-        {:else if $myForm[field.name].errors.includes('max')}
-          {field.name} max
-        {:else if $myForm[field.name].errors.includes('email')}
-          {field.name} is invalid email
-        {/if}
-      </div>
+    {#if !isValidForm}
+      {#if $myForm[field.name].validation.errors.includes('required')}
+        {field.name} is required!
+      {:else if $myForm[field.name].validation.errors.includes('min')}
+        {field.name} min
+      {:else if $myForm[field.name].validation.errors.includes('max')}
+        {field.name} max
+      {:else if $myForm[field.name].validation.errors.includes('email')}
+        {field.name} is invalid email
+      {/if}
     {:else}
       <div class="valid-feedback">Looks good!</div>
     {/if}

@@ -1,7 +1,13 @@
 export function required(val, args) {
-  if (val === undefined || val === null) return false;
+  if (
+    val === undefined ||
+    val === null ||
+    val === "undefined" ||
+    val === "null"
+  )
+    return false;
 
-  if (typeof val === 'string') {
+  if (typeof val === "string") {
     const tmp = val.replace(/\s/g, "");
 
     return tmp.length > 0;

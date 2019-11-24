@@ -2,25 +2,17 @@
   import { createEventDispatcher, onMount } from "svelte";
   import clsx from "clsx";
 
-  export let label;
-  export let type = "text";
   export let id = "";
   export let name = "";
-  export let value = "";
   export let classe = "";
-  export let placeholder = "";
-  export let required = false;
-  export let disabled = false;
-  export let size = undefined;
-  export let invalid = false;
-  export let readonly = false;
-  const formControlClass = "form-control";
-
   export let options = [];
+  export let disabled = false;
+  const formControlClass = "form-control";
 
   const dispatch = createEventDispatcher();
 
   function onChangeValue(event) {
+    console.log("event.target.value", event.target.value);
     dispatch("changeValue", {
       name: name,
       value: event.target.value
@@ -40,8 +32,8 @@
 <select
   {id}
   {name}
-  {value}
   class={clsx(classe, formControlClass)}
+  {disabled}
   on:input={onChangeValue}>
   {#each options as option (option.value)}
     <option value={option.value}>{option.title}</option>
@@ -49,6 +41,3 @@
     <option>Any</option>
   {/each}
 </select>
-
-<div class="valid-feedback">Looks good!</div>
-<div class="invalid-feedback">Please choose a {label}.</div>
