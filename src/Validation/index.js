@@ -15,7 +15,6 @@ function validateFields(fn, storeValues) {
     const field = fields[key];
     if (field.validators) {
       const statusObjField = validate(field);
-      console.log(key, statusObjField);
       fields[key] = { ...fields[key], ...statusObjField };
       if (statusObjField.validation.errors.length > 0) {
         $storeValue.valid = false;
@@ -46,7 +45,6 @@ function validate(field) {
     const args = validator.split(/:/g);
     rule = args.shift();
     valid = rules[rule].call(null, value, args);
-    console.log(rule, valid);
     if (!valid) {
       errors = [...errors, rule];
     }
