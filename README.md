@@ -102,6 +102,18 @@ npm i svelte-formly
 </script>
 ```
 
+```html
+<h2>{message}</h2>
+<form on:submit|preventDefault="{onSubmit}" novalidate>
+  <Field {fields} />
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+```
+
+<hr>
+
+### Params
+
 Inputs : text, password, email, number, tel
 
 ```javascript
@@ -222,12 +234,4 @@ List rules to validate form.
     }
   ]
 </script>
-```
-
-```html
-<h2>{message}</h2>
-<form on:submit|preventDefault="{onSubmit}" novalidate>
-  <Field {fields} />
-  <button class="btn btn-primary" type="submit">Submit</button>
-</form>
 ```
