@@ -12,7 +12,6 @@
   const dispatch = createEventDispatcher();
 
   function onChangeValue(event) {
-    console.log("event.target.value", event.target.value);
     dispatch("changeValue", {
       name: name,
       value: event.target.value

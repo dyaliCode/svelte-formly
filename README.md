@@ -90,6 +90,7 @@ npm i svelte-formly
     valuesForm.subscribe(data => {
       if (data.isValidForm) {
         message = "Congratulation! now your form is valid";
+        const values = data.values;
       } else {
         message = "Your form is not valid!";
       }

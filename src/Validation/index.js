@@ -9,7 +9,7 @@ import * as rules from "./rules";
  */
 function validateFields(fn, storeValues) {
   let fields = fn.call();
-  let $storeValue = get(storeValues);
+  let valid = true;
 
   Object.keys(fields).map(key => {
     const field = fields[key];
@@ -17,7 +17,7 @@ function validateFields(fn, storeValues) {
       const statusObjField = validate(field);
       fields[key] = { ...fields[key], ...statusObjField };
       if (statusObjField.validation.errors.length > 0) {
-        $storeValue.valid = false;
+        valid = false;
       }
     } else {
       fields[key] = {
@@ -27,7 +27,7 @@ function validateFields(fn, storeValues) {
     }
   });
 
-  fields = { ...fields, valid: $storeValue.valid };
+  fields = { ...fields, valid };
   storeValues.set(fields);
 }
 
@@ -59,7 +59,6 @@ function validate(field) {
  */
 export function validator(fn) {
   const storeValues = writable({ valid: true });
-  // validateFields(fn, storeValues);
   afterUpdate(() => validateFields(fn, storeValues));
   return storeValues;
 }
