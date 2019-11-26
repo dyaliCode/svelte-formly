@@ -36,7 +36,7 @@
         value={radio.value}
         checked={i === 0}
         on:input={onChangeValue} />
-      {radio.title}
+      <span>{radio.title}</span>
     </label>
   </div>
 {/each}

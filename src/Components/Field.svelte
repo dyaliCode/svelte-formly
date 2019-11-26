@@ -1,18 +1,33 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import clsx from "clsx";
   import { validator } from "../Validation/";
   import { valuesForm } from "./stores.js";
 
   // Import components.
+  import Tag from "./Tag.svelte";
   import Input from "./Input.svelte";
   import Textarea from "./Textarea.svelte";
   import Select from "./Select.svelte";
   import Radio from "./Radio.svelte";
+  import Message from "./Message.svelte";
 
   // Declar variables;
   export let fields = [];
   let values = [];
   let isValidForm = true;
+  let defaultAttributes = {
+    field: {
+      prefix: {
+        tag: "div",
+        classes: ["default-field"]
+      }
+    },
+    description: {
+      tag: "div",
+      classes: [""]
+    }
+  };
 
   // Set valeurs form and status validation.
   const setValuesForm = (isValidForm, values) => {
@@ -68,11 +83,13 @@
 </style>
 
 {#each fields as field}
-  <div class="form-group">
+  {field.wrapper.tag}
+  <Tag tag="div" classes={clsx(field.wrapper.classes)}>
+    <!-- Label -->
     {#if field.label}
       <label for={field.id}>{field.label}</label>
     {/if}
-
+    <!-- Field -->
     {#if field.type == 'text' || field.type == 'password' || field.type == 'email' || field.type == 'number' || field.type == 'tel'}
       <Input
         type={field.type}
@@ -110,29 +127,17 @@
         aligne={field.aligne}
         on:changeValue={changeValueHander} />
     {/if}
-
+    <!-- Description -->
     {#if field.description}
-      <small id={field.id} class="form-text text-muted">
-        {field.description}
-      </small>
+      <Tag tag={field.description.tag} classes={field.description.classes}>
+        {field.description.text}
+      </Tag>
     {/if}
-
     <!-- Error messages -->
     {#if !isValidForm}
       {#if $myForm[field.name].validation.errors.length > 0}
-        <div class="invalid-feedback" style="display:block">
-          {#if $myForm[field.name].validation.errors.includes('required')}
-            {field.name} is required!
-          {:else if $myForm[field.name].validation.errors.includes('min')}
-            {field.name} min
-          {:else if $myForm[field.name].validation.errors.includes('max')}
-            {field.name} max
-          {:else if $myForm[field.name].validation.errors.includes('email')}
-            {field.name} is invalid email
-          {/if}
-        </div>
+        <Message validation={$myForm[field.name].validation} {field} />
       {/if}
     {/if}
-
-  </div>
+  </Tag>
 {/each}

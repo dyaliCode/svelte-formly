@@ -1,6 +1,6 @@
 {
   "name": "svelte-formly",
-  "svelte": "src/index.js",
+  "svelte": "src/Component.svelte",
   "module": "dist/index.mjs",
   "main": "dist/component.min.js",
   "version": "0.0.11",
