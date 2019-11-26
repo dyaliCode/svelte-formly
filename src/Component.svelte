@@ -21,9 +21,10 @@
         text: "Description field first name",
         classes: ["class-description"]
       },
-      wrapper: {
+      prefix: {
         tag: "div",
-        classes: ["default-field"]
+        classes: ["default-field", "form-control"],
+        id: "my-id"
       }
     },
     {
@@ -78,7 +79,11 @@
           value: 2,
           title: "Casablanca"
         }
-      ]
+      ],
+      description: {
+        text: "Description field city",
+        classes: ["class-description"]
+      }
     }
   ];
 

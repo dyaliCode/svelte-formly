@@ -17,13 +17,6 @@
   let values = [];
   let isValidForm = true;
 
-  const typeFielComponents = {
-    text: Input,
-    textarea: Textarea,
-    select: Select,
-    radio: Radio
-  };
-
   // Set valeurs form and status validation.
   const setValuesForm = (isValidForm, values) => {
     valuesForm.set({
@@ -86,23 +79,43 @@
       <label for={field.id}>{field.label}</label>
     {/if}
     <!-- Field -->
-    <svelte:component
-      this={typeFielComponents[field.type]}
-      type={field.type}
-      id={field.id}
-      name={field.name}
-      value={field.value}
-      classe={field.class}
-      placeholder={field.placeholder}
-      min={field.min}
-      max={field.max}
-      rows={field.rows}
-      cols={field.cols}
-      options={field.options}
-      radios={field.radios}
-      aligne={field.aligne}
-      disabled={field.disabled}
-      on:changeValue={changeValueHander} />
+    {#if field.type == 'text' || field.type == 'password' || field.type == 'email' || field.type == 'number' || field.type == 'tel'}
+      <Input
+        type={field.type}
+        id={field.id}
+        name={field.name}
+        value={field.value}
+        classe={field.class}
+        placeholder={field.placeholder}
+        min={field.min}
+        max={field.max}
+        disabled={field.disabled}
+        on:changeValue={changeValueHander} />
+    {:else if field.type == 'textarea'}
+      <Textarea
+        id={field.id}
+        name={field.name}
+        value={field.value}
+        classe={field.class}
+        rows={field.rows}
+        cols={field.cols}
+        disabled={field.disabled}
+        on:changeValue={changeValueHander} />
+    {:else if field.type == 'select'}
+      <Select
+        id={field.id}
+        name={field.name}
+        classe={field.class}
+        disabled={field.readonly}
+        options={field.options}
+        on:changeValue={changeValueHander} />
+    {:else if field.type == 'radio'}
+      <Radio
+        name={field.name}
+        radios={field.radios}
+        aligne={field.aligne}
+        on:changeValue={changeValueHander} />
+    {/if}
     <!-- Description -->
     {#if field.description}
       <Tag tag={field.description.tag} classes={field.description.classes}>
