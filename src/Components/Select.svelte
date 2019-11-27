@@ -7,7 +7,6 @@
   export let classe = "";
   export let options = [];
   export let disabled = false;
-  const formControlClass = "form-control";
 
   const dispatch = createEventDispatcher();
 
@@ -28,12 +27,7 @@
   });
 </script>
 
-<select
-  {id}
-  {name}
-  class={clsx(classe, formControlClass)}
-  {disabled}
-  on:input={onChangeValue}>
+<select {id} {name} class={clsx(classe)} {disabled} on:input={onChangeValue}>
   {#each options as option (option.value)}
     <option value={option.value}>{option.title}</option>
   {:else}

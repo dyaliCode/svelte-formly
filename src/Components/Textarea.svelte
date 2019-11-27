@@ -10,7 +10,6 @@
   export let cols = 50;
   export let required = false;
   export let disabled = false;
-  const formControlClass = "form-control";
 
   const dispatch = createEventDispatcher();
 
@@ -32,7 +31,7 @@
 <textarea
   {id}
   {name}
-  class={clsx(classe, formControlClass)}
+  class={clsx(classe)}
   {required}
   {disabled}
   {rows}
