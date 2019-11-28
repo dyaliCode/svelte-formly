@@ -1,1 +1,1 @@
-import { Field, valuesForm, validator } from "./src";
+import { Field, valuesForm } from "./src";

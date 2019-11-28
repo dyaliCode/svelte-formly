@@ -41,5 +41,4 @@
   {:else if validation.errors.includes('email')}
     {displayError('email')}
   {:else if validation.errors.includes('url')}{displayError('url')}{/if}
-
 </div>

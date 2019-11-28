@@ -13,7 +13,6 @@
   export let autocomplete = "off";
   export let placeholder = null;
   export let disabled = null;
-
   const dispatch = createEventDispatcher();
 
   function onChangerValue(event) {
@@ -26,7 +25,6 @@
   onMount(() => {
     type = type === "datetimelocal" ? "datetime-local" : type;
     value = type === "range" ? (value = min) : value;
-
     dispatch("changeValue", {
       name,
       value

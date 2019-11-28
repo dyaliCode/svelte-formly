@@ -111,7 +111,7 @@
     <!-- Description -->
     {#if field.description}
       {#if field.description.text}
-        <Tag tag={field.description.tag} classes={field.description.classes}>
+        <Tag tag={field.description.tag} classes={field.description.class}>
           {field.description.text}
         </Tag>
       {/if}
