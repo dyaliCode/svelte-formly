@@ -42,7 +42,6 @@ npm i svelte-formly
     },
     {
       prefix: {
-        tag: "span",
         class: ["custom-form-group"]
       },
       type: "text",
@@ -107,8 +106,6 @@ npm i svelte-formly
       message = "Your form is not valid!";
     }
   }
-
-  onDestroy(valuesForm);
 </script>
 ```
 
@@ -137,7 +134,7 @@ npm i svelte-formly
 ```html
 <h1>Svelte Formly</h1>
 <h3>{message}</h3>
-<form on:submit|preventDefault="{onSubmit}" class="cutom-form">
+<form on:submit|preventDefault="{onSubmit}" class="custom-form">
   <Field {fields} />
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
