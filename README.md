@@ -42,7 +42,7 @@ npm i svelte-formly
     },
     {
       prefix: {
-        tag: "<span>",
+        tag: "span",
         class: ["custom-form-group"]
       },
       type: "text",
