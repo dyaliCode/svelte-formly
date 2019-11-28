@@ -7,12 +7,12 @@
   export let name = "";
   export let value = "";
   export let classe = "";
-  export let min = false;
-  export let max = false;
-  export let placeholder = "";
-  export let disabled = false;
-  const formControlClass = "form-control";
-
+  export let min = null;
+  export let max = null;
+  export let step = null;
+  export let autocomplete = "off";
+  export let placeholder = null;
+  export let disabled = null;
   const dispatch = createEventDispatcher();
 
   function onChangerValue(event) {
@@ -23,6 +23,8 @@
   }
 
   onMount(() => {
+    type = type === "datetimelocal" ? "datetime-local" : type;
+    value = type === "range" ? (value = min) : value;
     dispatch("changeValue", {
       name,
       value
@@ -35,10 +37,11 @@
   {id}
   {name}
   {value}
-  class={clsx(classe, formControlClass)}
+  class={clsx(classe)}
   {placeholder}
   {disabled}
   {min}
   {max}
-  autocomplete={type === 'password' ? 'off' : null}
+  {step}
+  {autocomplete}
   on:input={onChangerValue} />

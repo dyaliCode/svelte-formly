@@ -24,7 +24,7 @@ const scssOptions = {
 };
 
 export default {
-  input: "src/main.js",
+  input: "index.js",
   output: [
     { file: pkg.module, format: "es" },
     { file: mainpath, format: "iife" }

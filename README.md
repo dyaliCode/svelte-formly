@@ -21,7 +21,7 @@ npm i svelte-formly
 
 ```javascript
 <script>
-  import { onDestroy } from "svelte";
+  import { get } from "svelte/store";
   import { valuesForm, Field } from "svelte-formly";
 
   let message = "";
@@ -32,16 +32,28 @@ npm i svelte-formly
       name: "firstname",
       value: "",
       id: "firstname",
-      classe: "any-class",
+      class: ["form-control"],
       placeholder: "Tap your first name",
-      validation: ["required", "min:6"]
+      validation: ["required", "min:6"],
+      messages: {
+        required: "Firstname field is required!",
+        min: "First name field must have more that 6 caracters!"
+      }
     },
     {
+      prefix: {
+        tag: "span",
+        class: ["custom-form-group"]
+      },
       type: "text",
       name: "lastname",
       value: "",
       id: "lastname",
-      placeholder: "Tap your lastname"
+      placeholder: "Tap your lastname",
+      description: {
+        class: ["custom-class-desc"],
+        text: "Custom text for description"
+      }
     },
     {
       type: "email",
@@ -87,23 +99,45 @@ npm i svelte-formly
   ];
 
   function onSubmit() {
-    valuesForm.subscribe(data => {
-      if (data.isValidForm) {
-        message = "Congratulation! now your form is valid";
-        const values = data.values;
-      } else {
-        message = "Your form is not valid!";
-      }
-    });
+    const data = get(valuesForm);
+    if (data.isValidForm) {
+      values = data.values;
+      message = "Congratulation! now your form is valid";
+    } else {
+      message = "Your form is not valid!";
+    }
   }
 
   onDestroy(valuesForm);
 </script>
 ```
 
+```css
+<style>
+  h1 {
+    color: #ff3e00;
+  }
+  .custom-form :global(.form-group) {
+    padding: 10px;
+    border: solid 1px #ff3e00;
+    margin-bottom: 10px;
+  }
+  .custom-form :global(.custom-form-group) {
+    padding: 10px;
+    background: #ff3e00;
+    color: white;
+    margin-bottom: 10px;
+  }
+  .custom-form :global(.class-description) {
+    color: #ff3e00;
+  }
+</style>
+```
+
 ```html
-<h2>{message}</h2>
-<form on:submit|preventDefault="{onSubmit}" novalidate>
+<h1>Svelte Formly</h1>
+<h3>{message}</h3>
+<form on:submit|preventDefault="{onSubmit}" class="cutom-form">
   <Field {fields} />
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
@@ -122,7 +156,7 @@ Inputs : text, password, email, number, tel
       type: "text", // or password, email, number, tel, required
       name: "namefield", // required
       id: "idfield", // required
-      classe: "", // optional
+      class: "", // optional
       value: "", // optional
       label: "", // optional
       placeholder: "", // optional
@@ -144,7 +178,7 @@ Textarea
       type: "textarea", // required
       name: "namefield", // required
       id: "idfield", // required
-      classe: "", // optional
+      class: "", // optional
       value: "", // optional
       label: "", // optional
       disabled: false, // optional
@@ -165,7 +199,7 @@ Select
       type: "select", // required
       name: "namefield", // required
       id: "idfield", // required
-      classe: "", // optional
+      class: "", // optional
       label: "", // optional
       disabled: false, // optional
       options: [
@@ -193,7 +227,7 @@ Radio
       type: "radio", // required
       name: "namefield", // required
       id: "idfield", // required
-      classe: "", // optional
+      class: "", // optional
       label: "", // optional
       disabled: false, // optional
       radios: [
@@ -214,11 +248,48 @@ Radio
 </script>
 ```
 
-List rules to validate form.
+Color
 
 ```javascript
 <script>
   fields = [
+    {
+      type: "color", // required
+      name: "namefield", // required
+      id: "idfield", // required
+      class: "", // optional
+      label: "", // optional
+      disabled: false, // optional
+      value: "#ff3e00" // optional
+    }
+  ]
+</script>
+```
+
+Range
+
+```javascript
+<script>
+  fields = [
+    {
+      type: "range", // required
+      name: "namefield", // required
+      id: "idfield", // required
+      class: "", // optional
+      label: "", // optional
+      min: 10, // required
+      max: 100, // required
+      step: 10 // required
+    }
+  ]
+</script>
+```
+
+List rules to validate form.
+
+```javascript
+<script>
+  const fields = [
     {
       ...,
       validation: [
@@ -231,6 +302,6 @@ List rules to validate form.
         'url'
       ]
     }
-  ]
+  ];
 </script>
 ```

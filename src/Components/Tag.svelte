@@ -5,11 +5,7 @@
   export let classes = [];
 </script>
 
-{#if tag === 'div'}
-  <div class={classes.length > 0 ? clsx(classes) : null}>
-    <slot />
-  </div>
-{:else if tag === 'span'}
+{#if tag === 'span'}
   <span class={classes.length > 0 ? clsx(classes) : null}>
     <slot />
   </span>
@@ -21,4 +17,8 @@
   <strong class={classes.length > 0 ? clsx(classes) : null}>
     <slot />
   </strong>
+{:else}
+  <div class={classes.length > 0 ? clsx(classes) : null}>
+    <slot />
+  </div>
 {/if}
