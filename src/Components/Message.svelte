@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
 
-  export let validation = [];
+  export let error;
   export let field = {};
 
   // Liste rules with default message.
@@ -12,7 +12,8 @@
     between: "This field must be between values defined",
     equal: "This field must be equal to value defined",
     email: "This email format is not valid",
-    url: "This field must be an url valid"
+    url: "This field must be an url valid",
+    custom_rule: "Error"
   };
 
   // Get error message by rule.
@@ -20,25 +21,32 @@
     let message = "";
     if (field.messages) {
       message += field.messages[rule] ? field.messages[rule] : rules[rule];
+      if (field.messages[rule]) {
+        message = field.messages[rule];
+      } else {
+        message = rules[rule] ? rules[rule] : rules["custom_rule"];
+      }
     } else {
-      message += rules[rule];
+      message += rules[rule] ? rules[rule] : rules["custom_rule"];
     }
     return message;
   }
 </script>
 
 <div class="invalid-feedback">
-  {#if validation.errors.includes('required')}
+  {#if error === 'required'}
     {displayError('required')}
-  {:else if validation.errors.includes('min')}
+  {:else if error === 'min'}
     {displayError('min')}
-  {:else if validation.errors.includes('max')}
+  {:else if error === 'max'}
     {displayError('max')}
-  {:else if validation.errors.includes('between')}
+  {:else if error === 'between'}
     {displayError('between')}
-  {:else if validation.errors.includes('equal')}
+  {:else if error === 'equal'}
     {displayError('equal')}
-  {:else if validation.errors.includes('email')}
+  {:else if error === 'email'}
     {displayError('email')}
-  {:else if validation.errors.includes('url')}{displayError('url')}{/if}
+  {:else if error === 'url'}
+    {displayError('url')}
+  {:else}{displayError(error)}{/if}
 </div>

@@ -57,7 +57,7 @@
         const fieldValidate = {
           [field.name]: {
             value: values[field.name] ? values[field.name] : value,
-            validation: validation
+            validators: validation
           }
         };
         fieldsToValidate = { ...fieldsToValidate, ...fieldValidate };
@@ -118,10 +118,10 @@
     {/if}
     <!-- Error messages -->
     {#if !isValidForm}
-      {#if $form[field.name]}
-        {#if $form[field.name].validation.errors.length > 0}
-          <Message validation={$form[field.name].validation} {field} />
-        {/if}
+      {#if $form[field.name].validation.errors.length > 0}
+        {#each $form[field.name].validation.errors as error}
+          <Message {error} {field} />
+        {/each}
       {/if}
     {/if}
   </Tag>

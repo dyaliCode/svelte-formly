@@ -13,8 +13,8 @@ function validateFields(fn, storeValues) {
 
   Object.keys(fields).map(key => {
     const field = fields[key];
-    if (field.validation) {
-      const statusObjField = validate(field);
+    if (field.validators) {
+      const statusObjField = validate(field, fields);
       fields[key] = { ...fields[key], ...statusObjField };
       if (statusObjField.validation.errors.length > 0) {
         valid = false;
@@ -35,16 +35,21 @@ function validateFields(fn, storeValues) {
  * Validate field by rule.
  * @param {configs field} field
  */
-function validate(field) {
-  const { value, validation } = field;
+function validate(field, fields) {
+  const { value, validators } = field;
   let valid = true;
   let rule;
   let errors = [];
 
-  validation.map(validator => {
-    const args = validator.split(/:/g);
-    rule = args.shift();
-    valid = rules[rule].call(null, value, args);
+  validators.map(validator => {
+    if (typeof validator === "function") {
+      valid = validator.call();
+      rule = validator.name;
+    } else {
+      const args = validator.split(/:/g);
+      rule = args.shift();
+      valid = rules[rule].call(null, value, args);
+    }
     if (!valid) {
       errors = [...errors, rule];
     }
