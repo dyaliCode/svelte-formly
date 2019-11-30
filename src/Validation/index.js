@@ -13,7 +13,7 @@ function validateFields(fn, storeValues) {
 
   Object.keys(fields).map(key => {
     const field = fields[key];
-    if (field.validators) {
+    if (field.validation) {
       const statusObjField = validate(field);
       fields[key] = { ...fields[key], ...statusObjField };
       if (statusObjField.validation.errors.length > 0) {
@@ -36,12 +36,12 @@ function validateFields(fn, storeValues) {
  * @param {configs field} field
  */
 function validate(field) {
-  const { value, validators } = field;
+  const { value, validation } = field;
   let valid = true;
   let rule;
   let errors = [];
 
-  validators.map(validator => {
+  validation.map(validator => {
     const args = validator.split(/:/g);
     rule = args.shift();
     valid = rules[rule].call(null, value, args);
