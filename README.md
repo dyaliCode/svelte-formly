@@ -24,9 +24,13 @@ npm i svelte-formly
   import { get } from "svelte/store";
   import { valuesForm, Field } from "svelte-formly";
 
-  let message = "";
-
   const fields = [
+    {
+      type: "color",
+      name: "color",
+      id: "color",
+      label: "Color Form"
+    },
     {
       type: "text",
       name: "firstname",
@@ -97,10 +101,15 @@ npm i svelte-formly
     }
   ];
 
+  let message = "";
+  let values = {};
+  let color = "#dddddd";
+
   function onSubmit() {
     const data = get(valuesForm);
     if (data.isValidForm) {
       values = data.values;
+      color = values.color ? values.color : color;
       message = "Congratulation! now your form is valid";
     } else {
       message = "Your form is not valid!";
@@ -111,30 +120,34 @@ npm i svelte-formly
 
 ```css
 <style>
-  h1 {
-    color: #ff3e00;
+  * {
+    color: var(--theme-color);
   }
   .custom-form :global(.form-group) {
     padding: 10px;
-    border: solid 1px #ff3e00;
+    border: solid 1px var(--theme-color);
     margin-bottom: 10px;
   }
   .custom-form :global(.custom-form-group) {
     padding: 10px;
-    background: #ff3e00;
+    background: var(--theme-color);
     color: white;
     margin-bottom: 10px;
   }
   .custom-form :global(.class-description) {
-    color: #ff3e00;
+    color: var(--theme-color);
   }
 </style>
 ```
 
 ```html
-<h1>Svelte Formly</h1>
+<h1 style="--theme-color: {color}">Svelte Formly</h1>
 <h3>{message}</h3>
-<form on:submit|preventDefault="{onSubmit}" class="custom-form">
+<form
+  on:submit|preventDefault="{onSubmit}"
+  class="custom-form"
+  style="--theme-color: {color}"
+>
   <Field {fields} />
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
