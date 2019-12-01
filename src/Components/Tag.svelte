@@ -1,6 +1,6 @@
 <script>
   import clsx from "clsx";
-
+  // Declar variables.
   export let tag = "div";
   export let classes = [];
 </script>

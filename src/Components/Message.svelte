@@ -1,9 +1,8 @@
 <script>
   import { onMount } from "svelte";
-
+  // Declar variables.
   export let error;
-  export let field = {};
-
+  export let messages = {};
   // Liste rules with default message.
   const rules = {
     required: "This field is required",
@@ -15,17 +14,11 @@
     url: "This field must be an url valid",
     custom_rule: "Error"
   };
-
   // Get error message by rule.
   function displayError(rule) {
     let message = "";
-    if (field.messages) {
-      message += field.messages[rule] ? field.messages[rule] : rules[rule];
-      if (field.messages[rule]) {
-        message = field.messages[rule];
-      } else {
-        message = rules[rule] ? rules[rule] : rules["custom_rule"];
-      }
+    if (messages[rule]) {
+      message += messages[rule] ? messages[rule] : rules["custom_rule"];
     } else {
       message += rules[rule] ? rules[rule] : rules["custom_rule"];
     }
@@ -34,19 +27,5 @@
 </script>
 
 <div class="invalid-feedback">
-  {#if error === 'required'}
-    {displayError('required')}
-  {:else if error === 'min'}
-    {displayError('min')}
-  {:else if error === 'max'}
-    {displayError('max')}
-  {:else if error === 'between'}
-    {displayError('between')}
-  {:else if error === 'equal'}
-    {displayError('equal')}
-  {:else if error === 'email'}
-    {displayError('email')}
-  {:else if error === 'url'}
-    {displayError('url')}
-  {:else}{displayError(error)}{/if}
+  {#if error}{displayError(error)}{/if}
 </div>

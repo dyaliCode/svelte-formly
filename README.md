@@ -103,7 +103,7 @@ npm i svelte-formly
 
   let message = "";
   let values = {};
-  let color = "#dddddd";
+  let color = "#ff3e00";
 
   function onSubmit() {
     const data = get(valuesForm);
@@ -313,5 +313,46 @@ List rules to validate form.
       ]
     }
   ];
+</script>
+```
+
+Validation with custom rule
+
+```javascript
+<script>
+  import { get } from "svelte/store";
+  import { Field, valuesForm } from "svelte-formly";
+
+  const fields = [
+    {
+      type: "text",
+      name: "firstname",
+      id: "firstname",
+      validation: ["required"]
+    },
+    {
+      type: "text",
+      name: "lastname",
+      id: "lastname",
+      validation: ["required", notEqual, customRule2],
+      messages: {
+        notEqual: "Last name not equal to First name", // Custom message error, property name must equal to function name.
+        customRule2: 'foo bar'
+      }
+    }
+  ];
+
+  // Custom rule to force field
+  function notEqual() {
+    const values = get(valuesForm).values;
+    if (values.firstname === values.lastname) {
+      return false;
+    }
+    return true;
+  }
+
+  function customRule2() {
+    // ...others conditions.
+  }
 </script>
 ```
