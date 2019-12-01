@@ -1,5 +1,5 @@
 import { afterUpdate } from "svelte";
-import { writable, get } from "svelte/store";
+import { writable } from "svelte/store";
 import * as rules from "./rules";
 
 /**
@@ -10,11 +10,10 @@ import * as rules from "./rules";
 function validateFields(fn, storeValues) {
   let fields = fn.call();
   let valid = true;
-
   Object.keys(fields).map(key => {
     const field = fields[key];
     if (field.validators) {
-      const statusObjField = validate(field, fields);
+      const statusObjField = validate(field);
       fields[key] = { ...fields[key], ...statusObjField };
       if (statusObjField.validation.errors.length > 0) {
         valid = false;
@@ -35,7 +34,7 @@ function validateFields(fn, storeValues) {
  * Validate field by rule.
  * @param {configs field} field
  */
-function validate(field, fields) {
+function validate(field) {
   const { value, validators } = field;
   let valid = true;
   let rule;
