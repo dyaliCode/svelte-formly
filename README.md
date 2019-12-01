@@ -295,6 +295,10 @@ Range
 </script>
 ```
 
+<hr>
+
+### Validation
+
 List rules to validate form.
 
 ```javascript
@@ -310,6 +314,7 @@ List rules to validate form.
         'equal:number',
         'email',
         'url'
+        fnc
       ]
     }
   ];
