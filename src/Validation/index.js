@@ -41,16 +41,31 @@ function validate(field) {
   let errors = [];
 
   validators.map(validator => {
-    if (typeof validator === "function") {
-      valid = validator.call();
-      rule = validator.name;
+    // For file type.
+    if (validator === "file") {
+      if (value) {
+        Object.keys(value).map(i => {
+          Object.keys(field.file).map(r => {
+            valid = rules[r].call(null, value[i], field.file[r]);
+            if (!valid) {
+              errors = [...errors, r];
+            }
+          });
+        });
+      }
     } else {
-      const args = validator.split(/:/g);
-      rule = args.shift();
-      valid = rules[rule].call(null, value, args);
-    }
-    if (!valid) {
-      errors = [...errors, rule];
+      // For custom rule.
+      if (typeof validator === "function") {
+        valid = validator.call();
+        rule = validator.name;
+      } else {
+        const args = validator.split(/:/g);
+        rule = args.shift();
+        valid = rules[rule].call(null, value, args);
+      }
+      if (!valid) {
+        errors = [...errors, rule];
+      }
     }
   });
 
