@@ -9,6 +9,7 @@
   import Input from "./Input.svelte";
   import Textarea from "./Textarea.svelte";
   import Select from "./Select.svelte";
+  import AutoComplete from "./AutoComplete.svelte";
   import Radio from "./Radio.svelte";
   import Checkbox from "./Checkbox.svelte";
   import File from "./File.svelte";
@@ -106,7 +107,18 @@
         classe={field.class}
         options={field.options}
         disabled={field.disabled}
+        multiple={field.multiple}
         on:changeValue={changeValueHander} />
+    {:else if field.type === 'autocomplete'}
+      <AutoComplete
+        id={field.id}
+        name={field.name}
+        classe={field.class}
+        options={field.options}
+        disabled={field.disabled}
+        multiple={field.multiple}
+        on:changeValue={changeValueHander}
+        on:onSelectItem />
     {:else if field.type === 'radio'}
       <Radio
         name={field.name}
@@ -127,6 +139,7 @@
         classe={field.class}
         disabled={field.disabled}
         multiple={field.multiple}
+        showPreview={field.showPreview}
         on:changeValue={changeValueHander} />
     {/if}
     <!-- Description -->

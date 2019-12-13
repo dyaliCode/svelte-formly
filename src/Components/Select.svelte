@@ -7,6 +7,7 @@
   export let classe = "";
   export let options = [];
   export let disabled = false;
+  export let multiple = false;
   const dispatch = createEventDispatcher();
   // Change value.
   function onChangeValue(event) {
@@ -26,7 +27,13 @@
   });
 </script>
 
-<select {id} {name} class={clsx(classe)} {disabled} on:input={onChangeValue}>
+<select
+  {id}
+  {name}
+  class={clsx(classe)}
+  {disabled}
+  {multiple}
+  on:input={onChangeValue}>
   {#each options as option (option.value)}
     <option value={option.value}>{option.title}</option>
   {:else}

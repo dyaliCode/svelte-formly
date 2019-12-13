@@ -7,39 +7,16 @@
   export let classe = "";
   export let disabled = null;
   export let multiple = false;
+  export let showPreview = false;
   let files;
   const dispatch = createEventDispatcher();
   // Change value field.
   function onChangerValue(event) {
     files = event.target.files;
-    // console.log("files", files);
     dispatch("changeValue", {
       name: name,
-      value: event.target.files
+      value: files
     });
-
-    if (files && files.length > 0) {
-      const targetFile = files[0];
-      try {
-        const objectURL = window.URL.createObjectURL(targetFile);
-        console.log("objectURL", objectURL);
-        window.URL.revokeObjectURL(objectURL);
-      } catch (e) {
-        try {
-          // Fallback if createObjectURL is not supported
-          const fileReader = new FileReader();
-          fileReader.onload = evt => {
-            mediaElem.src = evt.target.result;
-          };
-          console.log(
-            "fileReader.readAsDataURL(targetFile)",
-            fileReader.readAsDataURL(targetFile)
-          );
-        } catch (e) {
-          console.log(`File Upload not supported: ${e}`);
-        }
-      }
-    }
   }
 </script>
 
@@ -65,23 +42,23 @@
   {multiple}
   on:input={onChangerValue} />
 
-{#if files}
-  <!-- content here -->
-
-  {#each files as file}
-    <div class="list-files">
-      <div class="file">
-        <div class="img">
-          <img src={window.URL.createObjectURL(file)} alt={file.name} />
-        </div>
-        <div class="infos">
-          <ul>
-            <li>Name: {file.name}</li>
-            <li>Size: {file.size}</li>
-            <li>Type: {file.type}</li>
-          </ul>
+{#if showPreview}
+  {#if files}
+    {#each files as file}
+      <div class="list-files">
+        <div class="file">
+          <div class="img">
+            <img src={window.URL.createObjectURL(file)} alt={file.name} />
+          </div>
+          <div class="infos">
+            <ul>
+              <li>Name: {file.name}</li>
+              <li>Size: {file.size}</li>
+              <li>Type: {file.type}</li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  {/each}
+    {/each}
+  {/if}
 {/if}
