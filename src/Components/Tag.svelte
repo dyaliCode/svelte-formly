@@ -17,6 +17,10 @@
   <strong class={classes.length > 0 ? clsx(classes) : null}>
     <slot />
   </strong>
+{:else if tag === 'label'}
+  <label class={classes.length > 0 ? clsx(classes) : null}>
+    <slot />
+  </label>
 {:else}
   <div class={classes.length > 0 ? clsx(classes) : null}>
     <slot />

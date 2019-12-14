@@ -42,7 +42,12 @@
       itemsSelected = [...itemsSelected, item];
       newValue = itemsSelected;
       // Delete tag from list.
-      items = items.filter(i => i.id != item.id);
+      let filterItems;
+      itemsSelected.forEach(s => {
+        items = loadItemes.filter(i => i.id != item.id);
+      });
+      console.log("items", items);
+      // items = loadItemes;
     } else {
       itemsSelected = [item];
       newValue = item;
@@ -64,14 +69,24 @@
     items = [...items, item];
   };
 
+  // Clear all tags.
+  const clearAll = () => {
+    itemsSelected = [];
+    hideListItems = true;
+    items = loadItemes;
+  };
+
+  // Filter items.
   const onFilter = e => {
     const keyword = e.target.value;
-    const filtered = items.filter(entry =>
-      Object.values(entry).some(
+    const filtered = items.filter(entry => {
+      return Object.values(entry).some(
         val => typeof val === "string" && val.includes(keyword)
-      )
-    );
-    loadItemes = filtered;
+      );
+    });
+    if (filtered.length > 0) {
+      items = filtered;
+    }
   };
 </script>
 
@@ -187,8 +202,7 @@
     <div
       class="clear-all"
       on:click={() => {
-        itemsSelected = [];
-        hideListItems = true;
+        clearAll();
       }}>
       <svg
         width="100%"
@@ -209,6 +223,7 @@
     type="text"
     spellcheck="false"
     autocorrect="off"
+    autocomplete="off"
     {id}
     {disabled}
     bind:this={input}
