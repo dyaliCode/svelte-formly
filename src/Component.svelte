@@ -16,6 +16,30 @@
       name: "tags",
       id: "autocomplete",
       multiple: true
+    },
+    {
+      type: "file",
+      name: "file",
+      id: "file",
+      multiple: true,
+      showPreview: true
+    },
+    {
+      type: "checkbox",
+      name: "checkbox",
+      id: "checkbox",
+      items: [
+        {
+          title: "ch 1",
+          name: "ch1",
+          checked: true
+        },
+        {
+          title: "ch 2",
+          name: "ch2",
+          checked: true
+        }
+      ]
     }
   ];
 
@@ -32,7 +56,6 @@
 <style>
   .custom-form {
     width: 500px;
-    /* border: solid 1px red; */
   }
 </style>
 

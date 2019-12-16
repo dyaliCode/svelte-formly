@@ -8,16 +8,21 @@
   export let disabled = null;
   export let multiple = false;
   export let showPreview = false;
-  let files;
+  let files = [];
   const dispatch = createEventDispatcher();
   // Change value field.
   function onChangerValue(event) {
-    files = event.target.files;
+    files = Array.from(event.target.files);
     dispatch("changeValue", {
       name: name,
       value: files
     });
   }
+
+  // Delete file.
+  const deleteFile = file => {
+    files = files.filter(i => i.name != file.name);
+  };
 </script>
 
 <style>
@@ -55,6 +60,11 @@
               <li>Name: {file.name}</li>
               <li>Size: {file.size}</li>
               <li>Type: {file.type}</li>
+              <li>
+                <button on:click|preventDefault={deleteFile(file)}>
+                  Remove
+                </button>
+              </li>
             </ul>
           </div>
         </div>

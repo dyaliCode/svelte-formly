@@ -8,6 +8,7 @@
   const dispatch = createEventDispatcher();
   // Change value.
   function onChangeValue(event) {
+    console.log("event.target.name", event);
     dispatch("changeValue", {
       name: event.target.name,
       value: event.target.checked

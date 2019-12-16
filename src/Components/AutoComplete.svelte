@@ -4,6 +4,8 @@
   // Declar variables.
   export let id = false;
   export let name = "";
+  export let placeholder = "Tap here...";
+  export let multiple = false;
   export let loadItemes = [
     {
       id: 1,
@@ -19,73 +21,66 @@
     }
   ];
   let items = loadItemes;
-  export let disabled = false;
-  export let multiple = false;
-  let hideListItems = true;
+  let itemsFiltered = [];
   let itemsSelected = [];
-  let input = undefined;
-  const dispatch = createEventDispatcher();
+  let hideListItems = true;
+  let useFilter = false;
+  let value = null;
 
-  // Change value.
-  function onChangeValue(event) {
-    dispatch("changeValue", {
-      name: name,
-      value: event.target.value
-    });
-  }
+  const dispatch = createEventDispatcher();
 
   // Select item.
   const onSelectItem = item => {
-    let newValue;
     hideListItems = true;
-    if (multiple) {
+    value = "";
+    const oldSelected = itemsSelected.filter(s => s.id === item.id);
+    if (oldSelected.length === 0) {
       itemsSelected = [...itemsSelected, item];
-      newValue = itemsSelected;
-      // Delete tag from list.
-      let filterItems;
-      itemsSelected.forEach(s => {
-        items = loadItemes.filter(i => i.id != item.id);
-      });
-      console.log("items", items);
-      // items = loadItemes;
-    } else {
-      itemsSelected = [item];
-      newValue = item;
+      items = items.filter(i => i.id != item.id);
     }
-    // Update value field
+    if (useFilter) {
+      itemsFiltered = items;
+    }
+
+    // Affect values.
     dispatch("changeValue", {
       name: name,
-      value: newValue
+      value: itemsSelected
     });
-    // Add disptach for custom function user.
-    dispatch("onSelectItem", item);
   };
 
-  // Delete tag from list selected.
+  // Delete tag
   const deleteTag = item => {
-    // Delete tag from list selected,
     itemsSelected = itemsSelected.filter(i => i.id != item.id);
-    // Add tag deleted to list item.
     items = [...items, item];
+    if (useFilter) {
+      itemsFiltered = items;
+    }
   };
 
-  // Clear all tags.
-  const clearAll = () => {
+  // Clear all items selected.
+  function clearAll() {
     itemsSelected = [];
-    hideListItems = true;
     items = loadItemes;
-  };
+    if (useFilter) {
+      itemsFiltered = items;
+    }
+  }
 
-  // Filter items.
+  // Filter item.
   const onFilter = e => {
     const keyword = e.target.value;
-    const filtered = items.filter(entry => {
-      return Object.values(entry).some(
-        val => typeof val === "string" && val.includes(keyword)
-      );
-    });
-    if (filtered.length > 0) {
-      items = filtered;
+    if (keyword.length > 2) {
+      hideListItems = false;
+      const filtered = items.filter(entry => {
+        return Object.values(entry).some(
+          val => typeof val === "string" && val.includes(keyword)
+        );
+      });
+      if (filtered.length > 0) {
+        itemsFiltered = filtered;
+      }
+      useFilter = true;
     }
   };
 </script>
@@ -199,11 +194,7 @@
         {/if}
       </div>
     {/each}
-    <div
-      class="clear-all"
-      on:click={() => {
-        clearAll();
-      }}>
+    <div class="clear-all" on:click={clearAll}>
       <svg
         width="100%"
         height="100%"
@@ -218,32 +209,44 @@
       </svg>
     </div>
   {/if}
+
   <!-- Input to autocomplete -->
   <input
+    {id}
     type="text"
     spellcheck="false"
     autocorrect="off"
     autocomplete="off"
-    {id}
-    {disabled}
-    bind:this={input}
+    {placeholder}
     on:keyup={onFilter}
-    on:focus={() => (hideListItems = false)} />
+    bind:value />
+
   <!-- List items -->
   {#if !hideListItems}
     <div style="position: relative; width: 100%;">
       <div class="items-container">
-        {#each items as item}
-          <div
-            class="item"
-            on:click={() => {
-              onSelectItem(item);
-            }}>
-            <span>{item.title}</span>
-          </div>
-        {/each}
+        {#if useFilter}
+          {#each itemsFiltered as item}
+            <div
+              class="item"
+              on:click={() => {
+                onSelectItem(item);
+              }}>
+              <span>{item.title}</span>
+            </div>
+          {/each}
+        {:else}
+          {#each items as item}
+            <div
+              class="item"
+              on:click={() => {
+                onSelectItem(item);
+              }}>
+              <span>{item.title}</span>
+            </div>
+          {/each}
+        {/if}
       </div>
     </div>
   {/if}
-
 </div>
