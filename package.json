@@ -3,7 +3,7 @@
   "svelte": "src/Component.svelte",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "author": "Kamal Sahmoud <maroc.develop@gmail.com>",
   "contributors": [
     "Kamal Sahmoud <maroc.develop@gmail.com>"

@@ -20,9 +20,13 @@
   }
 
   // Delete file.
-  const deleteFile = file => {
+  function deleteFile(file) {
     files = files.filter(i => i.name != file.name);
-  };
+    dispatch("changeValue", {
+      name: name,
+      value: files
+    });
+  }
 </script>
 
 <style>
@@ -49,7 +53,7 @@
 
 {#if showPreview}
   {#if files}
-    {#each files as file}
+    {#each files as file, i}
       <div class="list-files">
         <div class="file">
           <div class="img">
@@ -61,7 +65,11 @@
               <li>Size: {file.size}</li>
               <li>Type: {file.type}</li>
               <li>
-                <button on:click|preventDefault={deleteFile(file)}>
+                <button
+                  type="button"
+                  on:click|preventDefault={() => {
+                    deleteFile(file);
+                  }}>
                   Remove
                 </button>
               </li>

@@ -1,83 +1,36 @@
 <script>
-  import { onMount } from "svelte";
   import { get } from "svelte/store";
   import { valuesForm, Field } from "./index.js";
 
-  import loadOptions from "./Components/beers.js";
-  let _items = [];
-  $: items = _items;
-  onMount(async () => {
-    _items = await loadOptions("Coffee Imperial Stout");
-  });
-
   const fields = [
-    {
-      type: "autocomplete",
-      name: "tags",
-      id: "autocomplete",
-      multiple: true,
-      loadItemes: [
-        {
-          id: 1,
-          title: "item 1"
-        },
-        {
-          id: 2,
-          title: "item 2"
-        },
-        {
-          id: 3,
-          title: "item 3"
-        },
-        {
-          id: 4,
-          title: "item 4"
-        }
-      ]
-    },
     {
       type: "file",
       name: "file",
       id: "file",
+      label: "file",
       multiple: true,
       showPreview: true
-    },
-    {
-      type: "checkbox",
-      name: "checkbox",
-      id: "checkbox",
-      items: [
-        {
-          title: "ch 1",
-          name: "ch1",
-          checked: true
-        },
-        {
-          title: "ch 2",
-          name: "ch2",
-          checked: true
-        }
-      ]
     }
   ];
+
+  let message = "";
+  let values = {};
+  let color = "#ff3e00";
 
   function onSubmit() {
     const data = get(valuesForm);
     console.log("data.values", data.values);
+    // if (data.isValidForm) {
+    //   values = data.values;
+    //   color = values.color ? values.color : color;
+    //   message = "Congratulation! now your form is valid";
+    // } else {
+    //   message = "Your form is not valid!";
+    // }
   }
-
-  // function onSelectItem(event) {
-  //   console.log("event", event.detail);
-  // }
 </script>
 
-<style>
-  .custom-form {
-    width: 500px;
-  }
-</style>
-
-<form on:submit|preventDefault={onSubmit} class="custom-form">
+<form on:submit|preventDefault={onSubmit}>
   <Field {fields} />
-  <button class="btn btn-primary" type="submit">Submit</button>
+  <button type="submit">Send</button>
 </form>

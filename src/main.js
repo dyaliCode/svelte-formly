@@ -1,9 +1,10 @@
 import Component from "./Component.svelte";
 
-const target = document.createElement("div");
-document.body.appendChild(target);
-
-new Component({
-  target,
-  props: {}
+const app = new Component({
+  target: document.body,
+  props: {
+    name: "world"
+  }
 });
+
+export default app;
