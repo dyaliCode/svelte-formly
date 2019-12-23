@@ -15,7 +15,25 @@
       type: "autocomplete",
       name: "tags",
       id: "autocomplete",
-      multiple: true
+      multiple: true,
+      loadItemes: [
+        {
+          id: 1,
+          title: "item 1"
+        },
+        {
+          id: 2,
+          title: "item 2"
+        },
+        {
+          id: 3,
+          title: "item 3"
+        },
+        {
+          id: 4,
+          title: "item 4"
+        }
+      ]
     },
     {
       type: "file",

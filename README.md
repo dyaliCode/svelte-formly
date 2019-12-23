@@ -343,6 +343,59 @@ Range
 
 <hr>
 
+Autocomplete
+
+```javascript
+<script>
+  fields = [
+    {
+      type: "autocomplete", // required
+      name: "namefield", // required
+      id: "idfield", // required
+      multiple: true, // optional
+      loadItemes: [ // list items with id and title attributes.
+        {
+          id: 1,
+          title: "item 1"
+        },
+        {
+          id: 2,
+          title: "item 2"
+        },
+        {
+          id: 3,
+          title: "item 3"
+        },
+        {
+          id: 4,
+          title: "item 4"
+        }
+      ]
+    }
+  ]
+</script>
+```
+
+<hr>
+
+Range
+
+```javascript
+<script>
+  fields = [
+    {
+      type: "file", // required
+      name: "namefield", // required
+      id: "idfield", // required
+      multiple: true, // optional
+      showPreview: true // optional
+    }
+  ]
+</script>
+```
+
+<hr>
+
 ### Validation
 
 List rules to validate form.

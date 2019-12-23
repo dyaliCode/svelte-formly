@@ -114,7 +114,7 @@
         id={field.id}
         name={field.name}
         classe={field.class}
-        options={field.options}
+        loadItemes={field.loadItemes}
         disabled={field.disabled}
         multiple={field.multiple}
         on:changeValue={changeValueHander}

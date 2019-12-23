@@ -6,20 +6,7 @@
   export let name = "";
   export let placeholder = "Tap here...";
   export let multiple = false;
-  export let loadItemes = [
-    {
-      id: 1,
-      title: "item 1"
-    },
-    {
-      id: 2,
-      title: "item 2"
-    },
-    {
-      id: 3,
-      title: "item 3"
-    }
-  ];
+  export let loadItemes = [];
   let items = loadItemes;
   let itemsFiltered = [];
   let itemsSelected = [];
@@ -32,7 +19,6 @@
   // Select item.
   const onSelectItem = item => {
     hideListItems = true;
-    value = "";
     const oldSelected = itemsSelected.filter(s => s.id === item.id);
     if (oldSelected.length === 0) {
       itemsSelected = [...itemsSelected, item];
@@ -47,6 +33,8 @@
       name: name,
       value: itemsSelected
     });
+
+    value = "";
   };
 
   // Delete tag
@@ -56,6 +44,12 @@
     if (useFilter) {
       itemsFiltered = items;
     }
+
+    // Affect values.
+    dispatch("changeValue", {
+      name: name,
+      value: itemsSelected
+    });
   };
 
   // Clear all items selected.
@@ -65,6 +59,12 @@
     if (useFilter) {
       itemsFiltered = items;
     }
+
+    // Affect values.
+    dispatch("changeValue", {
+      name: name,
+      value: itemsSelected
+    });
   }
 
   // Filter item.
@@ -171,6 +171,46 @@
   input:focus {
     outline: none;
   }
+  .spinner-wrapper {
+    width: 30px;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    margin: 0 5px;
+  }
+  .spinner {
+    animation: rotate 1.4s linear infinite;
+    -webkit-animation: rotate 1.4s linear infinite;
+    -moz-animation: rotate 1.4s linear infinite;
+    width: 30px;
+    height: 30px;
+    position: relative;
+  }
+  .spinner-dot {
+    width: 274px;
+    height: 274px;
+    position: relative;
+    top: 0;
+  }
+  @keyframes rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes rotate {
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+  @-moz-keyframes rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .path {
+    stroke-dasharray: 170;
+    stroke-dashoffset: 20;
+  }
 </style>
 
 <div class="select-container">
@@ -209,6 +249,40 @@
       </svg>
     </div>
   {/if}
+
+  <div class="spinner-wrapper">
+    <svg
+      class="spinner"
+      width="30px"
+      height="30px"
+      viewBox="0 0 66 66"
+      xmlns="http://www.w3.org/2000/svg">
+      <circle
+        class="path"
+        fill="transparent"
+        stroke-width="2"
+        cx="33"
+        cy="33"
+        r="30"
+        stroke="url(#gradient)">
+        <linearGradient id="gradient">
+          <stop offset="50%" stop-color="#42d179" stop-opacity="1" />
+          <stop offset="65%" stop-color="#42d179" stop-opacity=".5" />
+          <stop offset="100%" stop-color="#42d179" stop-opacity="0" />
+        </linearGradient>
+      </circle>
+      <svg
+        class="spinner-dot dot"
+        width="5px"
+        height="5px"
+        viewBox="0 0 66 66"
+        xmlns="http://www.w3.org/2000/svg"
+        x="37"
+        y="1.5">
+        <circle class="path" fill="#42d179" cx="33" cy="33" r="30" />
+      </svg>
+    </svg>
+  </div>
 
   <!-- Input to autocomplete -->
   <input
