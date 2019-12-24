@@ -393,7 +393,7 @@ Autocomplete
 
 <hr>
 
-Range
+File
 
 ```javascript
 <script>
