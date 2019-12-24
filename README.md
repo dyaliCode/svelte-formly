@@ -118,52 +118,6 @@ npm i svelte-formly
 </script>
 ```
 
-## For Sapper
-
-```javascript
-<script>
-  import { onMount } from "svelte";
-  import { get } from "svelte/store";
-
-  let Field;
-  let valuesForm;
-
-  onMount(async () => {
-    const module = await import("svelte-formly");
-    Field = module.Field;
-    valuesForm = module.valuesForm;
-  });
-
-  const fields = [
-    {
-      type: "text",
-      name: "username",
-      id: "username",
-      validation: ["required"],
-      messages: {
-        required: "Username is required!"
-      }
-    },
-    {
-      type: "email",
-      name: "email",
-      id: "email",
-      validation: ["required", "email"],
-      messages: {
-        required: "E-mail is required!"
-      }
-    }
-  ];
-
-  function onSubmit() {
-    const data = get(valuesForm);
-    if (data.isValidForm) {
-      const values = data.values;
-    }
-  }
-</script>
-```
-
 ```css
 <style>
   * {
@@ -196,6 +150,67 @@ npm i svelte-formly
 >
   <Field {fields} />
   <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+```
+
+<hr>
+
+## For Sapper
+
+npm i -D svelte-formly
+
+```javascript
+<script context="module">
+  export async function preload({ params, query }) {
+    const module = await import("svelte-formly");
+    const Field = module.Field;
+    const valuesForm = module.valuesForm;
+    return { Field, valuesForm };
+  }
+</script>
+
+<script>
+  import { onMount } from "svelte";
+  import { get } from "svelte/store";
+
+  export let Field;
+  export let valuesForm;
+
+  const fields = [
+    {
+      type: "text",
+      name: "username",
+      id: "username",
+      validation: ["required"],
+      messages: {
+        required: "Username is required!"
+      }
+    },
+    {
+      type: "email",
+      name: "email",
+      id: "email",
+      validation: ["required", "email"],
+      messages: {
+        required: "E-mail is required!"
+      }
+    }
+  ];
+
+  function onSubmit() {
+    const data = get(valuesForm);
+    if (data.isValidForm) {
+      const values = data.values;
+      console.log('values', values);
+    }
+  }
+</script>
+```
+
+```html
+<form on:submit|preventDefault="{onSubmit}">
+  <svelte:component this="{Field}" {fields} />
+  <button type="submit">Submit</button>
 </form>
 ```
 
