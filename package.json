@@ -1,9 +1,10 @@
 {
   "name": "svelte-formly",
   "svelte": "src/index.js",
-  "module": "dist/index.mjs",
-  "main": "dist/index.js",
-  "version": "0.0.14",
+  "main": "dist/svelteformly.js",
+  "module": "dist/svelteformly.es.js",
+  "jsnext:main": "dist/svelteformly.es.js",
+  "version": "0.0.16",
   "author": "Kamal Sahmoud <maroc.develop@gmail.com>",
   "contributors": [
     "Kamal Sahmoud <maroc.develop@gmail.com>"

@@ -9,7 +9,10 @@
   import Input from "./Input.svelte";
   import Textarea from "./Textarea.svelte";
   import Select from "./Select.svelte";
+  import AutoComplete from "./AutoComplete.svelte";
   import Radio from "./Radio.svelte";
+  import Checkbox from "./Checkbox.svelte";
+  import File from "./File.svelte";
   import Message from "./Message.svelte";
   // Declar variables;
   export let fields = [];
@@ -42,7 +45,8 @@
         const fieldValidate = {
           [field.name]: {
             value: values[field.name] ? values[field.name] : value,
-            validators: validation
+            validators: validation,
+            file: field.type === "file" ? field.file : null
           }
         };
         fieldsToValidate = { ...fieldsToValidate, ...fieldValidate };
@@ -59,7 +63,7 @@
     $valuesForm;
   });
   // Lifecycle destroy to unbscribe.
-  onDestroy([valuesForm]);
+  // onDestroy([valuesForm]);
 </script>
 
 {#each fields as field (field.name)}
@@ -72,7 +76,7 @@
       <label for={field.id}>{field.label}</label>
     {/if}
     <!-- Field -->
-    {#if field.type === 'text' || field.type === 'password' || field.type === 'email' || field.type === 'tel' || field.type === 'number' || field.type === 'range' || field.type === 'date' || field.type === 'color' || field.type === 'file' || field.type === 'datetimelocal'}
+    {#if field.type === 'text' || field.type === 'password' || field.type === 'email' || field.type === 'tel' || field.type === 'number' || field.type === 'range' || field.type === 'date' || field.type === 'color' || field.type === 'datetimelocal'}
       <Input
         type={field.type}
         id={field.id}
@@ -103,13 +107,39 @@
         classe={field.class}
         options={field.options}
         disabled={field.disabled}
+        multiple={field.multiple}
         on:changeValue={changeValueHander} />
+    {:else if field.type === 'autocomplete'}
+      <AutoComplete
+        id={field.id}
+        name={field.name}
+        classe={field.class}
+        loadItemes={field.loadItemes}
+        disabled={field.disabled}
+        multiple={field.multiple}
+        on:changeValue={changeValueHander}
+        on:onSelectItem />
     {:else if field.type === 'radio'}
       <Radio
         name={field.name}
         classe={field.class}
-        radios={field.radios}
+        items={field.items}
         aligne={field.aligne}
+        on:changeValue={changeValueHander} />
+    {:else if field.type === 'checkbox'}
+      <Checkbox
+        classe={field.class}
+        items={field.items}
+        aligne={field.aligne}
+        on:changeValue={changeValueHander} />
+    {:else if field.type === 'file'}
+      <File
+        id={field.id}
+        name={field.name}
+        classe={field.class}
+        disabled={field.disabled}
+        multiple={field.multiple}
+        showPreview={field.showPreview}
         on:changeValue={changeValueHander} />
     {/if}
     <!-- Description -->

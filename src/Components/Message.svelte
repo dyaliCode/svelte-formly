@@ -11,7 +11,8 @@
     between: "This field must be between values defined",
     equal: "This field must be equal to value defined",
     email: "This email format is not valid",
-    url: "This field must be an url valid",
+    types: "Must to allowed file types",
+    maxsize: "This file has size more than max size",
     custom_rule: "Error"
   };
   // Get error message by rule.
