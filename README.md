@@ -301,7 +301,7 @@ Radio
       class: "", // optional
       label: "", // optional
       disabled: false, // optional
-      radios: [
+      items: [
         {
           id: 'radio1',
           value: 1,
