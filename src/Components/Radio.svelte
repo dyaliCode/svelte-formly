@@ -5,7 +5,7 @@
   export let name = "";
   export let classe = "";
   export let aligne = "default";
-  export let radios = [];
+  export let items = [];
   const dispatch = createEventDispatcher();
   // Change value.
   function onChangeValue(event) {
@@ -16,25 +16,25 @@
   }
   // Insert default value.
   onMount(() => {
-    if (radios.length > 0) {
+    if (items.length > 0) {
       dispatch("changeValue", {
         name: name,
-        value: radios[0].value
+        value: items[0].value
       });
     }
   });
 </script>
 
-{#each radios as radio, i}
+{#each items as item, i}
   <div class={aligne === 'inline' ? 'form-check-inline' : 'form-check'}>
     <input
       type="radio"
       class={clsx(classe)}
-      id={radio.id}
+      id={item.id}
       {name}
-      value={radio.value}
+      value={item.value}
       checked={i === 0}
       on:input={onChangeValue} />
-    <span>{radio.title}</span>
+    <span>{item.title}</span>
   </div>
 {/each}
