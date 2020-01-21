@@ -69,7 +69,7 @@ npm i svelte-formly
     {
       type: "radio",
       name: "gender",
-      radios: [
+      items: [
         {
           id: "female",
           value: "female",
