@@ -89,6 +89,7 @@
         step={field.step}
         autocomplete={field.autocomplete}
         disabled={field.disabled}
+        readonly={field.readonly}
         on:changeValue={changeValueHander} />
     {:else if field.type === 'textarea'}
       <Textarea
@@ -99,6 +100,7 @@
         rows={field.rows}
         cols={field.cols}
         disabled={field.disabled}
+        readonly={field.readonly}
         on:changeValue={changeValueHander} />
     {:else if field.type === 'select'}
       <Select

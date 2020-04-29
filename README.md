@@ -234,6 +234,7 @@ Inputs : text, password, email, number, tel
       min: null, // optional
       max: null, // optional
       disabled: false, // optional
+      readonly: false, // optional
       validation: [] // optional
     }
   ]
@@ -253,6 +254,7 @@ Textarea
       value: "", // optional
       label: "", // optional
       disabled: false, // optional
+      readonly: false, // optional
       rows: null, // optional
       cols: null, // optional
       validation: [] // optional

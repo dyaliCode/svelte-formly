@@ -13,6 +13,7 @@
   export let autocomplete = "off";
   export let placeholder = null;
   export let disabled = null;
+  export let readonly = null;
   const dispatch = createEventDispatcher();
   // Change value field.
   function onChangerValue(event) {
@@ -40,6 +41,7 @@
   class={clsx(classe)}
   {placeholder}
   {disabled}
+  {readonly}
   {min}
   {max}
   {step}

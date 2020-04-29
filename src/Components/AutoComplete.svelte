@@ -139,6 +139,9 @@
     height: 40px;
     cursor: pointer;
   }
+  .clear {
+    cursor: pointer;
+  }
   .tag {
     background-color: #ddd;
     border-radius: 15px;
@@ -171,7 +174,7 @@
   input:focus {
     outline: none;
   }
-  .spinner-wrapper {
+  /* .spinner-wrapper {
     width: 30px;
     position: absolute;
     right: 0;
@@ -191,8 +194,8 @@
     height: 274px;
     position: relative;
     top: 0;
-  }
-  @keyframes rotate {
+  } */
+  /* @keyframes rotate {
     to {
       transform: rotate(360deg);
     }
@@ -210,7 +213,7 @@
   .path {
     stroke-dasharray: 170;
     stroke-dashoffset: 20;
-  }
+  } */
 </style>
 
 <div class="select-container">
@@ -250,7 +253,7 @@
     </div>
   {/if}
 
-  <div class="spinner-wrapper">
+  <!-- <div class="spinner-wrapper">
     <svg
       class="spinner"
       width="30px"
@@ -282,7 +285,7 @@
         <circle class="path" fill="#42d179" cx="33" cy="33" r="30" />
       </svg>
     </svg>
-  </div>
+  </div> -->
 
   <!-- Input to autocomplete -->
   <input

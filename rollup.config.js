@@ -9,36 +9,38 @@ import postcss from "rollup-plugin-postcss";
 
 const watch = process.env.WATCH;
 const mainpath = watch ? "docs/index.js" : pkg.main;
-const dedupe = importee =>
+const dedupe = (importee) =>
   importee === "svelte" || importee.startsWith("svelte/");
 
 const scssOptions = {
   transformers: {
     scss: {
-      includePaths: ["node_modules", "src"]
+      includePaths: ["node_modules", "src"],
     },
     postcss: {
-      plugins: [require("autoprefixer")]
-    }
-  }
+      plugins: [require("autoprefixer")],
+    },
+  },
 };
 
+const production = !process.env.ROLLUP_WATCH;
+
 export default {
-  input: "src/index.js",
+  input: !production ? "src/main.js" : "src/index.js",
   output: [
     { file: pkg.module, format: "es" },
-    { file: mainpath, format: "iife" }
+    { file: mainpath, format: "iife" },
   ],
   plugins: [
     commonjs(),
     svelte({
-      preprocess: sveltePreprocess(scssOptions)
+      preprocess: sveltePreprocess(scssOptions),
     }),
     resolve({
-      dedupe
+      dedupe,
     }),
     postcss(),
     watch && browsersync({ server: "docs" }),
-    !watch && terser()
-  ]
+    !watch && terser(),
+  ],
 };
