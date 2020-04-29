@@ -10,6 +10,7 @@
   export let cols = 50;
   export let required = false;
   export let disabled = false;
+  export let readonly = false;
   const dispatch = createEventDispatcher();
   // Change value.
   function onChangerValue(event) {
@@ -33,6 +34,7 @@
   class={clsx(classe)}
   {required}
   {disabled}
+  {readonly}
   {rows}
   {cols}
   on:input={onChangerValue}>
