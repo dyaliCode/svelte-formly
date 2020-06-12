@@ -19,7 +19,7 @@ npm i svelte-formly
 
 ## Usage
 
-```javascript
+```html
 <script>
   import { get } from "svelte/store";
   import { valuesForm, Field } from "svelte-formly";
@@ -118,7 +118,7 @@ npm i svelte-formly
 </script>
 ```
 
-```css
+```html
 <style>
   * {
     color: var(--theme-color);
@@ -159,7 +159,7 @@ npm i svelte-formly
 
 npm i -D svelte-formly
 
-```javascript
+```html
 <script context="module">
   export async function preload({ params, query }) {
     const module = await import("svelte-formly");
@@ -220,7 +220,7 @@ npm i -D svelte-formly
 
 Inputs : text, password, email, number, tel
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -243,7 +243,7 @@ Inputs : text, password, email, number, tel
 
 Textarea
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -265,7 +265,7 @@ Textarea
 
 Select
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -293,7 +293,7 @@ Select
 
 Radio
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -323,7 +323,7 @@ Radio
 
 Color
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -341,7 +341,7 @@ Color
 
 Range
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -362,7 +362,7 @@ Range
 
 Autocomplete
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -397,7 +397,7 @@ Autocomplete
 
 File
 
-```javascript
+```html
 <script>
   fields = [
     {
@@ -417,7 +417,7 @@ File
 
 List rules to validate form.
 
-```javascript
+```html
 <script>
   const fields = [
     {
@@ -439,7 +439,7 @@ List rules to validate form.
 
 Validation with custom rule
 
-```javascript
+```html
 <script>
   import { get } from "svelte/store";
   import { Field, valuesForm } from "svelte-formly";
