@@ -1,7 +1,8 @@
 <script>
-  import clsx from "clsx";
+  import clsx from 'clsx';
   // Declar variables.
-  export let tag = "div";
+  export let tag = 'div';
+  export let id = '';
   export let classes = [];
 </script>
 
@@ -18,7 +19,7 @@
     <slot />
   </strong>
 {:else if tag === 'label'}
-  <label class={classes.length > 0 ? clsx(classes) : null}>
+  <label for={id} class={classes.length > 0 ? clsx(classes) : null}>
     <slot />
   </label>
 {:else}

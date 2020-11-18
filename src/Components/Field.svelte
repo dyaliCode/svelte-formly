@@ -1,19 +1,19 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
-  import { get } from "svelte/store";
-  import clsx from "clsx";
-  import { validator } from "../Validation/";
-  import { valuesForm } from "./stores.js";
+  import { onMount, onDestroy } from 'svelte';
+  import { get } from 'svelte/store';
+  import clsx from 'clsx';
+  import { validator } from '../Validation/';
+  import { valuesForm } from './stores.js';
   // Import components.
-  import Tag from "./Tag.svelte";
-  import Input from "./Input.svelte";
-  import Textarea from "./Textarea.svelte";
-  import Select from "./Select.svelte";
-  import AutoComplete from "./AutoComplete.svelte";
-  import Radio from "./Radio.svelte";
-  import Checkbox from "./Checkbox.svelte";
-  import File from "./File.svelte";
-  import Message from "./Message.svelte";
+  import Tag from './Tag.svelte';
+  import Input from './Input.svelte';
+  import Textarea from './Textarea.svelte';
+  import Select from './Select.svelte';
+  import AutoComplete from './AutoComplete.svelte';
+  import Radio from './Radio.svelte';
+  import Checkbox from './Checkbox.svelte';
+  import File from './File.svelte';
+  import Message from './Message.svelte';
   // Declar variables;
   export let fields = [];
   let values = [];
@@ -22,13 +22,13 @@
   const setValuesForm = (isValidForm, values) => {
     valuesForm.set({
       isValidForm,
-      values: { ...values }
+      values: { ...values },
     });
   };
   // Change values.
-  const changeValueHander = event => {
+  const changeValueHander = (event) => {
     values[`${event.detail.name}`] = event.detail.value;
-    fields.filter(field => {
+    fields.filter((field) => {
       if (field.name === event.detail.name) {
         field.value = event.detail.value;
       }
@@ -39,22 +39,22 @@
   let fieldsToValidate = {};
   const form = validator(() => {
     if (fields.length > 0) {
-      fields.map(field => {
+      fields.map((field) => {
         let { validation } = field;
         const value = field.value ? field.value : null;
         const fieldValidate = {
           [field.name]: {
             value: values[field.name] ? values[field.name] : value,
             validators: validation,
-            file: field.type === "file" ? field.file : null
-          }
+            file: field.type === 'file' ? field.file : null,
+          },
         };
         fieldsToValidate = { ...fieldsToValidate, ...fieldValidate };
       });
     }
     return fieldsToValidate;
   });
-  form.subscribe(data => {
+  form.subscribe((data) => {
     isValidForm = data.valid;
     setValuesForm(isValidForm, values);
   });
@@ -70,11 +70,10 @@
   <!-- Prefix -->
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
-    classes={field.prefix ? (field.prefix.class ? field.prefix.class : 'form-group') : 'form-group'}>
+    classes={field.prefix ? (field.prefix.class ? field.prefix.class : 'form-group') : 'form-group'}
+    id={field.id}>
     <!-- Label -->
-    {#if field.label}
-      <label for={field.id}>{field.label}</label>
-    {/if}
+    {#if field.label}<label for={field.id}>{field.label}</label>{/if}
     <!-- Field -->
     {#if field.type === 'text' || field.type === 'password' || field.type === 'email' || field.type === 'tel' || field.type === 'number' || field.type === 'range' || field.type === 'date' || field.type === 'color' || field.type === 'datetimelocal'}
       <Input
@@ -147,7 +146,10 @@
     <!-- Description -->
     {#if field.description}
       {#if field.description.text}
-        <Tag tag={field.description.tag} classes={field.description.class}>
+        <Tag
+          tag={field.description.tag}
+          classes={field.description.class}
+          id={field.id}>
           {field.description.text}
         </Tag>
       {/if}
