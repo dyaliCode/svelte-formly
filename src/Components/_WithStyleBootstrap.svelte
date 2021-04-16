@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate, onDestroy, onMount } from 'svelte';
+  import { afterUpdate, beforeUpdate, onMount, tick } from 'svelte';
   import { validator } from '../Validation/';
   import { valuesForm } from './stores.js';
   import { isRequired } from './helpers.js';
@@ -41,8 +41,8 @@
   };
 
   // Validation Form.
+  let fieldsToValidate = {};
   let form = validator(() => {
-    let fieldsToValidates = {};
     if (fields.length > 0) {
       fields.map((field) => {
         // Proprecess
@@ -50,24 +50,31 @@
           const fnc = field.preprocess;
           field = preprocess_field(field, values, fnc);
         }
+        // console.log(`field`, field);
+        // console.log(`field`, field.value);
+        // console.log('======================');
 
         let { validation } = field;
+        // const value = field.value ? field.value : null;
+        const value = field.value;
 
         const fieldValidate = {
           [field.name]: {
-            value: field.value,
+            value: value, // values[field.name] ? values[field.name] : value,
             validators: validation,
+            file: field.type === 'file' ? field.file : null,
           },
         };
-
-        fieldsToValidates = { ...fieldsToValidates, ...fieldValidate };
+        fieldsToValidate = { ...fieldsToValidate, ...fieldValidate };
       });
       fields = fields;
     }
-    return fieldsToValidates;
+    // console.log(`fieldsToValidate`, fieldsToValidate);
+    return fieldsToValidate;
   });
 
   form.subscribe((data) => {
+    // console.log(`data`, data);
     isValidForm = data.valid;
     setValuesForm(isValidForm, values);
   });
@@ -78,59 +85,73 @@
   });
 
   afterUpdate(() => {
-    let formValid = validator(() => {
-      let fieldsToValidates = {};
+    // console.log(`$valuesForm.values`, $valuesForm.values);
+    const validform = validator(() => {
       if (fields.length > 0) {
         fields.map((field) => {
-          console.log(`field`, field);
+          // Proprecess
+          if (field.preprocess) {
+            const fnc = field.preprocess;
+            field = preprocess_field(field, values, fnc);
+          }
+          // console.log(`field`, field);
+          // console.log(`field`, field.value);
+          // console.log('======================');
+
           let { validation } = field;
+          // const value = field.value ? field.value : null;
+          const value = field.value;
 
           const fieldValidate = {
             [field.name]: {
-              value: field.value,
+              value: value, // values[field.name] ? values[field.name] : value,
               validators: validation,
+              file: field.type === 'file' ? field.file : null,
             },
           };
-
-          fieldsToValidates = { ...fieldsToValidates, ...fieldValidate };
+          fieldsToValidate = { ...fieldsToValidate, ...fieldValidate };
         });
         fields = fields;
       }
-      return fieldsToValidates;
+      // console.log(`fieldsToValidate`, fieldsToValidate);
+      return fieldsToValidate;
     });
-
-    formValid.subscribe((data) => {
+    validform.subscribe((data) => {
+      console.log(`values subscribe`, values);
       isValidForm = data.valid;
       setValuesForm(isValidForm, values);
     });
+    form = validform;
+    // form.subscribe((data) => {
+    //   // console.log(`datasss`, data);
+    //   // console.log(`values subscribe22222222222222`, values);
+    //   isValidForm = data.valid;
+    //   setValuesForm(isValidForm, values);
+    // });
   });
 
-  const preprocess_field = (field, fields, fnc) => {
-    const newField = fnc.call(null, field, fields);
+  const preprocess_field = (field, values, fnc) => {
+    const newField = fnc.call(null, field, values);
     return newField;
   };
-  // const preprocess_field = (field, values, fnc) => {
-  //   return new Promise((resolve, reject) => {
-  //     const newField = fnc.call(null, field, values);
-  //     resolve(newField);
-  //   });
-  // };
 
   // Lifecycle destroy to unbscribe.
-  onDestroy([valuesForm]);
+  // onDestroy([valuesForm]);
 </script>
 
-<pre>
-  <code>
-    {JSON.stringify($form, null, 2)}
-  </code>
-</pre>
-<hr />
 <pre>
   <code>
     {JSON.stringify(fields, null, 2)}
   </code>
 </pre>
+<hr />
+<pre>
+  <h2>$FORM</h2>
+  <code>
+    {JSON.stringify($form, null, 2)}
+  </code>
+</pre>
+
 {#each fields as field (field.name)}
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
@@ -152,7 +173,7 @@
     <!-- Field -->
     {#if field.type === 'input'}
       <Input
-        type={field.attributes.type}
+        type={field.type}
         name={field.name}
         value={field.value}
         id={field.attributes.id}

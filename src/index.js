@@ -1,4 +1,4 @@
-import Field from "./Components/Field.svelte";
-import { valuesForm } from "./Components/stores";
+import Field from './Components/Field.svelte'
+import { valuesForm } from './Components/stores'
 
-export { Field, valuesForm };
+export { Field, valuesForm }

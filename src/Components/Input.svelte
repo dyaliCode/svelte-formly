@@ -1,5 +1,11 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import {
+    afterUpdate,
+    beforeUpdate,
+    createEventDispatcher,
+    onMount,
+    tick,
+  } from 'svelte';
   import clsx from 'clsx';
   import { settingStore } from './stores.js';
 
@@ -7,7 +13,7 @@
   export let type = 'text';
   export let id = '';
   export let name = '';
-  export let value = '';
+  export let value = null;
   export let classe = '';
   export let min = null;
   export let max = null;
@@ -45,8 +51,27 @@
       value,
     });
   });
+
+  // beforeUpdate(() => {
+  //   console.log(`value before`, value);
+  //   dispatch('changeValue', {
+  //     name,
+  //     value,
+  //   });
+  // });
+
+  afterUpdate(async () => {
+    await tick();
+    dispatch('changeValue', {
+      name,
+      value,
+    });
+  });
 </script>
 
+<br />
+<span>{value}</span>
+<br />
 <input
   {type}
   {id}
