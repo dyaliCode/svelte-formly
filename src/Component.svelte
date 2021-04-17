@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
 
@@ -6,7 +7,68 @@
     style: 'bootstrap',
   };
 
+  const fetchUsers = async () => {
+    const res = await fetch(
+      `https://jsonplaceholder.typicode.com/users?_limit=2`
+    );
+    const items = await res.json();
+    return items.map((item) => {
+      return { value: item.id, title: item.username };
+    });
+  };
+
+  const fetchPosts = async () => {
+    const res = await fetch(
+      `https://jsonplaceholder.typicode.com/posts?_limit=2`
+    );
+    const items = await res.json();
+    return items.map((item) => {
+      return { value: item.id, title: item.title };
+    });
+  };
+
+  // onMount(async () => {
+  //   const users = await fetchUsers();
+  //   console.log(`users`, users);
+  // });
+
   const fields = [
+    // {
+    //   type: 'input',
+    //   name: 'total',
+    //   attributes: {
+    //     type: 'number',
+    //     class: ['form-control'],
+    //     placeholder: 'Tap your total',
+    //     label: 'Total',
+    //   },
+    //   rules: ['required', 'min:6'],
+    //   messages: {
+    //     required: 'Total field is required!',
+    //     min: 'Total field must have more that 6 caracters!',
+    //   },
+    //   preprocess: (field, fields) => {
+    //     field.value = field.value ? field.value * 2 : field.value;
+    //   },
+    // },
+    // {
+    //   type: 'input',
+    //   name: 'firstname',
+    //   attributes: {
+    //     type: 'text',
+    //     class: ['form-control'],
+    //     placeholder: 'Tap your first name',
+    //     label: 'firstname',
+    //   },
+    //   rules: ['required', 'min:6'],
+    //   messages: {
+    //     required: 'Firstname field is required!',
+    //     min: 'First name field must have more that 6 caracters!',
+    //   },
+    //   preprocess: (field, fields) => {
+    //     field.value = field.value ? field.value.toUpperCase() : field.value;
+    //   },
+    // },
     {
       type: 'select',
       name: 'country',
@@ -15,6 +77,7 @@
         label: 'Country',
       },
       value: null,
+      rules: ['required'],
       options: [
         {
           value: null,
@@ -22,11 +85,11 @@
         },
         {
           value: 1,
-          title: 'Morocco',
+          title: 'Users',
         },
         {
           value: 2,
-          title: 'Japan',
+          title: 'Posts',
         },
       ],
     },
@@ -37,45 +100,53 @@
         type: 'text',
         label: 'City',
       },
-      validation: ['required'],
-      preprocess: (field, values) => {
+      rules: ['required'],
+      preprocess: async (field, values) => {
+        // let options = [];
+        // if (values.country) {
+        //   if (values.country == 1) {
+        //     options = [
+        //       {
+        //         value: 'null',
+        //         title: 'Any',
+        //       },
+        //       {
+        //         value: '3',
+        //         title: 'Agadir',
+        //       },
+        //       {
+        //         value: '4',
+        //         title: 'Casablanca',
+        //       },
+        //     ];
+        //   } else if (values.country == 2) {
+        //     console.log(`333`, 333);
+        //     options = [
+        //       {
+        //         value: 'null',
+        //         title: 'Any',
+        //       },
+        //       {
+        //         value: '5',
+        //         title: 'Seol',
+        //       },
+        //       {
+        //         value: '6',
+        //         title: 'Toyota',
+        //       },
+        //     ];
+        //   }
+        // } else {
+        //   options = [];
+        // }
+
         let options = [];
-        if (values.country) {
-          if (values.country == 1) {
-            options = [
-              {
-                value: null,
-                title: 'Any',
-              },
-              {
-                value: 3,
-                title: 'Agadir',
-              },
-              {
-                value: 4,
-                title: 'Casablanca',
-              },
-            ];
-          } else {
-            options = [
-              {
-                value: null,
-                title: 'Any',
-              },
-              {
-                value: 5,
-                title: 'Seol',
-              },
-              {
-                value: 6,
-                title: 'Toyota',
-              },
-            ];
-          }
-          field.value = options[0].value;
-        } else {
-          field.value = null;
+        if (values.country == 1) {
+          options = await fetchUsers();
+        } else if (values.country == 2) {
+          options = await fetchPosts();
         }
+
         field.options = options;
         return field;
       },
@@ -84,8 +155,7 @@
 
   function onSubmit() {
     const data = get(valuesForm);
-    const values = data.values;
-    console.log(`data`, data.values, data.isValidForm);
+    console.log(`data.onSubmit`, data);
   }
 </script>
 

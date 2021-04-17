@@ -1,48 +1,52 @@
-import { afterUpdate } from 'svelte'
+import { afterUpdate, onMount } from 'svelte'
 import { writable, get } from 'svelte/store'
-import { valuesForm, fieldsStore } from '../lib/stores.js'
-import * as CoreRules from './rules'
+import { valuesForm } from '../lib/stores'
+import * as coreRules from './rules'
 
 /**
  * Validation fields.
- * @param {object fields to validate} fn
+ * @param {object fields to validate} fields
  * @param {default fields with config} storeValues
  */
-function validateFields (fn, storeValues) {
-  let fields = fn.call()
-  // let fields = get(fieldsStore)
+export async function validateFields (fnc, storeValues) {
+  let fields = fnc.call()
   let valid = true
   let values = {}
 
-  Object.keys(fields).map(key => {
-    const field = fields[key]
+  // console.log(`fields`, fields)
+
+  Object.keys(fields).map(async key => {
+    let field = fields[key]
+
     if (field.rules) {
       const statusObjField = validate(field)
-      fields[key] = { ...fields[key], ...statusObjField }
+      fields[field.name] = { ...fields[key], ...statusObjField }
       if (statusObjField.validation.errors.length > 0) {
         valid = false
       }
-    } else {
-      fields[key] = {
-        ...fields[key],
-        validation: { errors: [], dirty: false }
-      }
     }
 
-    values = { ...values, [field.name]: field.value }
+    const fieldName = field.name
+    const fieldValue = field.value
+
+    values = { ...values, [fieldName]: fieldValue }
   })
 
-  // fields = { fields, values, valid }
-  console.log(`fields`, fields)
-  fieldsStore.set(fields)
-  storeValues.set({ fields, values, valid })
+  // fields = { ...fields, values, valid }
+  // storeValues.set({
+  //   fields,
+  //   values,
+  //   valid
+  // })
+  fields = { ...fields, values, valid }
+  storeValues.set(fields)
 }
 
 /**
  * Validate field by rule.
  * @param {configs field} field
  */
-function validate (field) {
+export function validate (field) {
   const { value, rules } = field
   let valid = true
   let rule
@@ -69,7 +73,7 @@ function validate (field) {
       } else {
         const args = validator.split(/:/g)
         rule = args.shift()
-        valid = CoreRules[rule].call(null, value, args)
+        valid = coreRules[rule].call(null, value, args)
       }
       if (!valid) {
         errors = [...errors, rule]
@@ -77,9 +81,7 @@ function validate (field) {
     }
   })
 
-  const data = { ...field, validation: { errors, dirty: errors.length > 0 } };
-  console.log(`data`, data)
-  return data;
+  return { ...field, validation: { errors, dirty: errors.length > 0 } }
 }
 
 /**
@@ -87,7 +89,8 @@ function validate (field) {
  * @param {object fields to validate} fn
  */
 export function validator (fn) {
-  const storeValues = writable({ fields: [], values: {}, valid: true })
+  const storeValues = writable({ fields: [], value: {}, valid: true })
+  onMount(() => validateFields(fn, storeValues))
   afterUpdate(() => validateFields(fn, storeValues))
   return storeValues
 }

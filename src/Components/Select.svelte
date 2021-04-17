@@ -26,43 +26,29 @@
   }
   // Insert default value.
   onMount(() => {
-    if (options) {
-      if (options.length > 0) {
-        dispatch('changeValue', {
-          name: name,
-          value: value ? value : options[0].value,
-        });
-      }
-    }
+    dispatch('changeValue', {
+      name: name,
+      value: value ? value : null,
+    });
   });
 
-  // beforeUpdate(() => {
-  //   if (options) {
-  //     if (options.length > 0) {
-  //       const data = value ? value : options[0].value;
-  //       dispatch('changeValue', {
-  //         name: name,
-  //         value: data,
-  //       });
-  //     }
-  //   }
-  // });
-
   afterUpdate(() => {
-    if (options) {
-      if (options.length > 0) {
-        const data = value ? value : null;
-        dispatch('changeValue', {
-          name: name,
-          value: data,
-        });
-      }
-    }
+    const data = value ? value : null;
+    // console.log(`afterUpdate ${name}`, data);
+    dispatch('changeValue', {
+      name: name,
+      value: data,
+    });
   });
 </script>
 
 <strong>{value}</strong>
 <hr />
+<pre>
+  <code>
+    {JSON.stringify(options, null, 2)}
+  </code>
+</pre>
 <select
   {id}
   {name}
@@ -72,7 +58,7 @@
   bind:value
 >
   {#each options as option (option.value)}
-    <option value={option.value} selected={value ? value : options[1].value}
+    <option value={option.value} selected={value ? value : options[0].value}
       >{option.title}</option
     >
   {/each}

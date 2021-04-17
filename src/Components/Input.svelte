@@ -7,7 +7,7 @@
     tick,
   } from 'svelte';
   import clsx from 'clsx';
-  import { settingStore } from './stores.js';
+  import { settingStore } from '../lib/stores.js';
 
   // Declar variables.
   export let type = 'text';
@@ -52,16 +52,8 @@
     });
   });
 
-  // beforeUpdate(() => {
-  //   console.log(`value before`, value);
-  //   dispatch('changeValue', {
-  //     name,
-  //     value,
-  //   });
-  // });
-
-  afterUpdate(async () => {
-    await tick();
+  afterUpdate(() => {
+    // await tick();
     dispatch('changeValue', {
       name,
       value,
