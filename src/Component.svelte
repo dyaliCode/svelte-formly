@@ -1,11 +1,6 @@
 <script>
-  import { onMount } from 'svelte';
   import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
-
-  const settings = {
-    style: 'bootstrap',
-  };
 
   const fetchUsers = async () => {
     const res = await fetch(
@@ -19,7 +14,7 @@
 
   const fetchPosts = async () => {
     const res = await fetch(
-      `https://jsonplaceholder.typicode.com/posts?_limit=2`
+      `https://jsonplaceholder.typicode.com/posts?_start=5&_limit=2`
     );
     const items = await res.json();
     return items.map((item) => {
@@ -27,48 +22,11 @@
     });
   };
 
-  // onMount(async () => {
-  //   const users = await fetchUsers();
-  //   console.log(`users`, users);
-  // });
+  const settings = {
+    style: 'bootstrap',
+  };
 
   const fields = [
-    // {
-    //   type: 'input',
-    //   name: 'total',
-    //   attributes: {
-    //     type: 'number',
-    //     class: ['form-control'],
-    //     placeholder: 'Tap your total',
-    //     label: 'Total',
-    //   },
-    //   rules: ['required', 'min:6'],
-    //   messages: {
-    //     required: 'Total field is required!',
-    //     min: 'Total field must have more that 6 caracters!',
-    //   },
-    //   preprocess: (field, fields) => {
-    //     field.value = field.value ? field.value * 2 : field.value;
-    //   },
-    // },
-    // {
-    //   type: 'input',
-    //   name: 'firstname',
-    //   attributes: {
-    //     type: 'text',
-    //     class: ['form-control'],
-    //     placeholder: 'Tap your first name',
-    //     label: 'firstname',
-    //   },
-    //   rules: ['required', 'min:6'],
-    //   messages: {
-    //     required: 'Firstname field is required!',
-    //     min: 'First name field must have more that 6 caracters!',
-    //   },
-    //   preprocess: (field, fields) => {
-    //     field.value = field.value ? field.value.toUpperCase() : field.value;
-    //   },
-    // },
     {
       type: 'select',
       name: 'country',
@@ -76,7 +34,6 @@
         type: 'text',
         label: 'Country',
       },
-      value: null,
       rules: ['required'],
       options: [
         {
@@ -101,53 +58,23 @@
         label: 'City',
       },
       rules: ['required'],
-      preprocess: async (field, values) => {
-        // let options = [];
-        // if (values.country) {
-        //   if (values.country == 1) {
-        //     options = [
-        //       {
-        //         value: 'null',
-        //         title: 'Any',
-        //       },
-        //       {
-        //         value: '3',
-        //         title: 'Agadir',
-        //       },
-        //       {
-        //         value: '4',
-        //         title: 'Casablanca',
-        //       },
-        //     ];
-        //   } else if (values.country == 2) {
-        //     console.log(`333`, 333);
-        //     options = [
-        //       {
-        //         value: 'null',
-        //         title: 'Any',
-        //       },
-        //       {
-        //         value: '5',
-        //         title: 'Seol',
-        //       },
-        //       {
-        //         value: '6',
-        //         title: 'Toyota',
-        //       },
-        //     ];
-        //   }
-        // } else {
-        //   options = [];
-        // }
+      preprocess: async (field, fields, values) => {
+        const value = values.country;
 
         let options = [];
-        if (values.country == 1) {
+        if (value == 1) {
           options = await fetchUsers();
-        } else if (values.country == 2) {
+        } else if (value == 2) {
           options = await fetchPosts();
         }
 
+        options.unshift({
+          value: null,
+          title: 'SELECT',
+        });
+
         field.options = options;
+        field.value = value == 'null' ? null : field.value;
         return field;
       },
     },

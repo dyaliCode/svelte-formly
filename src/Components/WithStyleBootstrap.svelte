@@ -1,10 +1,7 @@
 <script>
-  import { afterUpdate, beforeUpdate, onDestroy, onMount, tick } from 'svelte';
-  import { get, writable } from 'svelte/store';
-
-  import { validator, validateFields } from '../Validation/';
-  import { valuesForm, fieldsStore } from '../lib/stores.js';
-  import { isRequired } from './helpers.js';
+  import { validate } from '../Validation/index';
+  import { valuesForm } from '../lib/stores.js';
+  import { isRequired } from '../lib/helpers.js';
 
   // Import components.
   import Tag from './Tag.svelte';
@@ -19,103 +16,72 @@
 
   // Declar variables;
   export let fields = [];
-  $: listFields = fields;
   let isValidForm = true;
-
-  // Set values form and status validation.
-  const setValuesForm = (isValidForm, values) => {
-    valuesForm.set({
-      isValidForm,
-      values: { ...values },
-    });
-  };
+  let values = [];
 
   // Change values.
-  const changeValueHander = (event) => {
-    let values = $valuesForm;
-    values = { ...values.values, [`${event.detail.name}`]: event.detail.value };
-    fields.filter((field) => {
-      if (field.name === event.detail.name) {
-        field.value = event.detail.value;
-      }
-    });
-    setValuesForm(isValidForm, values);
-  };
-
-  $: list = fields;
-  let form = validator(() => {
-    const items = get(fieldsStore);
-    fields = items;
-    // console.log(`fields`, fields);
-    if (items.length > 0) {
-      items.map(async (field, index) => {
-        if (field.preprocess) {
-          field = await preprocess_field(field, index, items);
+  const changeValueHander = async (event) => {
+    values[`${event.detail.name}`] = event.detail.value;
+    let mylist = await Promise.all(
+      listFields.map(async (field) => {
+        if (field.name == event.detail.name) {
+          field.value = event.detail.value;
         }
-      });
-      // console.log(`items`, items);
-    }
-    return items;
-  });
-
-  onMount(() => {
-    fieldsStore.set(fields);
-  });
-
-  form.subscribe((data) => {
-    console.log(`subscribe data:`, data);
-    isValidForm = data.valid;
-    fields = data.fields.length > 0 ? data.fields : fields;
-    fieldsStore.set(data.fields);
-    // console.log(`$fieldsStore`, $fieldsStore);
-    setValuesForm(data.valid, data.values);
-  });
-
-  const preprocess_field = async (field, index, fields) => {
-    const { values } = $valuesForm;
-    const fnc = field.preprocess;
-    const newField = await fnc.call(null, field, values);
-    fields[index] = newField;
-    fieldsStore.set(fields);
-    return newField;
+        if (field.preprocess) {
+          const fnc = field.preprocess;
+          field = await preprocess_field(field, listFields, values);
+        }
+        field = await validate(field);
+        if (field.rules) {
+          field.validation.errors.length > 0
+            ? (isValidForm = false)
+            : (isValidForm = true);
+        }
+        valuesForm.set({ values, valid: isValidForm });
+        return field;
+      })
+    );
+    itemsField = mylist;
   };
 
-  // beforeUpdate(() => {
-  //   const newFields = get(fieldsStore);
-  //   listFields.set(newFields);
-  //   //   fields = get(fieldsStore);
-  //   //   console.log(`fields111`, fields);
-  //   //   // console.log(`listFields`, listFields);
-  // });
+  let itemsField = [];
+  $: listFields = itemsField;
 
-  afterUpdate(() => {
-    form.subscribe((data) => {
-      listFields = data.fields.length > 0 ? data.fields : fields;
-    });
-    console.log(`$form`, $form);
+  const preprocess_field = async (field, fields, values) => {
+    const fnc = field.preprocess;
+    field = await fnc.call(null, field, fields, values);
+    return field;
+  };
+
+  fields.map(async (field) => {
+    if (field.preprocess) {
+      const fnc = field.preprocess;
+      field = await preprocess_field(field, fields, values);
+    }
+    field = await validate(field);
+    if (field.rules) {
+      field.validation.errors.length > 0
+        ? (isValidForm = false)
+        : (isValidForm = true);
+    }
+
+    itemsField = [...itemsField, field];
+
+    values[`${field.name}`] = field.value;
+    valuesForm.set({ values, valid: isValidForm });
+
+    return field;
   });
 </script>
 
-<h2>{JSON.stringify($form, null, 2)}</h2>
-<!-- {#await fieldsStore}
-  <p>...waiting</p>
-{:then data}
-  <pre>
-  <code>
-    {JSON.stringify(data, null, 2)}
-  </code>
-</pre>
-{:catch error}
-  <p style="color: red">err</p>
-{/await} -->
-<!--
+<h2>{isValidForm}</h2>
 <pre>
   <code>
-    {JSON.stringify(list, null, 2)}
+    {JSON.stringify(listFields, null, 2)}
   </code>
-</pre> -->
-<hr />
-{#each listFields as field (field.name)}
+</pre>
+
+{#each listFields as field, i}
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
     classes={field.prefix
@@ -221,22 +187,11 @@
     {/if}
     <!-- Error messages -->
     {#if !isValidForm}
-      <!-- {#if $form[field.name].validation.errors.length > 0}
-        {#each $form[field.name].validation.errors as error, index}
+      {#if field.validation.errors.length > 0}
+        {#each field.validation.errors as error, index}
           <Message {error} messages={field.messages} />
         {/each}
-      {/if} -->
-      {#await form}
-        <p>...waiting</p>
-      {:then data}
-        <!-- <pre>
-          <code>
-            {JSON.stringify($form, null, 2)}
-          </code>
-        </pre> -->
-      {:catch error}
-        <p style="color: red">error</p>
-      {/await}
+      {/if}
     {/if}
   </Tag>
 {/each}

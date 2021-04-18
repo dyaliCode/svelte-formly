@@ -1,16 +1,14 @@
 import { afterUpdate } from 'svelte'
-import { writable, get } from 'svelte/store'
-import { valuesForm, fieldsStore } from '../lib/stores.js'
-import * as CoreRules from './rules'
+import { writable } from 'svelte/store'
+import * as CoreRules from './rules/index'
 
 /**
  * Validation fields.
  * @param {object fields to validate} fn
  * @param {default fields with config} storeValues
  */
-function validateFields (fn, storeValues) {
+export function validateFields (fn, storeValues) {
   let fields = fn.call()
-  // let fields = get(fieldsStore)
   let valid = true
   let values = {}
 
@@ -32,9 +30,6 @@ function validateFields (fn, storeValues) {
     values = { ...values, [field.name]: field.value }
   })
 
-  // fields = { fields, values, valid }
-  console.log(`fields`, fields)
-  fieldsStore.set(fields)
   storeValues.set({ fields, values, valid })
 }
 
@@ -42,7 +37,7 @@ function validateFields (fn, storeValues) {
  * Validate field by rule.
  * @param {configs field} field
  */
-function validate (field) {
+export function validate (field) {
   const { value, rules } = field
   let valid = true
   let rule
@@ -77,9 +72,7 @@ function validate (field) {
     }
   })
 
-  const data = { ...field, validation: { errors, dirty: errors.length > 0 } };
-  console.log(`data`, data)
-  return data;
+  return { ...field, validation: { errors, dirty: errors.length > 0 } }
 }
 
 /**

@@ -19,3 +19,4 @@ export const settingStore = writable({
 
 export const alertsStore = writable([])
 
+export const testStore = writable([])
