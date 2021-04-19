@@ -1,11 +1,5 @@
 <script>
-  import {
-    afterUpdate,
-    beforeUpdate,
-    createEventDispatcher,
-    onMount,
-    tick,
-  } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import clsx from 'clsx';
   import { settingStore } from '../lib/stores.js';
 
@@ -13,7 +7,7 @@
   export let type = 'text';
   export let id = '';
   export let name = '';
-  export let value = null;
+  export let value = '';
   export let classe = '';
   export let min = null;
   export let max = null;
@@ -31,39 +25,23 @@
   function onChangerValue(event) {
     dispatch('changeValue', {
       name: name,
-      value: event.target.value,
+      value: scanValue(event.target.value),
     });
   }
 
-  // onMount(() => {
-  //   // Added default classes by style type.
-  //   settingStore.subscribe((data) => {
-  //     if (data.style) {
-  //       defaulClasses = data.style === 'bootstrap' ? 'form-control' : '';
-  //     }
-  //   });
+  function scanValue(value) {
+    let newVal = null;
+    if (value) {
+      newVal = type === 'number' ? parseInt(value) : value;
+    }
+    return newVal;
+  }
 
-  //   // Insert default values.
-  //   type = type === 'datetimelocal' ? 'datetime-local' : type;
-  //   value = type === 'range' ? (value = min) : value;
-  //   dispatch('changeValue', {
-  //     name,
-  //     value,
-  //   });
-  // });
-
-  // afterUpdate(() => {
-  //   // await tick();
-  //   dispatch('changeValue', {
-  //     name,
-  //     value,
-  //   });
-  // });
+  onMount(() => {
+    console.log(`value ${name}`, value);
+  });
 </script>
 
-<br />
-<span>{value}</span>
-<br />
 <input
   {type}
   {id}

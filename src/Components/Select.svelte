@@ -20,14 +20,7 @@
   }
 </script>
 
-<select
-  {id}
-  {name}
-  class={clsx(classe)}
-  {disabled}
-  on:input={onChangeValue}
-  bin:value
->
+<select {id} {name} class={clsx(classe)} {disabled} on:input={onChangeValue}>
   {#if options}
     {#each options as option}
       <option value={option.value} selected={option.value === value}
