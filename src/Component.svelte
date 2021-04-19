@@ -85,8 +85,8 @@
         label: 'Total',
       },
       preprocess: async (field, fields, values) => {
+        console.log(`values`, values);
         const data = get(valuesForm);
-        console.log(`data`, data);
         if (values.a && values.b) {
           field.value = `${parseInt(values.a) * parseInt(values.b)} MAD`;
         } else {
@@ -95,77 +95,90 @@
         return field;
       },
     },
-    // {
-    //   type: 'select',
-    //   name: 'country',
-    //   attributes: {
-    //     label: 'Country',
-    //   },
-    //   rules: ['required'],
-    //   options: [
-    //     {
-    //       value: null,
-    //       title: 'Any',
-    //     },
-    //     {
-    //       value: 1,
-    //       title: 'Users',
-    //     },
-    //     {
-    //       value: 2,
-    //       title: 'Posts',
-    //     },
-    //   ],
-    // },
-    // {
-    //   type: 'select',
-    //   name: 'city',
-    //   attributes: {
-    //     label: 'City',
-    //   },
-    //   rules: ['required'],
-    //   preprocess: async (field, fields, values) => {
-    //     const value = values.country;
+    {
+      type: 'input', // required
+      name: 'name-field-range', // required
+      attributes: {
+        type: 'range',
+        id: 'id-field-range', // required
+        class: ['form-range'], // optional
+        label: 'Label field range', // optional
+        min: 10, // required
+        max: 100, // required
+        step: 10, // required
+      },
+    },
+    {
+      type: 'select',
+      name: 'country',
+      attributes: {
+        label: 'Country',
+      },
+      rules: ['required'],
+      options: [
+        {
+          value: null,
+          title: 'Any',
+        },
+        {
+          value: 1,
+          title: 'Users',
+        },
+        {
+          value: 2,
+          title: 'Posts',
+        },
+      ],
+    },
+    {
+      type: 'select',
+      name: 'city',
+      attributes: {
+        label: 'City',
+      },
+      rules: ['required'],
+      preprocess: async (field, fields, values) => {
+        const value = values.country;
 
-    //     let options = [];
-    //     if (value == 1) {
-    //       options = await fetchUsers();
-    //     } else if (value == 2) {
-    //       options = await fetchPosts();
-    //     }
+        let options = [];
+        if (value == 1) {
+          options = await fetchUsers();
+        } else if (value == 2) {
+          options = await fetchPosts();
+        }
 
-    //     options.unshift({
-    //       value: null,
-    //       title: 'SELECT',
-    //     });
+        options.unshift({
+          value: null,
+          title: 'SELECT',
+        });
 
-    //     field.options = options;
-    //     field.value = value == 'null' ? null : field.value;
-    //     return field;
-    //   },
-    // },
-    // {
-    //   type: 'input',
-    //   name: 'category',
-    //   rules: ['required'],
-    //   value: '',
-    //   attributes: {
-    //     type: 'text',
-    //     class: ['form-control'],
-    //     label: 'Category',
-    //     disabled: true,
-    //   },
-    //   preprocess: async (field, fields, values) => {
-    //     const value = values.country;
-    //     if (value == 1) {
-    //       field.value = 'Fetching from users';
-    //     } else if (value == 2) {
-    //       field.value = 'Fetching from posts';
-    //     }
-    //     // field.value = '';
-    //     return field;
-    //   },
-    // },
+        field.options = options;
+        field.value = value == 'null' ? null : field.value;
+        return field;
+      },
+    },
+    {
+      type: 'input',
+      name: 'category',
+      rules: ['required'],
+      value: '',
+      attributes: {
+        type: 'text',
+        class: ['form-control'],
+        label: 'Category',
+        disabled: true,
+      },
+      preprocess: async (field, fields, values) => {
+        const value = values.country;
+        if (value == 1) {
+          field.value = 'Fetching from users';
+        } else if (value == 2) {
+          field.value = 'Fetching from posts';
+        }
+        // field.value = '';
+        return field;
+      },
+    },
   ];
 
   function onSubmit() {

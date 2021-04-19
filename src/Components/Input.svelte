@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
   import clsx from 'clsx';
-  import { settingStore } from '../lib/stores.js';
 
   // Declar variables.
   export let type = 'text';
@@ -18,12 +17,13 @@
   export let disabled = null;
   export let readonly = null;
 
+  let typeOfNumber = ['number', 'range'];
+
   const dispatch = createEventDispatcher();
   let defaulClasses = null;
 
   // Change value field.
   function onChangerValue(event) {
-    console.log(`11`, 11);
     dispatch('changeValue', {
       name: name,
       value: scanValue(event.target.value),
@@ -33,7 +33,7 @@
   function scanValue(value) {
     let newVal = null;
     if (value) {
-      newVal = type === 'number' ? parseInt(value) : value;
+      newVal = typeOfNumber.includes(type) ? parseInt(value) : value;
     }
     return newVal;
   }
