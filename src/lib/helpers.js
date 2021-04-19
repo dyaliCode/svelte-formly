@@ -53,4 +53,10 @@ function getDefaultMessageError (messages, rule) {
   return message
 }
 
-export { setAttributes, createDomElement, addDomElement, getDefaultMessageError, isArray, isRequired }
+async function preprocessField (field, fields, values) {
+  const fnc = field.preprocess
+  field = await fnc.call(null, field, fields, values)
+  return field
+};
+
+export { setAttributes, createDomElement, addDomElement, getDefaultMessageError, isArray, isRequired, preprocessField }

@@ -28,10 +28,42 @@
 
   const fields = [
     {
+      type: 'input',
+      name: 'a',
+      rules: ['required'],
+      attributes: {
+        type: 'number',
+        class: ['form-control'],
+        label: 'A',
+      },
+    },
+    {
+      type: 'input',
+      name: 'b',
+      rules: ['required'],
+      attributes: {
+        type: 'number',
+        class: ['form-control'],
+        label: 'B',
+      },
+    },
+    {
+      type: 'input',
+      name: 'total',
+      attributes: {
+        type: 'number',
+        class: ['form-control'],
+        label: 'Total',
+      },
+      preprocess: async (field, fields, values) => {
+        field.value = parseInt(values.a) * parseInt(values.b);
+        return field;
+      },
+    },
+    {
       type: 'select',
       name: 'country',
       attributes: {
-        type: 'text',
         label: 'Country',
       },
       rules: ['required'],
@@ -54,7 +86,6 @@
       type: 'select',
       name: 'city',
       attributes: {
-        type: 'text',
         label: 'City',
       },
       rules: ['required'],

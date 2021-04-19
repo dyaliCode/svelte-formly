@@ -28,9 +28,11 @@
   on:input={onChangeValue}
   bin:value
 >
-  {#each options as option (option.value)}
-    <option value={option.value} selected={option.value === value}
-      >{option.title}</option
-    >
-  {/each}
+  {#if options}
+    {#each options as option}
+      <option value={option.value} selected={option.value === value}
+        >{option.title}</option
+      >
+    {/each}
+  {/if}
 </select>

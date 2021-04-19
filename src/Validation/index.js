@@ -39,40 +39,44 @@ export function validateFields (fn, storeValues) {
  */
 export function validate (field) {
   const { value, rules } = field
+
   let valid = true
   let rule
   let errors = []
 
-  rules.map(validator => {
-    // For file type.
-    if (validator === 'file') {
-      if (value) {
-        Object.keys(value).map(i => {
-          Object.keys(field.file).map(r => {
-            valid = rules[r].call(null, value[i], field.file[r])
-            if (!valid) {
-              errors = [...errors, r]
-            }
+  if (rules) {
+    rules.map(validator => {
+      // For file type.
+      if (validator === 'file') {
+        if (value) {
+          Object.keys(value).map(i => {
+            Object.keys(field.file).map(r => {
+              valid = rules[r].call(null, value[i], field.file[r])
+              if (!valid) {
+                errors = [...errors, r]
+              }
+            })
           })
-        })
-      }
-    } else {
-      // For custom rule.
-      if (typeof validator === 'function') {
-        valid = validator.call()
-        rule = validator.name
+        }
       } else {
-        const args = validator.split(/:/g)
-        rule = args.shift()
-        valid = CoreRules[rule].call(null, value, args)
+        // For custom rule.
+        if (typeof validator === 'function') {
+          valid = validator.call()
+          rule = validator.name
+        } else {
+          const args = validator.split(/:/g)
+          rule = args.shift()
+          valid = CoreRules[rule].call(null, value, args)
+        }
+        if (!valid) {
+          errors = [...errors, rule]
+        }
       }
-      if (!valid) {
-        errors = [...errors, rule]
-      }
-    }
-  })
-
-  return { ...field, validation: { errors, dirty: errors.length > 0 } }
+    })
+    return { ...field, validation: { errors, dirty: errors.length > 0 } }
+  } else {
+    return { ...field, validation: { errors, dirty: true } }
+  }
 }
 
 /**

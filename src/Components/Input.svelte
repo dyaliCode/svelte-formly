@@ -35,30 +35,30 @@
     });
   }
 
-  onMount(() => {
-    // Added default classes by style type.
-    settingStore.subscribe((data) => {
-      if (data.style) {
-        defaulClasses = data.style === 'bootstrap' ? 'form-control' : '';
-      }
-    });
+  // onMount(() => {
+  //   // Added default classes by style type.
+  //   settingStore.subscribe((data) => {
+  //     if (data.style) {
+  //       defaulClasses = data.style === 'bootstrap' ? 'form-control' : '';
+  //     }
+  //   });
 
-    // Insert default values.
-    type = type === 'datetimelocal' ? 'datetime-local' : type;
-    value = type === 'range' ? (value = min) : value;
-    dispatch('changeValue', {
-      name,
-      value,
-    });
-  });
+  //   // Insert default values.
+  //   type = type === 'datetimelocal' ? 'datetime-local' : type;
+  //   value = type === 'range' ? (value = min) : value;
+  //   dispatch('changeValue', {
+  //     name,
+  //     value,
+  //   });
+  // });
 
-  afterUpdate(() => {
-    // await tick();
-    dispatch('changeValue', {
-      name,
-      value,
-    });
-  });
+  // afterUpdate(() => {
+  //   // await tick();
+  //   dispatch('changeValue', {
+  //     name,
+  //     value,
+  //   });
+  // });
 </script>
 
 <br />

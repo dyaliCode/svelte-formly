@@ -1,7 +1,8 @@
 <script>
+  import { onMount } from 'svelte';
   import { validate } from '../Validation/index';
   import { valuesForm } from '../lib/stores.js';
-  import { isRequired } from '../lib/helpers.js';
+  import { isRequired, preprocessField } from '../lib/helpers.js';
 
   // Import components.
   import Tag from './Tag.svelte';
@@ -29,7 +30,8 @@
         }
         if (field.preprocess) {
           const fnc = field.preprocess;
-          field = await preprocess_field(field, listFields, values);
+          field = await preprocessField(field, listFields, values);
+          values[`${field.name}`] = field.value;
         }
         field = await validate(field);
         if (field.rules) {
@@ -47,39 +49,31 @@
   let itemsField = [];
   $: listFields = itemsField;
 
-  const preprocess_field = async (field, fields, values) => {
-    const fnc = field.preprocess;
-    field = await fnc.call(null, field, fields, values);
-    return field;
-  };
+  onMount(async () => {
+    const myList = await Promise.all(
+      fields.map(async (field) => {
+        if (field.preprocess) {
+          const fnc = field.preprocess;
+          field = await preprocessField(field, fields, values);
+        }
+        field = await validate(field);
+        if (field.rules) {
+          field.validation.errors.length > 0
+            ? (isValidForm = false)
+            : (isValidForm = true);
+        }
 
-  fields.map(async (field) => {
-    if (field.preprocess) {
-      const fnc = field.preprocess;
-      field = await preprocess_field(field, fields, values);
-    }
-    field = await validate(field);
-    if (field.rules) {
-      field.validation.errors.length > 0
-        ? (isValidForm = false)
-        : (isValidForm = true);
-    }
+        itemsField = [...itemsField, field];
 
-    itemsField = [...itemsField, field];
+        values[`${field.name}`] = field.value;
+        valuesForm.set({ values, valid: isValidForm });
 
-    values[`${field.name}`] = field.value;
-    valuesForm.set({ values, valid: isValidForm });
-
-    return field;
+        return field;
+      })
+    );
+    itemsField = myList;
   });
 </script>
-
-<h2>{isValidForm}</h2>
-<pre>
-  <code>
-    {JSON.stringify(listFields, null, 2)}
-  </code>
-</pre>
 
 {#each listFields as field, i}
   <Tag
