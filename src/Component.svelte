@@ -28,12 +28,16 @@
 
   const fields = [
     {
+      prefix: {
+        class: ['form-group'],
+      },
+      value: 'email@email.com',
       type: 'input',
       name: 'email',
       rules: ['required', 'email'],
-      messages: {
-        email: 'format email not correct',
-      },
+      // messages: {
+      //   email: 'format email not correct',
+      // },
       attributes: {
         type: 'email',
         class: ['form-control'],
@@ -41,8 +45,12 @@
       },
     },
     {
+      prefix: {
+        class: ['form-group'],
+      },
       type: 'input',
       name: 'a',
+      value: 1,
       rules: ['required'],
       attributes: {
         type: 'number',
@@ -51,8 +59,12 @@
       },
     },
     {
+      prefix: {
+        class: ['form-group'],
+      },
       type: 'input',
       name: 'b',
+      value: 1,
       rules: ['required'],
       attributes: {
         type: 'number',
@@ -61,15 +73,25 @@
       },
     },
     {
+      prefix: {
+        class: ['form-group'],
+      },
       type: 'input',
       name: 'total',
+      rules: ['required'],
       attributes: {
         type: 'text',
         class: ['form-control'],
         label: 'Total',
       },
       preprocess: async (field, fields, values) => {
-        field.value = `${parseInt(values.a) * parseInt(values.b)} MAD`;
+        const data = get(valuesForm);
+        console.log(`data`, data);
+        if (values.a && values.b) {
+          field.value = `${parseInt(values.a) * parseInt(values.b)} MAD`;
+        } else {
+          // field.value = '0 MAD';
+        }
         return field;
       },
     },
@@ -177,5 +199,10 @@
 <style>
   :global(.invalid-feedback) {
     display: block !important;
+  }
+  :global(.form-group) {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: solid 1px #ddd;
   }
 </style>

@@ -75,7 +75,7 @@ export function validate (field) {
     })
     return { ...field, validation: { errors, dirty: errors.length > 0 } }
   } else {
-    return { ...field, validation: { errors, dirty: true } }
+    return { ...field, validation: { errors, dirty: false } }
   }
 }
 

@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, afterUpdate } from 'svelte';
   import clsx from 'clsx';
 
   // Declar variables.
@@ -18,6 +18,10 @@
       value: event.target.value,
     });
   }
+
+  afterUpdate(() => {
+    value = value ? value : null;
+  });
 </script>
 
 <select {id} {name} class={clsx(classe)} {disabled} on:input={onChangeValue}>

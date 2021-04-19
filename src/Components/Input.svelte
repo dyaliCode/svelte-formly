@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
   import clsx from 'clsx';
   import { settingStore } from '../lib/stores.js';
 
@@ -23,6 +23,7 @@
 
   // Change value field.
   function onChangerValue(event) {
+    console.log(`11`, 11);
     dispatch('changeValue', {
       name: name,
       value: scanValue(event.target.value),
@@ -37,8 +38,8 @@
     return newVal;
   }
 
-  onMount(() => {
-    console.log(`value ${name}`, value);
+  afterUpdate(() => {
+    value = value ? value : null;
   });
 </script>
 

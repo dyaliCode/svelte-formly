@@ -34,15 +34,16 @@
           values[`${field.name}`] = field.value;
         }
         field = await validate(field);
-        if (field.rules) {
-          field.validation.errors.length > 0
-            ? (isValidForm = false)
-            : (isValidForm = true);
-        }
-        valuesForm.set({ values, valid: isValidForm });
         return field;
       })
     );
+    const dirty = mylist.find((item) => {
+      if (item.validation) {
+        return item.validation.dirty === true;
+      }
+    });
+    isValidForm = dirty ? false : true;
+    valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
   };
 
@@ -50,32 +51,32 @@
   $: listFields = itemsField;
 
   onMount(async () => {
-    const myList = await Promise.all(
+    const mylist = await Promise.all(
       fields.map(async (field) => {
+        values[`${field.name}`] = field.value;
         if (field.preprocess) {
           const fnc = field.preprocess;
           field = await preprocessField(field, fields, values);
         }
         field = await validate(field);
-        if (field.rules) {
-          field.validation.errors.length > 0
-            ? (isValidForm = false)
-            : (isValidForm = true);
-        }
-
         itemsField = [...itemsField, field];
-
         values[`${field.name}`] = field.value;
-        valuesForm.set({ values, valid: isValidForm });
-
         return field;
       })
     );
-    itemsField = myList;
+    const dirty = mylist.find((item) => {
+      if (item.validation) {
+        return item.validation.dirty === true;
+      }
+    });
+    isValidForm = dirty ? false : true;
+    valuesForm.set({ values, valid: isValidForm });
+    itemsField = mylist;
   });
 </script>
 
-{#each listFields as field, i}
+{isValidForm}
+{#each listFields as field (field.name)}
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
     classes={field.prefix
@@ -182,8 +183,8 @@
     <!-- Error messages -->
     {#if !isValidForm}
       {#if field.validation.errors.length > 0}
-        {#each field.validation.errors as error, index}
-          <Message {error} messages={field.messages} />
+        {#each field.validation.errors as error}
+          <Message {error} messages={field.messages ? field.messages : []} />
         {/each}
       {/if}
     {/if}
