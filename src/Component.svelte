@@ -32,34 +32,13 @@
 
   const fields = [
     {
-      type: 'autocomplete', // required
-      name: 'name-field-autocomplete', // required
-      // rules: ['required'],
+      type: 'file', // required
+      name: 'name-field-file', // required
       attributes: {
-        id: 'id-field-autocomplete', // required
+        id: 'id-field-file',
         multiple: true, // optional
       },
-      extra: {
-        loadItemes: [
-          // list items with id and title attributes.
-          {
-            id: 1,
-            title: 'item 1',
-          },
-          {
-            id: 2,
-            title: 'item 2',
-          },
-          {
-            id: 3,
-            title: 'item 3',
-          },
-          {
-            id: 4,
-            title: 'item 4',
-          },
-        ],
-      },
+      showPreview: true, // optional
     },
   ];
 

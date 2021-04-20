@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { validate } from '../Validation/index';
   import { valuesForm } from '../lib/stores.js';
-  import { isRequired, preprocessField } from '../lib/helpers.js';
+  import { preprocessField } from '../lib/helpers.js';
 
   // Import components.
   import Tag from './Tag.svelte';
@@ -106,13 +106,8 @@
       />
     {:else if field.type === 'radio'}
       <Radio {field} on:changeValue={changeValueHander} />
-    {:else if field.type === 'checkbox'}
-      <Checkbox
-        classe={field.attributes.class}
-        items={field.items}
-        aligne={field.attributes.aligne}
-        on:changeValue={changeValueHander}
-      />
+    {:else if field.type == 'checkbox'}
+      <Checkbox {field} on:changeValue={changeValueHander} />
     {:else if field.type === 'file'}
       <File
         name={field.name}

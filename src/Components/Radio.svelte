@@ -20,7 +20,10 @@
     }
     return list;
   }
+
+  // Dispatch.
   const dispatch = createEventDispatcher();
+
   // Change value.
   function onChangeValue(event) {
     dispatch('changeValue', {
@@ -28,6 +31,7 @@
       value: event.target.value,
     });
   }
+
   // Insert default value.
   onMount(() => {
     if (items.length > 0) {

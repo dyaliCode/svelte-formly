@@ -1,19 +1,6 @@
 <script>
   import { afterUpdate, createEventDispatcher } from 'svelte';
 
-  //  name={field.name}
-  // id={field.attributes.id}
-  // classe={field.attributes.class}
-  // loadItemes={field.loadItemes}
-  // disabled={field.attributes.disabled}
-  // multiple={field.attributes.multiple}
-
-  // Declar variables.
-  // export let id = false;
-  // export let name = '';
-  // export let multiple = false;
-  // export let placeholder = multiple ? 'Tap here...' : '';
-
   // Declar variables.
   export let field = {};
   const defaultAttr = {

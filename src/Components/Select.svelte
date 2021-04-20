@@ -2,7 +2,7 @@
   import { createEventDispatcher, afterUpdate } from 'svelte';
   import clsx from 'clsx';
 
-  import { isRequired, scanValue } from '../lib/helpers';
+  import { isRequired } from '../lib/helpers';
 
   export let field = {};
   const defaultAttr = {
@@ -13,14 +13,7 @@
   let classe = null;
   let defaulClasses = null;
 
-  // name={field.name}
-  // value={field.value}
-  // id={field.attributes.id}
-  // classe={field.attributes.class}
-  // options={field.options}
-  // disabled={field.attributes.disabled}
-  // multiple={field.attributes.multiple}
-
+  // Dispatch.
   const dispatch = createEventDispatcher();
 
   // Change value.
@@ -31,6 +24,7 @@
     });
   }
 
+  // Lifecycle.
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
     classe = clsx(field.attributes.classes, defaulClasses);
