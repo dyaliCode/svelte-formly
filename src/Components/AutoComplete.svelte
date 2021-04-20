@@ -1,13 +1,28 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { afterUpdate, createEventDispatcher } from 'svelte';
+
+  //  name={field.name}
+  // id={field.attributes.id}
+  // classe={field.attributes.class}
+  // loadItemes={field.loadItemes}
+  // disabled={field.attributes.disabled}
+  // multiple={field.attributes.multiple}
 
   // Declar variables.
-  export let id = false;
-  export let name = '';
-  export let placeholder = 'Tap here...';
-  export let multiple = false;
-  export let loadItemes = [];
-  let items = loadItemes;
+  // export let id = false;
+  // export let name = '';
+  // export let multiple = false;
+  // export let placeholder = multiple ? 'Tap here...' : '';
+
+  // Declar variables.
+  export let field = {};
+  const defaultAttr = {
+    id: '',
+    placeholder: field.attributes.multiple ? 'Tap here...' : '',
+    multiple: false,
+  };
+
+  let items = field.extra.loadItemes;
   let itemsFiltered = [];
   let itemsSelected = [];
   let hideListItems = true;
@@ -30,7 +45,7 @@
 
     // Affect values.
     dispatch('changeValue', {
-      name: name,
+      name: field.name,
       value: itemsSelected,
     });
 
@@ -47,23 +62,23 @@
 
     // Affect values.
     dispatch('changeValue', {
-      name: name,
-      value: itemsSelected,
+      name: field.name,
+      value: itemsSelected.length > 0 ? itemsFiltered : null,
     });
   };
 
   // Clear all items selected.
   function clearAll() {
     itemsSelected = [];
-    items = loadItemes;
+    items = field.extra.loadItemes;
     if (useFilter) {
       itemsFiltered = items;
     }
 
     // Affect values.
     dispatch('changeValue', {
-      name: name,
-      value: itemsSelected,
+      name: field.name,
+      value: itemsSelected.length > 0 ? itemsFiltered : null,
     });
   }
 
@@ -83,15 +98,29 @@
       useFilter = true;
     }
   };
+
+  // Lifecycle.
+  afterUpdate(() => {
+    if (field.value == undefined) {
+      field.value = null;
+    } else {
+      if (field.value.length === 0) {
+        field.value = null;
+      } else {
+        field.value = field.value;
+      }
+    }
+    // classe = clsx(field.attributes.classes, defaulClasses);
+    field.attributes = { ...defaultAttr, ...field.attributes };
+  });
 </script>
 
 <div class="select-container">
-  <!-- Selected item and clear button -->
   {#if itemsSelected.length > 0}
     {#each itemsSelected as itemSelected}
-      <div class="item-selected {multiple ? 'tag' : ''}">
+      <div class="item-selected {field.attributes.multiple ? 'tag' : ''}">
         <span>{itemSelected.title}</span>
-        {#if multiple}
+        {#if field.attributes.multiple}
           <div class="clear" on:click={() => deleteTag(itemSelected)}>
             <svg
               width="100%"
@@ -128,12 +157,12 @@
 
   <!-- Input to autocomplete -->
   <input
-    {id}
+    id={field.attributes.id}
     type="text"
     spellcheck="false"
     autocorrect="off"
     autocomplete="off"
-    {placeholder}
+    placeholder={field.attributes.placeholder}
     on:keyup={onFilter}
     bind:value
   />
@@ -173,7 +202,7 @@
 <style>
   .select-container {
     border: solid 1px #dddddd;
-    border-radius: 4px;
+    border-radius: 5px;
     height: auto;
     position: relative;
     display: flex;
@@ -184,7 +213,6 @@
     padding: 0 15px;
     height: 40px;
     width: 100%;
-    /* position: absolute; */
     box-sizing: border-box;
   }
   .items-container {

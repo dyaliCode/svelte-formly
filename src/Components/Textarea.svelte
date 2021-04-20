@@ -1,57 +1,54 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { afterUpdate, createEventDispatcher } from 'svelte';
   import clsx from 'clsx';
-  import { settingStore } from './stores.js';
+
+  import { isRequired } from '../lib/helpers';
 
   // Declar variables.
-  export let id = '';
-  export let name = '';
-  export let value = '';
-  export let classe = '';
-  export let placeholder = '';
-  export let rows = 4;
-  export let cols = 50;
-  export let required = false;
-  export let disabled = false;
-  export let readonly = false;
-
-  const dispatch = createEventDispatcher();
+  export let field = {};
+  const defaultAttr = {
+    id: '',
+    classes: '',
+    min: null,
+    max: null,
+    step: null,
+    autocomplete: 'off',
+    placeholder: '',
+    required: false,
+    disabled: false,
+    readonly: false,
+  };
+  let classe = null;
   let defaulClasses = null;
+
+  // Dispatch.
+  const dispatch = createEventDispatcher();
 
   // Change value.
   function onChangerValue(event) {
     dispatch('changeValue', {
-      name: name,
+      name: field.name,
       value: event.target.value,
     });
   }
 
   // Insert default value.
-  onMount(() => {
-    // Added default classes by style type.
-    settingStore.subscribe((data) => {
-      if (data.style) {
-        defaulClasses = data.style === 'bootstrap' ? 'form-control' : '';
-      }
-    });
-
-    dispatch('changeValue', {
-      name,
-      value,
-    });
+  afterUpdate(() => {
+    field.value = field.value == undefined ? null : field.value;
+    classe = clsx(field.attributes.classes, defaulClasses);
+    field.attributes = { ...defaultAttr, ...field.attributes };
   });
 </script>
 
 <textarea
-  {id}
-  {name}
-  class={clsx(classe)}
-  {placeholder}
-  {required}
-  {disabled}
-  {readonly}
-  {rows}
-  {cols}
+  name={field.name}
+  class={classe}
+  value={field.value}
+  placeholder={field.attributes.placeholder}
+  required={isRequired(field)}
+  disabled={field.attributes.disabled}
+  readonly={field.attributes.readonly}
+  rows={field.attributes.rows}
+  cols={field.attributes.cols}
   on:input={onChangerValue}
 />
-{value}

@@ -7,7 +7,7 @@
   const rules = {
     required: 'This field is required',
     min: 'This field must be more characters long',
-    max: 'This field must be more characters long',
+    max: 'This field must be less characters long',
     between: 'This field must be between values defined',
     equal: 'This field must be equal to value defined',
     email: 'This email format is not valid',

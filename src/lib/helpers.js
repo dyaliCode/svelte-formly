@@ -1,6 +1,6 @@
 function isRequired (field) {
-  if (field.validation) {
-    if (field.validation.length > 0) {
+  if (field.rules) {
+    if (field.rules.length > 0) {
       return true
     }
   }

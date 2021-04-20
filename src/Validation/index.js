@@ -38,7 +38,8 @@ export function validateFields (fn, storeValues) {
  * @param {configs field} field
  */
 export function validate (field) {
-  const { value, rules } = field
+  let { value, rules } = field
+  // value = value === undefined ? '' : value
 
   let valid = true
   let rule

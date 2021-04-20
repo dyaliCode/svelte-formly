@@ -1,49 +1,58 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { afterUpdate, createEventDispatcher } from 'svelte';
   import clsx from 'clsx';
 
-  import { scanValue } from '../lib/helpers';
+  import { isRequired, scanValue } from '../lib/helpers';
 
   // Declar variables.
-  export let type = 'text';
-  export let id = '';
-  export let name = '';
-  export let value = '';
-  export let classe = '';
-  export let min = null;
-  export let max = null;
-  export let step = null;
-  export let autocomplete = 'off';
-  export let placeholder = null;
-  export let required = null;
-  export let disabled = null;
-  export let readonly = null;
-
-  const dispatch = createEventDispatcher();
+  export let field = {};
+  const defaultAttr = {
+    id: '',
+    classes: '',
+    min: null,
+    max: null,
+    step: null,
+    autocomplete: 'off',
+    placeholder: '',
+    required: false,
+    disabled: false,
+    readonly: false,
+  };
+  let classe = null;
   let defaulClasses = null;
+
+  // Dispatch.
+  const dispatch = createEventDispatcher();
 
   // Change value field.
   function onChangerValue(event) {
     dispatch('changeValue', {
-      name: name,
-      value: scanValue(type, event.target.value),
+      name: field.name,
+      value: scanValue(field.attributes.type, event.target.value),
     });
   }
+
+  // Lifecycle.
+  afterUpdate(() => {
+    field.value = field.value == undefined ? null : field.value;
+    classe = clsx(field.attributes.classes, defaulClasses);
+    field.attributes = { ...defaultAttr, ...field.attributes };
+  });
 </script>
 
 <input
-  {type}
-  {id}
-  {name}
-  {value}
-  class={clsx(classe, defaulClasses)}
-  {placeholder}
-  {required}
-  {disabled}
-  {readonly}
-  {min}
-  {max}
-  {step}
-  {autocomplete}
+  type={field.attributes.type}
+  name={field.name}
+  value={field.value}
+  id={field.attributes.id}
+  class={classe}
+  placeholder={field.attributes.placeholder}
+  required={isRequired(field)}
+  disabled={field.attributes.disabled}
+  readonly={field.attributes.readonly}
+  min={field.attributes.min}
+  max={field.attributes.max}
+  step={field.attributes.step}
+  autocomplete={field.attributes.autocomplete}
   on:input={onChangerValue}
 />

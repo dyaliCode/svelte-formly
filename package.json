@@ -51,6 +51,7 @@
     "rollup-plugin-svelte": "^6.1.1",
     "rollup-plugin-terser": "^5.1.1",
     "sass": "^1.22.10",
+    "svelte": "^3.37.0",
     "svelte-preprocess": "^2.15.1"
   },
   "keywords": [
@@ -101,7 +102,6 @@
     }
   },
   "dependencies": {
-    "clsx": "^1.0.4",
-    "svelte": "^3.37.0"
+    "clsx": "^1.0.4"
   }
 }

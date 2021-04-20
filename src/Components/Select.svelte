@@ -2,34 +2,58 @@
   import { createEventDispatcher, afterUpdate } from 'svelte';
   import clsx from 'clsx';
 
-  // Declar variables.
-  export let id = '';
-  export let name = '';
-  export let classe = '';
-  export let options = [];
-  export let disabled = false;
-  export let value;
+  import { isRequired, scanValue } from '../lib/helpers';
+
+  export let field = {};
+  const defaultAttr = {
+    id: '',
+    classes: '',
+    disabled: false,
+  };
+  let classe = null;
+  let defaulClasses = null;
+
+  // name={field.name}
+  // value={field.value}
+  // id={field.attributes.id}
+  // classe={field.attributes.class}
+  // options={field.options}
+  // disabled={field.attributes.disabled}
+  // multiple={field.attributes.multiple}
+
   const dispatch = createEventDispatcher();
 
   // Change value.
   function onChangeValue(event) {
     dispatch('changeValue', {
-      name: name,
+      name: field.name,
       value: event.target.value,
     });
   }
 
   afterUpdate(() => {
-    value = value ? value : null;
+    field.value = field.value == undefined ? null : field.value;
+    classe = clsx(field.attributes.classes, defaulClasses);
+    field.attributes = { ...defaultAttr, ...field.attributes };
   });
 </script>
 
-<select {id} {name} class={clsx(classe)} {disabled} on:input={onChangeValue}>
-  {#if options}
-    {#each options as option}
-      <option value={option.value} selected={option.value === value}
-        >{option.title}</option
-      >
-    {/each}
+<select
+  name={field.name}
+  value={field.value}
+  id={field.attributes.id}
+  class={clsx(classe)}
+  required={isRequired(field)}
+  disabled={field.attributes.disabled}
+  on:input={onChangeValue}
+>
+  {#if field.extra}
+    {#if field.extra.options}
+      {#each field.extra.options as option}
+        <option value={option.value} selected={option.value === field.value}
+          >{option.title}</option
+        >
+      {/each}
+    {/if}
   {/if}
 </select>

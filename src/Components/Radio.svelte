@@ -1,17 +1,30 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
   import clsx from 'clsx';
+
   // Declar variables.
-  export let name = '';
-  export let value;
-  export let classe = '';
-  export let aligne = 'default';
-  export let items = [];
+  export let field = {};
+  const defaultAttr = {
+    classes: '',
+  };
+  let classe = null;
+  let defaulClasses = null;
+  export let items = getItems(field);
+
+  function getItems(field) {
+    let list = [];
+    if (field.extra) {
+      if (field.extra.items) {
+        list = field.extra.items;
+      }
+    }
+    return list;
+  }
   const dispatch = createEventDispatcher();
   // Change value.
   function onChangeValue(event) {
     dispatch('changeValue', {
-      name: name,
+      name: field.name,
       value: event.target.value,
     });
   }
@@ -19,24 +32,33 @@
   onMount(() => {
     if (items.length > 0) {
       dispatch('changeValue', {
-        name: name,
+        name: field.name,
         value: items[0].value,
       });
     }
+  });
+
+  // Lifecycle.
+  afterUpdate(() => {
+    field.value = field.value == undefined ? null : field.value;
+    classe = clsx(field.attributes.classes, defaulClasses);
+    field.attributes = { ...defaultAttr, ...field.attributes };
   });
 </script>
 
 {#each items as item, i}
   <div
-    class={aligne === 'inline' ? 'form-check form-check-inline' : 'form-check'}
+    class={field.extra.aligne === 'inline'
+      ? 'form-check form-check-inline'
+      : 'form-check'}
   >
     <input
       type="radio"
-      class={clsx(classe)}
+      class={classe}
       id={item.id}
-      {name}
+      name={field.name}
       value={item.value}
-      checked={item.value === value}
+      checked={item.value === field.value}
       on:input={onChangeValue}
     />
     <span>{item.title}</span>
