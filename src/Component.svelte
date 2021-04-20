@@ -1,6 +1,13 @@
 <script>
+  import { afterUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
+  import { fieldsStore } from './lib/stores';
+
+  let colorBorder;
+  // $: valid = $valuesForm.valid;
+  let data = $valuesForm;
+  $: values = data;
 
   const fetchUsers = async () => {
     const res = await fetch(
@@ -28,156 +35,32 @@
 
   const fields = [
     {
-      prefix: {
-        class: ['form-group'],
-      },
-      value: 'email@email.com',
-      type: 'input',
-      name: 'email',
-      rules: ['required', 'email'],
-      // messages: {
-      //   email: 'format email not correct',
-      // },
+      type: 'autocomplete', // required
+      name: 'name-field-autocomplete', // required
+      id: 'id-field-autocomplete', // required
       attributes: {
-        type: 'email',
-        class: ['form-control'],
-        label: 'Email',
+        label: 'auto',
       },
-    },
-    {
-      prefix: {
-        class: ['form-group'],
-      },
-      type: 'input',
-      name: 'a',
-      value: 1,
-      rules: ['required'],
-      attributes: {
-        type: 'number',
-        class: ['form-control'],
-        label: 'A',
-      },
-    },
-    {
-      prefix: {
-        class: ['form-group'],
-      },
-      type: 'input',
-      name: 'b',
-      value: 1,
-      rules: ['required'],
-      attributes: {
-        type: 'number',
-        class: ['form-control'],
-        label: 'B',
-      },
-    },
-    {
-      prefix: {
-        class: ['form-group'],
-      },
-      type: 'input',
-      name: 'total',
-      rules: ['required'],
-      attributes: {
-        type: 'text',
-        class: ['form-control'],
-        label: 'Total',
-      },
-      preprocess: async (field, fields, values) => {
-        console.log(`values`, values);
-        const data = get(valuesForm);
-        if (values.a && values.b) {
-          field.value = `${parseInt(values.a) * parseInt(values.b)} MAD`;
-        } else {
-          // field.value = '0 MAD';
-        }
-        return field;
-      },
-    },
-    {
-      type: 'input', // required
-      name: 'name-field-range', // required
-      attributes: {
-        type: 'range',
-        id: 'id-field-range', // required
-        class: ['form-range'], // optional
-        label: 'Label field range', // optional
-        min: 10, // required
-        max: 100, // required
-        step: 10, // required
-      },
-    },
-    {
-      type: 'select',
-      name: 'country',
-      attributes: {
-        label: 'Country',
-      },
-      rules: ['required'],
-      options: [
+      multiple: true, // optional
+      loadItemes: [
+        // list items with id and title attributes.
         {
-          value: null,
-          title: 'Any',
+          id: 1,
+          title: 'item 1',
         },
         {
-          value: 1,
-          title: 'Users',
+          id: 2,
+          title: 'item 2',
         },
         {
-          value: 2,
-          title: 'Posts',
+          id: 3,
+          title: 'item 3',
+        },
+        {
+          id: 4,
+          title: 'item 4',
         },
       ],
-    },
-    {
-      type: 'select',
-      name: 'city',
-      attributes: {
-        label: 'City',
-      },
-      rules: ['required'],
-      preprocess: async (field, fields, values) => {
-        const value = values.country;
-
-        let options = [];
-        if (value == 1) {
-          options = await fetchUsers();
-        } else if (value == 2) {
-          options = await fetchPosts();
-        }
-
-        options.unshift({
-          value: null,
-          title: 'SELECT',
-        });
-
-        field.options = options;
-        field.value = value == 'null' ? null : field.value;
-        return field;
-      },
-    },
-    {
-      type: 'input',
-      name: 'category',
-      rules: ['required'],
-      value: '',
-      attributes: {
-        type: 'text',
-        class: ['form-control'],
-        label: 'Category',
-        disabled: true,
-      },
-      preprocess: async (field, fields, values) => {
-        const value = values.country;
-        if (value == 1) {
-          field.value = 'Fetching from users';
-        } else if (value == 2) {
-          field.value = 'Fetching from posts';
-        }
-        // field.value = '';
-        return field;
-      },
     },
   ];
 
@@ -185,8 +68,18 @@
     const data = get(valuesForm);
     console.log(`data.onSubmit`, data);
   }
+
+  afterUpdate(() => {
+    data = get(valuesForm);
+    console.log(`data`, data);
+  });
 </script>
 
+<pre>
+  <code>
+    {JSON.stringify(values, null, 2)}
+  </code>
+</pre>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -216,6 +109,6 @@
   :global(.form-group) {
     margin-bottom: 20px;
     padding: 20px;
-    border: solid 1px #ddd;
+    /* border: solid 1px var(--theme-color-border); */
   }
 </style>

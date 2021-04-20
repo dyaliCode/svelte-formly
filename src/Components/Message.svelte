@@ -1,8 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
   // Declar variables.
   export let error;
   export let messages = {};
+
   // Liste rules with default message.
   const rules = {
     required: 'This field is required',
@@ -15,6 +15,7 @@
     maxsize: 'This file has size more than max size',
     custom_rule: 'Error',
   };
+
   // Get error message by rule.
   function displayError(rule) {
     let message = '';

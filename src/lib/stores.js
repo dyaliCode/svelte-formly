@@ -7,7 +7,7 @@ export const storeValues = writable({
 export const currentFieldStore = writable(null)
 
 export const valuesForm = writable({
-  isValidForm: true,
+  valid: true,
   values: {}
 })
 

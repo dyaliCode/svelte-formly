@@ -53,10 +53,28 @@ function getDefaultMessageError (messages, rule) {
   return message
 }
 
+function scanValue (type, value) {
+  let typeOfNumber = ['number', 'range']
+  let newVal = null
+  if (value) {
+    newVal = typeOfNumber.includes(type) ? parseInt(value) : value
+  }
+  return newVal
+}
+
 async function preprocessField (field, fields, values) {
   const fnc = field.preprocess
   field = await fnc.call(null, field, fields, values)
   return field
 };
 
-export { setAttributes, createDomElement, addDomElement, getDefaultMessageError, isArray, isRequired, preprocessField }
+export {
+  setAttributes,
+  createDomElement,
+  addDomElement,
+  getDefaultMessageError,
+  isArray,
+  isRequired,
+  preprocessField,
+  scanValue
+}

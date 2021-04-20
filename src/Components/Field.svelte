@@ -19,6 +19,8 @@
   export let fields = [];
   let isValidForm = true;
   let values = [];
+  let itemsField = [];
+  $: listFields = itemsField;
 
   // Change values.
   const changeValueHander = async (event) => {
@@ -47,9 +49,7 @@
     itemsField = mylist;
   };
 
-  let itemsField = [];
-  $: listFields = itemsField;
-
+  // Lifecycle.
   onMount(async () => {
     const mylist = await Promise.all(
       fields.map(async (field) => {
@@ -75,7 +75,11 @@
   });
 </script>
 
-{isValidForm}
+<!-- <pre>
+  <code>
+    {JSON.stringify(itemsField, null, 2)}
+  </code>
+</pre> -->
 {#each listFields as field (field.name)}
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
@@ -149,9 +153,10 @@
     {:else if field.type === 'radio'}
       <Radio
         name={field.name}
+        value={field.value}
         classe={field.attributes.class}
         items={field.items}
-        aligne={field.attributes.aligne}
+        aligne={field.aligne}
         on:changeValue={changeValueHander}
       />
     {:else if field.type === 'checkbox'}

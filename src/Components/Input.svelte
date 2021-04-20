@@ -1,6 +1,8 @@
 <script>
-  import { createEventDispatcher, onMount, afterUpdate } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import clsx from 'clsx';
+
+  import { scanValue } from '../lib/helpers';
 
   // Declar variables.
   export let type = 'text';
@@ -17,8 +19,6 @@
   export let disabled = null;
   export let readonly = null;
 
-  let typeOfNumber = ['number', 'range'];
-
   const dispatch = createEventDispatcher();
   let defaulClasses = null;
 
@@ -26,21 +26,9 @@
   function onChangerValue(event) {
     dispatch('changeValue', {
       name: name,
-      value: scanValue(event.target.value),
+      value: scanValue(type, event.target.value),
     });
   }
-
-  function scanValue(value) {
-    let newVal = null;
-    if (value) {
-      newVal = typeOfNumber.includes(type) ? parseInt(value) : value;
-    }
-    return newVal;
-  }
-
-  afterUpdate(() => {
-    value = value ? value : null;
-  });
 </script>
 
 <input
