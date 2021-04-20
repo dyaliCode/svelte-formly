@@ -48,10 +48,9 @@
     "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-svelte": "^5.0.0",
+    "rollup-plugin-svelte": "^6.1.1",
     "rollup-plugin-terser": "^5.1.1",
     "sass": "^1.22.10",
-    "svelte": "^3.8.0",
     "svelte-preprocess": "^2.15.1"
   },
   "keywords": [
@@ -102,6 +101,7 @@
     }
   },
   "dependencies": {
-    "clsx": "^1.0.4"
+    "clsx": "^1.0.4",
+    "svelte": "^3.37.0"
   }
 }
