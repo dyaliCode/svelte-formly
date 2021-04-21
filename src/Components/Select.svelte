@@ -4,6 +4,7 @@
 
   import { isRequired } from '../lib/helpers';
 
+  // Declar variables.
   export let field = {};
   const defaultAttr = {
     id: '',

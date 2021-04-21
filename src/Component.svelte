@@ -32,13 +32,15 @@
 
   const fields = [
     {
-      type: 'file', // required
-      name: 'name-field-file', // required
+      type: 'file',
+      name: 'name-field-file',
       attributes: {
         id: 'id-field-file',
-        multiple: true, // optional
       },
-      showPreview: true, // optional
+      extra: {
+        multiple: true,
+        showPreview: true,
+      },
     },
   ];
 

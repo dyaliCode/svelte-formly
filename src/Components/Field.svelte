@@ -109,15 +109,7 @@
     {:else if field.type == 'checkbox'}
       <Checkbox {field} on:changeValue={changeValueHander} />
     {:else if field.type === 'file'}
-      <File
-        name={field.name}
-        id={field.attributes.id}
-        classe={field.attributes.class}
-        disabled={field.attributes.disabled}
-        multiple={field.attributes.multiple}
-        showPreview={field.showPreview}
-        on:changeValue={changeValueHander}
-      />
+      <File {field} on:changeValue={changeValueHander} />
     {/if}
 
     <!-- Description -->
