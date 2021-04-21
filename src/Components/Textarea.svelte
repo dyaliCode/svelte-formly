@@ -18,6 +18,9 @@
     disabled: false,
     readonly: false,
   };
+  const fieldAttributes = field.attributes ? field.attributes : {};
+  field.attributes = { ...defaultAttributes, ...fieldAttributes };
+
   let classe = null;
   let defaulClasses = null;
 
@@ -36,7 +39,6 @@
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
     classe = clsx(field.attributes.classes, defaulClasses);
-    field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>
 

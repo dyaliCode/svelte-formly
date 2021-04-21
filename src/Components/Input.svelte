@@ -7,6 +7,7 @@
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
+    type: 'text',
     id: '',
     classes: '',
     min: null,
@@ -18,6 +19,9 @@
     disabled: false,
     readonly: false,
   };
+  const fieldAttributes = field.attributes ? field.attributes : {};
+  field.attributes = { ...defaultAttributes, ...fieldAttributes };
+
   let classe = null;
   let defaulClasses = null;
 
@@ -36,10 +40,14 @@
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
     classe = clsx(field.attributes.classes, defaulClasses);
-    field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>
 
+<pre>
+  <code>
+    {JSON.stringify(field, null, 2)}
+  </code>
+</pre>
 <input
   type={field.attributes.type}
   name={field.name}

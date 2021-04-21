@@ -40,12 +40,17 @@
         value: items[0].value,
       });
     }
+    if (field.attributes) {
+      if (field.attributes.classes) {
+        classe = field.attributes.classes;
+      }
+    }
   });
 
   // Lifecycle.
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
-    classe = clsx(field.attributes.classes, defaulClasses);
+    classe = clsx(classe, defaulClasses);
     field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>

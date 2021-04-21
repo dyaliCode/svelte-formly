@@ -1,13 +1,24 @@
 <script>
-  import { afterUpdate, createEventDispatcher } from 'svelte';
+  import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
 
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
     id: '',
-    placeholder: field.attributes.multiple ? 'Tap here...' : '',
+    spellcheck: false,
+    autocorrect: 'off',
+    autocomplete: 'off',
+    placeholder: 'Tap here...',
+  };
+  const fieldAttributes = field.attributes ? field.attributes : {};
+  field.attributes = { ...defaultAttributes, ...fieldAttributes };
+
+  const defaultExtra = {
+    loadItemes: [],
     multiple: false,
   };
+  const fieldExtra = field.extra ? field.extra : {};
+  field.extra = { ...defaultExtra, ...fieldExtra };
 
   let items = field.extra.loadItemes;
   let itemsFiltered = [];
@@ -21,10 +32,10 @@
   // Select item.
   const onSelectItem = (item) => {
     hideListItems = true;
-    const oldSelected = itemsSelected.filter((s) => s.id === item.id);
+    const oldSelected = itemsSelected.filter((s) => s.value === item.value);
     if (oldSelected.length === 0) {
       itemsSelected = [...itemsSelected, item];
-      items = items.filter((i) => i.id != item.id);
+      items = items.filter((i) => i.value != item.value);
     }
     if (useFilter) {
       itemsFiltered = items;
@@ -37,11 +48,16 @@
     });
 
     value = '';
+
+    // placeholder
+    field.attributes.placeholder = field.extra.multiple
+      ? field.attributes.placeholder
+      : '';
   };
 
   // Delete tag
   const deleteTag = (item) => {
-    itemsSelected = itemsSelected.filter((i) => i.id != item.id);
+    itemsSelected = itemsSelected.filter((i) => i.value != item.value);
     items = [...items, item];
     if (useFilter) {
       itemsFiltered = items;
@@ -50,7 +66,7 @@
     // Affect values.
     dispatch('changeValue', {
       name: field.name,
-      value: itemsSelected.length > 0 ? itemsFiltered : null,
+      value: itemsSelected,
     });
   };
 
@@ -65,7 +81,7 @@
     // Affect values.
     dispatch('changeValue', {
       name: field.name,
-      value: itemsSelected.length > 0 ? itemsFiltered : null,
+      value: itemsSelected,
     });
   }
 
@@ -79,35 +95,27 @@
           (val) => typeof val === 'string' && val.includes(keyword)
         );
       });
+      console.log(`filtered`, filtered);
       if (filtered.length > 0) {
         itemsFiltered = filtered;
+        useFilter = true;
+      } else {
+        itemsFiltered = [];
+        useFilter = false;
       }
-      useFilter = true;
+      hideListItems = useFilter > 0 ? false : true;
+    } else {
+      hideListItems = true;
     }
   };
-
-  // Lifecycle.
-  afterUpdate(() => {
-    if (field.value == undefined) {
-      field.value = null;
-    } else {
-      if (field.value.length === 0) {
-        field.value = null;
-      } else {
-        field.value = field.value;
-      }
-    }
-    // classe = clsx(field.attributes.classes, defaulClasses);
-    field.attributes = { ...defaultAttributes, ...field.attributes };
-  });
 </script>
 
 <div class="select-container">
   {#if itemsSelected.length > 0}
     {#each itemsSelected as itemSelected}
-      <div class="item-selected {field.attributes.multiple ? 'tag' : ''}">
+      <div class="item-selected {field.extra.multiple ? 'tag' : ''}">
         <span>{itemSelected.title}</span>
-        {#if field.attributes.multiple}
+        {#if field.extra.multiple}
           <div class="clear" on:click={() => deleteTag(itemSelected)}>
             <svg
               width="100%"
@@ -142,19 +150,17 @@
     </div>
   {/if}
 
-  <!-- Input to autocomplete -->
   <input
     id={field.attributes.id}
     type="text"
-    spellcheck="false"
-    autocorrect="off"
-    autocomplete="off"
+    spellcheck={field.attributes.spellcheck}
+    autocorrect={field.attributes.autocorrect}
+    autocomplete={field.attributes.autocomplete}
     placeholder={field.attributes.placeholder}
     on:keyup={onFilter}
     bind:value
   />
 
-  <!-- List items -->
   {#if !hideListItems}
     <div style="position: relative; width: 100%;">
       <div class="items-container">
@@ -189,7 +195,7 @@
 <style>
   .select-container {
     border: solid 1px #dddddd;
-    border-radius: 5px;
+    border-radius: 4px;
     height: auto;
     position: relative;
     display: flex;
@@ -200,6 +206,7 @@
     padding: 0 15px;
     height: 40px;
     width: 100%;
+    /* position: absolute; */
     box-sizing: border-box;
   }
   .items-container {

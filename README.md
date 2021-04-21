@@ -12,6 +12,7 @@ by [@kamalkech](https://github.com/kamalkech)
 
 - ⚡️ Generate dynamic forms for sveltejs / Sapper js.
 - 😍 Easy to extend with custom field type, custom validation.
+- ✔️ Compatible with Svelte, Svetelkit, Sapper, Routify
 
 ## Installation
 
@@ -26,19 +27,25 @@ npm i svelte-formly
 
   const fields = [
     {
-      type: "color",
+      type: "input",
       name: "color",
-      id: "color",
-      label: "Color Form"
+      attributes: {
+        type: "color",
+        id: "color",
+        label: "Color Form"
+        class: ['class-field-color']
+      }
     },
     {
       type: "text",
       name: "firstname",
       value: "",
-      id: "firstname",
-      class: ["form-control"],
-      placeholder: "Tap your first name",
-      validation: ["required", "min:6"],
+      attributes: {
+        id: "firstname",
+        class: ["form-control"],
+        placeholder: "Tap your first name",
+      },
+      rules: ["required", "min:6"],
       messages: {
         required: "Firstname field is required!",
         min: "First name field must have more that 6 caracters!"
@@ -48,11 +55,14 @@ npm i svelte-formly
       prefix: {
         class: ["custom-form-group"]
       },
-      type: "text",
+      type: "input",
       name: "lastname",
       value: "",
-      id: "lastname",
-      placeholder: "Tap your lastname",
+      attributes: {
+        type: "text",
+        id: "lastname",
+        placeholder: "Tap your lastname",
+      },
       description: {
         class: ["custom-class-desc"],
         text: "Custom text for description"
@@ -62,25 +72,29 @@ npm i svelte-formly
       type: "email",
       name: "email",
       value: "",
-      id: "email",
-      placeholder: "Tap your email",
-      validation: ["required", "email"]
+      attributes: {
+        id: "email",
+        placeholder: "Tap your email",
+      },
+      rules: ["required", "email"]
     },
     {
       type: "radio",
       name: "gender",
-      items: [
-        {
-          id: "female",
-          value: "female",
-          title: "Female"
-        },
-        {
-          id: "male",
-          value: "male",
-          title: "Male"
-        }
-      ]
+      extra: {
+        items: [
+          {
+            id: "female",
+            value: "female",
+            title: "Female"
+          },
+          {
+            id: "male",
+            value: "male",
+            title: "Male"
+          }
+        ]
+      }
     },
     {
       type: "select",

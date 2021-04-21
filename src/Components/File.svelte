@@ -62,12 +62,15 @@
   });
 </script>
 
+<pre>
+  <code>
+    {JSON.stringify(field, null, 2)}
+  </code>
+</pre>
 <input
   type="file"
-  name={field.attributes.name}
-  id={field.attributes.id}
+  name={field.name}
   class={classe}
-  disabled={field.attributes.disabled}
   {multiple}
   on:input={onChangerValue}
   bind:this={inputFile}

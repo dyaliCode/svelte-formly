@@ -2,6 +2,7 @@
   import { afterUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
+  import { fieldsStore } from './lib/stores';
 
   let data = $valuesForm;
   $: values = data;
@@ -17,6 +18,7 @@
   };
 
   const fetchPosts = async () => {
+    console.log('fetch Posts');
     const res = await fetch(
       `https://jsonplaceholder.typicode.com/posts?_start=5&_limit=2`
     );
@@ -28,15 +30,20 @@
 
   const fields = [
     {
-      type: 'file',
-      name: 'fetch',
-      attributes: {
-        classes: ['form-control'],
-      },
-      rules: ['required'],
+      type: 'autocomplete',
+      name: 'gender',
+      // attributes: {
+      //   placeholder: 'Tap here...',
+      // },
       extra: {
-        showPreview: true,
+        loadItemes: [],
         multiple: true,
+      },
+      preprocess: async (field, fields, values) => {
+        if (field.extra.loadItemes.length === 0) {
+          field.extra.loadItemes = await fetchPosts();
+        }
+        return field;
       },
     },
   ];
