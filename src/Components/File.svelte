@@ -4,7 +4,7 @@
 
   // Declar variables.
   export let field = {};
-  const defaultAttr = {
+  const defaultAttributes = {
     id: '',
     classe: '',
     disabled: null,
@@ -24,22 +24,29 @@
   // Change value field.
   function onChangerValue(event) {
     files = Array.from(event.target.files);
-    dispatch('changeValue', {
-      name: field.name,
-      value: files,
-    });
+    if (files.length > 0) {
+      dispatch('changeValue', {
+        name: field.name,
+        value: files,
+      });
+    }
   }
 
   // Delete file.
   function deleteFile(file) {
+    let newValue;
     files = files.filter((i) => i.name != file.name);
+    if (files.length === 0) {
+      inputFile.value = null;
+      newValue = null;
+    } else {
+      newValue = files;
+    }
+
     dispatch('changeValue', {
       name: field.name,
-      value: files,
+      value: newValue,
     });
-    if (files.length === 0) {
-      inputFile.value = '';
-    }
   }
 
   onMount(() => {
@@ -51,7 +58,7 @@
   });
 
   afterUpdate(() => {
-    field.attributes = { ...defaultAttr, ...field.attributes };
+    field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>
 
@@ -59,7 +66,7 @@
   type="file"
   name={field.attributes.name}
   id={field.attributes.id}
-  class={clsx(classe)}
+  class={classe}
   disabled={field.attributes.disabled}
   {multiple}
   on:input={onChangerValue}

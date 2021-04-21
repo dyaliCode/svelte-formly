@@ -6,7 +6,7 @@
 
   // Declar variables.
   export let field = {};
-  const defaultAttr = {
+  const defaultAttributes = {
     id: '',
     classes: '',
     disabled: false,
@@ -29,7 +29,7 @@
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
     classe = clsx(field.attributes.classes, defaulClasses);
-    field.attributes = { ...defaultAttr, ...field.attributes };
+    field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>
 
@@ -37,7 +37,7 @@
   name={field.name}
   value={field.value}
   id={field.attributes.id}
-  class={clsx(classe)}
+  class={classe}
   required={isRequired(field)}
   disabled={field.attributes.disabled}
   on:input={onChangeValue}

@@ -3,7 +3,7 @@
 
   // Declar variables.
   export let field = {};
-  const defaultAttr = {
+  const defaultAttributes = {
     id: '',
     placeholder: field.attributes.multiple ? 'Tap here...' : '',
     multiple: false,
@@ -98,7 +98,7 @@
       }
     }
     // classe = clsx(field.attributes.classes, defaulClasses);
-    field.attributes = { ...defaultAttr, ...field.attributes };
+    field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>
 

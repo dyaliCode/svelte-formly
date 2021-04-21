@@ -5,7 +5,7 @@
   // Declar variables.
   export let field = {};
   let values = [];
-  const defaultAttr = {
+  const defaultAttributes = {
     classes: '',
   };
   let classe = null;
@@ -54,7 +54,7 @@
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
     classe = clsx(field.attributes.classes, defaulClasses);
-    field.attributes = { ...defaultAttr, ...field.attributes };
+    field.attributes = { ...defaultAttributes, ...field.attributes };
   });
 </script>
 
@@ -64,7 +64,7 @@
   >
     <input
       type="checkbox"
-      class={clsx(classe)}
+      class={classe}
       id={item.id}
       name={item.name}
       checked={item.checked ? item.checked : false}

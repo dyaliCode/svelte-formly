@@ -26,20 +26,17 @@
     });
   };
 
-  const settings = {
-    style: 'bootstrap',
-  };
-
   const fields = [
     {
       type: 'file',
-      name: 'name-field-file',
+      name: 'fetch',
       attributes: {
-        id: 'id-field-file',
+        classes: ['form-control'],
       },
+      rules: ['required'],
       extra: {
-        multiple: true,
         showPreview: true,
+        multiple: true,
       },
     },
   ];
@@ -51,7 +48,6 @@
 
   afterUpdate(() => {
     data = get(valuesForm);
-    console.log(`data`, data);
   });
 </script>
 
@@ -60,11 +56,12 @@
     {JSON.stringify(values, null, 2)}
   </code>
 </pre>
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
       <form on:submit|preventDefault={onSubmit}>
-        <Field {fields} {settings} />
+        <Field {fields} />
         <button class="btn btn-primary btn-lg btn-block" type="submit"
           >Submit</button
         >
