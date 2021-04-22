@@ -15,7 +15,6 @@
     step: null,
     autocomplete: 'off',
     placeholder: '',
-    required: false,
     disabled: false,
     readonly: false,
   };
@@ -39,21 +38,16 @@
   // Lifecycle.
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
-    classe = clsx(field.attributes.classes, defaulClasses);
+    // classe = clsx(field.attributes.classes, defaulClasses);
   });
 </script>
 
-<pre>
-  <code>
-    {JSON.stringify(field, null, 2)}
-  </code>
-</pre>
 <input
   type={field.attributes.type}
   name={field.name}
   value={field.value}
   id={field.attributes.id}
-  class={classe}
+  class={clsx(field.attributes.classes)}
   placeholder={field.attributes.placeholder}
   required={isRequired(field)}
   disabled={field.attributes.disabled}

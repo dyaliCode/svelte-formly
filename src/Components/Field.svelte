@@ -79,8 +79,8 @@
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
     classes={field.prefix
-      ? field.prefix.class
-        ? field.prefix.class
+      ? field.prefix.classes
+        ? field.prefix.classes
         : 'form-group'
       : 'form-group'}
   >
@@ -115,7 +115,10 @@
     <!-- Description -->
     {#if field.description}
       {#if field.description.text}
-        <Tag tag={field.description.tag} classes={field.description.class}>
+        <Tag
+          tag={field.description.tag}
+          classes={field.description.classes ? field.description.classes : ''}
+        >
           {field.description.text}
         </Tag>
       {/if}

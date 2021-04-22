@@ -95,7 +95,6 @@
           (val) => typeof val === 'string' && val.includes(keyword)
         );
       });
-      console.log(`filtered`, filtered);
       if (filtered.length > 0) {
         itemsFiltered = filtered;
         useFilter = true;
@@ -206,7 +205,6 @@
     padding: 0 15px;
     height: 40px;
     width: 100%;
-    /* position: absolute; */
     box-sizing: border-box;
   }
   .items-container {

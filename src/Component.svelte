@@ -40,9 +40,11 @@
     // },
     {
       type: 'file',
-      name: 'myFile',
+      name: 'name-file',
       attributes: {
-        classes: ['form-control'],
+        id: 'id-field', // required
+        classes: ['form-control'], // optional
+        label: 'Image', // optional
       },
       extra: {
         multiple: true,
@@ -64,12 +66,6 @@
     data = get(valuesForm);
   });
 </script>
-
-<pre>
-  <code>
-    {JSON.stringify(values, null, 2)}
-  </code>
-</pre>
 
 <div class="container">
   <div class="row">
