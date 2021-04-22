@@ -12,6 +12,11 @@ by [@kamalkech](https://github.com/kamalkech)
 
 - ⚡️ Generate dynamic forms for sveltejs / Sapper js.
 - 😍 Easy to extend with custom field type, custom validation.
+- ✔️ Compatible with Svelte, Svetelkit, Sapper, Routify
+
+## Documentation
+
+[Link Documentation](https://documentation-svelte-formly.vercel.app/)
 
 ## Installation
 
@@ -30,79 +35,105 @@ npm i svelte-formly
 
   const fields = [
     {
-      type: "color",
-      name: "color",
-      id: "color",
-      label: "Color Form"
+      type: 'input',
+      name: 'color',
+      attributes: {
+        type: 'color',
+        label: 'Color Form',
+        id: 'color',
+        classes: ['class-field-color'],
+      },
     },
     {
-      type: "text",
-      name: "firstname",
-      value: "",
-      id: "firstname",
-      class: ["form-control"],
-      placeholder: "Tap your first name",
-      validation: ["required", "min:6"],
+      type: 'input',
+      name: 'firstname',
+      value: '',
+      attributes: {
+        type: 'text',
+        label: 'Username',
+        id: 'firstname',
+        classes: ['form-control'],
+        placeholder: 'Tap your first name',
+      },
+      rules: ['required', 'min:6'],
       messages: {
-        required: "Firstname field is required!",
-        min: "First name field must have more that 6 caracters!"
-      }
+        required: 'Firstname field is required!',
+        min: 'First name field must have more that 6 caracters!',
+      },
     },
     {
       prefix: {
-        class: ["custom-form-group"]
+        classes: ['custom-form-group'],
       },
-      type: "text",
-      name: "lastname",
-      value: "",
-      id: "lastname",
-      placeholder: "Tap your lastname",
+      type: 'input',
+      name: 'lastname',
+      value: '',
+      attributes: {
+        type: 'text',
+        id: 'lastname',
+        placeholder: 'Tap your lastname',
+        classes: ['form-control'],
+      },
       description: {
-        class: ["custom-class-desc"],
-        text: "Custom text for description"
-      }
+        classes: ['custom-class-desc'],
+        text: 'Custom text for description',
+      },
     },
     {
-      type: "email",
-      name: "email",
-      value: "",
-      id: "email",
-      placeholder: "Tap your email",
-      validation: ["required", "email"]
+      type: 'input',
+      name: 'email',
+      value: '',
+      attributes: {
+        type: 'email',
+        id: 'email',
+        placeholder: 'Tap your email',
+      },
+      rules: ['required', 'email'],
     },
     {
-      type: "radio",
-      name: "gender",
-      items: [
-        {
-          id: "female",
-          value: "female",
-          title: "Female"
-        },
-        {
-          id: "male",
-          value: "male",
-          title: "Male"
-        }
-      ]
+      type: 'radio',
+      name: 'gender',
+      extra: {
+        items: [
+          {
+            id: 'female',
+            value: 'female',
+            title: 'Female',
+          },
+          {
+            id: 'male',
+            value: 'male',
+            title: 'Male',
+          },
+        ],
+      },
     },
     {
-      type: "select",
-      name: "city",
-      id: "city",
-      label: "City",
-      validation: ["required"],
-      options: [
-        {
-          value: 1,
-          title: "Agadir"
-        },
-        {
-          value: 2,
-          title: "Casablanca"
-        }
-      ]
-    }
+      type: 'select',
+      name: 'city',
+      value: 1,
+      attributes: {
+        id: 'city',
+        label: 'City',
+      },
+      rules: ['required'],
+      extra: {
+        options: [
+          {
+            value: null,
+            title: 'All',
+          },
+          {
+            value: 1,
+            title: 'Agadir',
+          },
+          {
+            value: 2,
+            title: 'Casablanca',
+          },
+        ],
+      },
+    },
   ];
 
   let message = "";
@@ -111,7 +142,7 @@ npm i svelte-formly
 
   function onSubmit() {
     const data = get(valuesForm);
-    if (data.isValidForm) {
+    if (data.valid) {
       values = data.values;
       color = values.color ? values.color : color;
       message = "Congratulation! now your form is valid";
@@ -170,19 +201,25 @@ npm i -D svelte-formly
 
   const fields = [
     {
-      type: "text",
+      type: "input",
       name: "username",
-      id: "username",
-      validation: ["required"],
+      attributes: {
+        type: "text",
+        id: "username",
+      },
+      rules: ["required"],
       messages: {
         required: "Username is required!"
       }
     },
     {
-      type: "email",
+      type: "input",
       name: "email",
-      id: "email",
-      validation: ["required", "email"],
+      attributes: {
+        type: "email",
+        id: "email",
+      },
+      rules: ["required", "email"],
       messages: {
         required: "E-mail is required!"
       }
@@ -191,7 +228,7 @@ npm i -D svelte-formly
 
   function onSubmit() {
     const data = get(valuesForm);
-    if (data.isValidForm) {
+    if (data.valid) {
       const values = data.values;
       console.log('values', values);
     }
@@ -216,18 +253,25 @@ Inputs : text, password, email, number, tel
 <script>
   fields = [
     {
-      type: "text", // or password, email, number, tel, required
+      type: "input", // required
       name: "namefield", // required
-      id: "idfield", // required
-      class: "", // optional
       value: "", // optional
-      label: "", // optional
-      placeholder: "", // optional
-      min: null, // optional
-      max: null, // optional
-      disabled: false, // optional
-      readonly: false, // optional
-      validation: [] // optional
+      attributes: {
+        type: "text", // default=text or change to password, email, number, tel, color
+        id: "id-field", // required
+        classes: [], // optional
+        label: "", // optional
+        placeholder: "", // optional
+        min: null, // optional
+        max: null, // optional
+        disabled: false, // optional
+        readonly: false, // optional
+      },
+      extra: {}, // optional
+      rules: [], // optional
+      preprocess: (field, fields, values) => { // Hook to alter current field
+        return field
+      }
     }
   ]
 </script>
@@ -240,16 +284,22 @@ Textarea
   fields = [
     {
       type: "textarea", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      class: "", // optional
+      name: "name-field", // required
       value: "", // optional
-      label: "", // optional
-      disabled: false, // optional
-      readonly: false, // optional
-      rows: null, // optional
-      cols: null, // optional
-      validation: [] // optional
+      attributes: {
+        id: "id-field", // required
+        class: "", // optional
+        label: "", // optional
+        disabled: false, // optional
+        readonly: false, // optional
+        rows: null, // optional
+        cols: null, // optional
+      }
+      extra: {}, // optional
+      rules: [], // optional
+      preprocess: (field, fields, values) => { // Hook to alter current field
+        return field
+      }
     }
   ]
 </script>
@@ -262,22 +312,65 @@ Select
   fields = [
     {
       type: "select", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      class: "", // optional
-      label: "", // optional
-      disabled: false, // optional
-      options: [
-        {
-          value: 1,
-          title: 'option 1'
-        },
-        {
-          value: 2,
-          title: 'option 2'
-        }
-      ], // required
-      validation: [] // optional
+      name: "name-field", // required
+      attributes: {
+        id: "id-field", // required
+        classes: [], // optional
+        label: "", // optional
+        disabled: false, // optional
+      },
+      extra: {
+        options: [
+          {
+            value: 1,
+            title: 'option 1'
+          },
+          {
+            value: 2,
+            title: 'option 2'
+          }
+        ],
+      }, // optional
+      rules: [], // optional
+      preprocess: (field, fields, values) => { // Hook to alter current field
+        return field
+      }
+    }
+  ]
+</script>
+```
+
+Checkbox
+
+```javascript
+<script>
+  fields = [
+    {
+      type: "checkbox", // required
+      name: "name-field", // required
+      attributes: {
+        id: "id-field", // required
+        classes: [], // optional
+        label: "", // optional
+      },
+      extra: {
+        items: [
+          {
+            value: 1,
+            name: 'checkbox-1',
+            title: 'checkbox 1'
+          },
+          {
+            value: 2,
+            name: 'checkbox-2',
+            title: 'checkbox 2'
+          }
+        ],
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => { // Hook to alter current field
+        return field
+      }
     }
   ]
 </script>
@@ -290,24 +383,30 @@ Radio
   fields = [
     {
       type: "radio", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      class: "", // optional
-      label: "", // optional
-      disabled: false, // optional
-      items: [
-        {
-          id: 'radio1',
-          value: 1,
-          title: 'radio 1'
-        },
-        {
-          id: 'radio2',
-          value: 2,
-          title: 'radio 2'
-        }
-      ], // required
-      validation: [] // optional
+      name: "name-field", // required
+      attributes: {
+        id: "id-field", // required
+        classes: [], // optional
+        label: "", // optional
+      },
+      extra: {
+        items: [
+          {
+            id: 'radio-1',
+            value: 1,
+            title: 'radio 1'
+          },
+          {
+            id: 'radio-2',
+            value: 2,
+            title: 'radio 2'
+          }
+        ],
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => { // Hook to alter current field
+        return field
+      }
     }
   ]
 </script>
@@ -319,14 +418,22 @@ Color
 <script>
   fields = [
     {
-      type: "color", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      class: "", // optional
-      label: "", // optional
-      disabled: false, // optional
-      value: "#ff3e00" // optional
-    }
+      type: 'input', // required
+      name: 'name field', // required
+      value: '#ff3e00', // optional
+      attributes: {
+        type: 'color', // optional
+        id: 'id-field', // required
+        classes: [], // optional
+        label: 'Color', // optional
+        disabled: false, // optional
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => {
+        // Hook to alter current field
+        return field;
+      },
+    },
   ]
 </script>
 ```
@@ -337,14 +444,22 @@ Range
 <script>
   fields = [
     {
-      type: "range", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      class: "", // optional
-      label: "", // optional
-      min: 10, // required
-      max: 100, // required
-      step: 10 // required
+      type: 'input', // required
+      name: 'name field', // required
+      attributes: {
+        type: 'range', // optional
+        id: 'id-field', // required
+        classes: [], // optional
+        label: '', // optional
+        min: 10, // required
+        max: 100, // required
+        step: 10, // required
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => {
+        // Hook to alter current field
+        return field;
+      },
     }
   ]
 </script>
@@ -358,28 +473,38 @@ Autocomplete
 <script>
   fields = [
     {
-      type: "autocomplete", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      multiple: true, // optional
-      loadItemes: [ // list items with id and title attributes.
-        {
-          id: 1,
-          title: "item 1"
-        },
-        {
-          id: 2,
-          title: "item 2"
-        },
-        {
-          id: 3,
-          title: "item 3"
-        },
-        {
-          id: 4,
-          title: "item 4"
-        }
-      ]
+      type: 'autocomplete', // required
+      name: 'name field', // required
+      attributes: {
+        id: 'id-field', // optional
+      },
+      extra: {
+        multiple: true, // optional
+        loadItemes: [
+          // list items with id and title attributes.
+          {
+            value: 1,
+            title: 'item 1',
+          },
+          {
+            value: 2,
+            title: 'item 2',
+          },
+          {
+            value: 3,
+            title: 'item 3',
+          },
+          {
+            value: 4,
+            title: 'item 4',
+          },
+        ],
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => {
+        // Hook to alter current field
+        return field;
+      },
     }
   ]
 </script>
@@ -393,12 +518,22 @@ File
 <script>
   fields = [
     {
-      type: "file", // required
-      name: "namefield", // required
-      id: "idfield", // required
-      multiple: true, // optional
-      showPreview: true // optional
-    }
+      type: 'file',
+      name: 'name-file',
+      attributes: {
+        id: 'id-field', // optional
+        classes: [], // optional
+        label: '', // optional
+      },
+      extra: {
+        multiple: true, // optional, default=false
+      },
+      rules: ['file'],
+      file: {
+        types: 'jpg,gif,png',
+        maxsize: 5, // 5MB
+      },
+    },
   ]
 </script>
 ```
@@ -414,7 +549,7 @@ List rules to validate form.
   const fields = [
     {
       ...,
-      validation: [
+      rules: [
         'required',
         'min:number',
         'max:number',
@@ -422,7 +557,7 @@ List rules to validate form.
         'equal:number',
         'email',
         'url'
-        fnc
+        'file'
       ]
     }
   ];
@@ -440,14 +575,18 @@ Validation with custom rule
     {
       type: "text",
       name: "firstname",
-      id: "firstname",
-      validation: ["required"]
+      attributes: {
+        id: "firstname",
+      },
+      rules: ["required"]
     },
     {
       type: "text",
       name: "lastname",
-      id: "lastname",
-      validation: ["required", notEqual, customRule2],
+      attributes: {
+        id: "lastname",
+      },
+      rules: ["required", notEqual, customRule2],
       messages: {
         notEqual: "Last name not equal to First name", // Custom message error, property name must equal to function name.
         customRule2: 'foo bar'

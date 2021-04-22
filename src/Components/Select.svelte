@@ -1,42 +1,56 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
-  import clsx from "clsx";
+  import { createEventDispatcher, afterUpdate } from 'svelte';
+  import clsx from 'clsx';
+
+  import { isRequired } from '../lib/helpers';
+
   // Declar variables.
-  export let id = "";
-  export let name = "";
-  export let classe = "";
-  export let options = [];
-  export let disabled = false;
-  export let multiple = false;
+  export let field = {};
+  const defaultAttributes = {
+    id: '',
+    classes: '',
+    disabled: false,
+  };
+  const fieldAttributes = field.attributes ? field.attributes : {};
+  field.attributes = { ...defaultAttributes, ...fieldAttributes };
+
+  let classe = null;
+  let defaulClasses = null;
+
+  // Dispatch.
   const dispatch = createEventDispatcher();
+
   // Change value.
   function onChangeValue(event) {
-    dispatch("changeValue", {
-      name: name,
-      value: event.target.value
+    dispatch('changeValue', {
+      name: field.name,
+      value: event.target.value,
     });
   }
-  // Insert default value.
-  onMount(() => {
-    if (options.length > 0) {
-      dispatch("changeValue", {
-        name: name,
-        value: options[0].value
-      });
-    }
+
+  // Lifecycle.
+  afterUpdate(() => {
+    field.value = field.value == undefined ? null : field.value;
+    classe = clsx(field.attributes.classes, defaulClasses);
   });
 </script>
 
 <select
-  {id}
-  {name}
-  class={clsx(classe)}
-  {disabled}
-  {multiple}
-  on:input={onChangeValue}>
-  {#each options as option (option.value)}
-    <option value={option.value}>{option.title}</option>
-  {:else}
-    <option>Any</option>
-  {/each}
+  name={field.name}
+  value={field.value}
+  id={field.attributes.id}
+  class={classe}
+  required={isRequired(field)}
+  disabled={field.attributes.disabled}
+  on:input={onChangeValue}
+>
+  {#if field.extra}
+    {#if field.extra.options}
+      {#each field.extra.options as option}
+        <option value={option.value} selected={option.value === field.value}
+          >{option.title}</option
+        >
+      {/each}
+    {/if}
+  {/if}
 </select>

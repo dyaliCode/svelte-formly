@@ -2,21 +2,21 @@
  * Convert byts to diffirents sizes types.
  * @param {number} bytes
  */
-function bytesToSize(bytes) {
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-  if (bytes === 0) return "n/a";
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-  if (i === 0) return `${bytes} ${sizes[i]})`;
-  return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
+export function bytesToSize (bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (bytes === 0) return 'n/a'
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+  if (i === 0) return `${bytes} ${sizes[i]})`
+  return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`
 }
 
 /**
  * Get extension file.
  * @param {file} file.
  */
-function getFileExtension(file) {
-  const filenameParts = file.name.split(".");
-  return filenameParts[filenameParts.length - 1].toLowerCase();
+export function getFileExtension (file) {
+  const filenameParts = file.name.split('.')
+  return filenameParts[filenameParts.length - 1].toLowerCase()
 }
 
 /**
@@ -24,11 +24,12 @@ function getFileExtension(file) {
  * @param {file} file .file object.
  * @param {array} allowedFileTypes list allowed types file.
  */
-export function types(file, allowedFileTypes) {
+export function types (file, allowedFileTypes) {
+  console.log(`allowedFileTypes`, allowedFileTypes)
   if (!allowedFileTypes.includes(getFileExtension(file))) {
-    return false;
+    return false
   }
-  return true;
+  return true
 }
 
 /**
@@ -36,11 +37,11 @@ export function types(file, allowedFileTypes) {
  * @param {file} file .file object.
  * @param {number} maxFileSize max size file.
  */
-export function maxsize(file, maxFileSize) {
-  const maxSize = parseFloat(maxFileSize) * 1024 * 1024;
+export function maxsize (file, maxFileSize) {
+  const maxSize = parseFloat(maxFileSize) * 1024 * 1024
 
   if (file.size > maxSize) {
-    return false;
+    return false
   }
-  return true;
+  return true
 }
