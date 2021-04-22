@@ -52,7 +52,7 @@ export function validate (field) {
         if (value) {
           Object.keys(value).map(i => {
             Object.keys(field.file).map(r => {
-              valid = rules[r].call(null, value[i], field.file[r])
+              valid = CoreRules[r].call(null, value[i], field.file[r])
               if (!valid) {
                 errors = [...errors, r]
               }

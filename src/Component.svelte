@@ -29,21 +29,28 @@
   };
 
   const fields = [
+    // {
+    //   type: 'input',
+    //   name: 'username',
+    //   attributes: {
+    //     type: 'text',
+    //     classes: ['form-control'],
+    //   },
+    //   rules: ['email'],
+    // },
     {
-      type: 'autocomplete',
-      name: 'gender',
-      // attributes: {
-      //   placeholder: 'Tap here...',
-      // },
+      type: 'file',
+      name: 'myFile',
+      attributes: {
+        classes: ['form-control'],
+      },
       extra: {
-        loadItemes: [],
         multiple: true,
       },
-      preprocess: async (field, fields, values) => {
-        if (field.extra.loadItemes.length === 0) {
-          field.extra.loadItemes = await fetchPosts();
-        }
-        return field;
+      rules: ['file'],
+      file: {
+        types: 'jpg,gif,png',
+        maxsize: 5,
       },
     },
   ];

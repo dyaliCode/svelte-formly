@@ -18,6 +18,7 @@
 
   // Get error message by rule.
   function displayError(rule) {
+    console.log(`rule`, rule);
     let message = '';
     if (messages[rule]) {
       message += messages[rule] ? messages[rule] : rules['custom_rule'];

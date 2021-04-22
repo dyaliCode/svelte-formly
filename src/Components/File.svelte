@@ -6,9 +6,12 @@
   export let field = {};
   const defaultAttributes = {
     id: '',
-    classe: '',
+    classes: '',
     disabled: null,
   };
+  const fieldAttributes = field.attributes ? field.attributes : {};
+  field.attributes = { ...defaultAttributes, ...fieldAttributes };
+
   let classe = null;
   let defaulClasses = null;
 
@@ -56,17 +59,8 @@
       showPreview = field.extra.showPreview ? field.extra.showPreview : null;
     }
   });
-
-  afterUpdate(() => {
-    field.attributes = { ...defaultAttributes, ...field.attributes };
-  });
 </script>
 
-<pre>
-  <code>
-    {JSON.stringify(field, null, 2)}
-  </code>
-</pre>
 <input
   type="file"
   name={field.name}
@@ -75,6 +69,16 @@
   on:input={onChangerValue}
   bind:this={inputFile}
 />
+
+{#if field.file}
+  <div class="file-rules">
+    <ul>
+      {#each Object.entries(field.file) as [rule, ruleValue]}
+        <li><strong>{rule}</strong>: {ruleValue}</li>
+      {/each}
+    </ul>
+  </div>
+{/if}
 
 {#if showPreview}
   {#if files}
