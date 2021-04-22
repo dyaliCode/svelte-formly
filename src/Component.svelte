@@ -38,49 +38,80 @@
     //   },
     //   rules: ['email'],
     // },
+    // {
+    //   type: 'radio', // required
+    //   name: 'name-field', // required
+    //   attributes: {
+    //     id: 'id-field', // required
+    //     classes: [], // optional
+    //     label: '', // optional
+    //   },
+    //   extra: {
+    //     items: [
+    //       {
+    //         id: 'radio-1',
+    //         value: 1,
+    //         title: 'radio 1',
+    //       },
+    //       {
+    //         id: 'radio-2',
+    //         value: 2,
+    //         title: 'radio 2',
+    //       },
+    //     ],
+    //   },
+    //   rules: [], // optional
+    //   preprocess: (field, fields, values) => {
+    //     // Hook to alter current field
+    //     return field;
+    //   },
+    // },
+    // {
+    //   type: 'file',
+    //   name: 'name-file',
+    //   attributes: {
+    //     id: 'id-field', // required
+    //     classes: ['form-control'], // optional
+    //     label: 'Image', // optional
+    //   },
+    //   extra: {
+    //     multiple: true,
+    //   },
+    //   rules: ['file'],
+    //   file: {
+    //     types: 'jpg,gif,png',
+    //     maxsize: 5,
+    //   },
+    // },
+
     {
-      type: 'radio', // required
-      name: 'name-field', // required
+      type: 'input',
+      name: 'firstname',
       attributes: {
-        id: 'id-field', // required
-        classes: [], // optional
-        label: '', // optional
+        type: 'text',
+        id: 'username',
+        classes: ['form-control'],
+        placeholder: 'Tap your first name',
       },
-      extra: {
-        items: [
-          {
-            id: 'radio-1',
-            value: 1,
-            title: 'radio 1',
-          },
-          {
-            id: 'radio-2',
-            value: 2,
-            title: 'radio 2',
-          },
-        ],
-      },
-      rules: [], // optional
-      preprocess: (field, fields, values) => {
-        // Hook to alter current field
-        return field;
+      rules: ['required', 'min:6'],
+      messages: {
+        required: 'Firstname field is required!',
+        min: 'First name field must have more that 6 caracters!',
       },
     },
     {
-      type: 'file',
-      name: 'name-file',
+      type: 'input',
+      name: 'password',
       attributes: {
-        id: 'id-field', // required
-        classes: ['form-control'], // optional
-        label: 'Image', // optional
+        type: 'password',
+        id: 'password',
+        classes: ['form-control'],
+        placeholder: 'Tap your password',
       },
-      extra: {
-        multiple: true,
-      },
-      rules: ['file'],
-      file: {
-        types: 'jpg,gif,png',
-        maxsize: 5,
+      rules: ['required', 'min:6'],
+      messages: {
+        required: 'password field is required!',
+        min: 'Password field must have more that 6 caracters!',
       },
     },
   ];

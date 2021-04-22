@@ -18,13 +18,14 @@
   // Declar variables;
   export let fields = [];
   let isValidForm = true;
-  let values = [];
+  let values;
   let itemsField = [];
   $: listFields = itemsField;
 
   // Change values.
   const changeValueHander = async (event) => {
-    values[`${event.detail.name}`] = event.detail.value;
+    // values[`${event.detail.name}`] = event.detail.value;
+    values = { ...values, [`${event.detail.name}`]: event.detail.value };
     let mylist = await Promise.all(
       listFields.map(async (field) => {
         if (field.name == event.detail.name) {
@@ -53,7 +54,8 @@
   onMount(async () => {
     const mylist = await Promise.all(
       fields.map(async (field) => {
-        values[`${field.name}`] = field.value;
+        // values[`${field.name}`] = field.value;
+        values = { ...values, [`${field.name}`]: field.value };
         if (field.preprocess) {
           const fnc = field.preprocess;
           field = await preprocessField(field, fields, values);
