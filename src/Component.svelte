@@ -39,6 +39,34 @@
     //   rules: ['email'],
     // },
     {
+      type: 'radio', // required
+      name: 'name-field', // required
+      attributes: {
+        id: 'id-field', // required
+        classes: [], // optional
+        label: '', // optional
+      },
+      extra: {
+        items: [
+          {
+            id: 'radio-1',
+            value: 1,
+            title: 'radio 1',
+          },
+          {
+            id: 'radio-2',
+            value: 2,
+            title: 'radio 2',
+          },
+        ],
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => {
+        // Hook to alter current field
+        return field;
+      },
+    },
+    {
       type: 'file',
       name: 'name-file',
       attributes: {

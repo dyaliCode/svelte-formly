@@ -32,7 +32,6 @@
   // Insert default
   onMount(() => {
     if (field.extra.items.length > 0) {
-      field.extra.items[0].checked = true;
       field.extra.items.map((i) => {
         values = [
           ...values,
@@ -42,10 +41,6 @@
             checked: i.checked ? i.checked : false,
           },
         ];
-      });
-      dispatch('changeValue', {
-        name: field.name,
-        value: values,
       });
     }
   });
@@ -58,6 +53,11 @@
   });
 </script>
 
+<pre>
+  <code>
+    {JSON.stringify(field.extra.items, null, 2)}
+  </code>
+</pre>
 {#each field.extra.items as item, i}
   <div
     class={field.extra.aligne === 'inline' ? 'form-check-inline' : 'form-check'}
@@ -65,7 +65,7 @@
     <input
       type="checkbox"
       class={classe}
-      id={item.id}
+      value={item.value}
       name={item.name}
       checked={item.checked ? item.checked : false}
       on:input={onChangeValue}

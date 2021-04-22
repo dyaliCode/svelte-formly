@@ -348,6 +348,42 @@ Select
 </script>
 ```
 
+Checkbox
+
+```javascript
+<script>
+  fields = [
+    {
+      type: "checkbox", // required
+      name: "name-field", // required
+      attributes: {
+        id: "id-field", // required
+        classes: [], // optional
+        label: "", // optional
+      },
+      extra: {
+        items: [
+          {
+            value: 1,
+            name: 'checkbox-1',
+            title: 'checkbox 1'
+          },
+          {
+            value: 2,
+            name: 'checkbox-2',
+            title: 'checkbox 2'
+          }
+        ],
+      },
+      rules: [], // optional
+      preprocess: (field, fields, values) => { // Hook to alter current field
+        return field
+      }
+    }
+  ]
+</script>
+```
+
 Radio
 
 ```javascript
@@ -364,12 +400,12 @@ Radio
       extra: {
         items: [
           {
-            id: 'radio1',
+            id: 'radio-1',
             value: 1,
             title: 'radio 1'
           },
           {
-            id: 'radio2',
+            id: 'radio-2',
             value: 2,
             title: 'radio 2'
           }
@@ -512,7 +548,7 @@ File
 
 <hr>
 
-### Rules
+### Validation
 
 List rules to validate form.
 

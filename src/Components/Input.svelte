@@ -38,7 +38,6 @@
   // Lifecycle.
   afterUpdate(() => {
     field.value = field.value == undefined ? null : field.value;
-    // classe = clsx(field.attributes.classes, defaulClasses);
   });
 </script>
 
