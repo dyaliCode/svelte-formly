@@ -22,10 +22,6 @@ by [@kamalkech](https://github.com/kamalkech)
 
 npm i svelte-formly
 
-## Documentation
-
-[Link Documentation](https://documentation-svelte-formly.vercel.app/)
-
 ## Usage
 
 ```javascript
