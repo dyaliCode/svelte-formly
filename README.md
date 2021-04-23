@@ -10,7 +10,7 @@ by [@kamalkech](https://github.com/kamalkech)
 
 ## Features
 
-- ⚡️ Generate dynamic forms for sveltejs / Sapper js.
+- ⚡️ Generate dynamic and reactive forms.
 - 😍 Easy to extend with custom field type, custom validation.
 - ✔️ Compatible with Svelte, Svetelkit, Sapper, Routify
 
