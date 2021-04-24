@@ -1,149 +1,113 @@
 <script>
-  import { afterUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
-  import { fieldsStore } from './lib/stores';
 
-  let data = $valuesForm;
-  $: values = data;
-
+  // Fetch Users
   const fetchUsers = async () => {
     const res = await fetch(
-      `https://jsonplaceholder.typicode.com/users?_limit=2`
+      'https://jsonplaceholder.cypress.io/users?_limit=10'
     );
-    const items = await res.json();
-    return items.map((item) => {
-      return { value: item.id, title: item.username };
-    });
+    const data = await res.json();
+    return data.map((item) => ({ value: item.id, title: item.name }));
   };
 
+  // Fetch posts
   const fetchPosts = async () => {
-    console.log('fetch Posts');
-    const res = await fetch(`https://jsonplaceholder.typicode.com/posts`);
-    const items = await res.json();
-    return items.map((item) => {
-      return { value: item.id, title: item.title };
-    });
+    const res = await fetch(
+      'https://jsonplaceholder.cypress.io/posts?_limit=10'
+    );
+    const data = await res.json();
+    return data.map((item) => ({ value: item.id, title: item.title }));
   };
 
+  let loading = false;
+
+  // Fields
   const fields = [
-    // {
-    //   type: 'input',
-    //   name: 'username',
-    //   attributes: {
-    //     label: 'Username',
-    //     type: 'text',
-    //     classes: ['form-control'],
-    //   },
-    //   rules: ['email'],
-    // },
-    // {
-    //   type: 'radio', // required
-    //   name: 'name-field', // required
-    //   attributes: {
-    //     id: 'id-field', // required
-    //     classes: [], // optional
-    //     label: 'Radio', // optional
-    //   },
-    //   extra: {
-    //     items: [
-    //       {
-    //         id: 'radio-1',
-    //         value: 1,
-    //         title: 'radio 1',
-    //       },
-    //       {
-    //         id: 'radio-2',
-    //         value: 2,
-    //         title: 'radio 2',
-    //       },
-    //     ],
-    //   },
-    //   rules: [], // optional
-    //   preprocess: async (field, fields, values) => {
-    //     console.log(`values.username`, values.username);
-    //     // Hook to alter current field
-    //     if (values.username == 'kamal') {
-    //       const posts = await fetchPosts();
-    //       field.attributes.label = 'Radio updated ' + posts.length;
-    //       field.extra.items = [...field.extra.items, { id: 1, title: 'kamal' }];
-    //     } else {
-    //       field.attributes.label = 'LABEL';
-    //     }
-    //     return field;
-    //   },
-    // },
-    // {
-    //   type: 'file',
-    //   name: 'name-file',
-    //   attributes: {
-    //     id: 'id-field', // required
-    //     classes: ['form-control'], // optional
-    //     label: 'Image', // optional
-    //   },
-    //   extra: {
-    //     multiple: true,
-    //   },
-    //   rules: ['file'],
-    //   file: {
-    //     types: 'jpg,gif,png',
-    //     maxsize: 5,
-    //   },
-    // },
-    // {
-    //   type: 'input',
-    //   name: 'firstname',
-    //   attributes: {
-    //     type: 'text',
-    //     id: 'username',
-    //     classes: ['form-control'],
-    //     placeholder: 'Tap your first name',
-    //   },
-    //   rules: ['required', 'min:6'],
-    //   messages: {
-    //     required: 'Firstname field is required!',
-    //     min: 'First name field must have more that 6 caracters!',
-    //   },
-    // },
-    // {
-    //   type: 'input',
-    //   name: 'password',
-    //   attributes: {
-    //     type: 'password',
-    //     id: 'password',
-    //     classes: ['form-control'],
-    //     placeholder: 'Tap your password',
-    //   },
-    //   rules: ['required', 'min:6'],
-    //   messages: {
-    //     required: 'password field is required!',
-    //     min: 'Password field must have more that 6 caracters!',
-    //   },
-    // },
+    {
+      type: 'input',
+      name: 'x',
+      attributes: {
+        type: 'number',
+        classes: ['form-control'],
+        label: 'X',
+      },
+      rules: ['required'],
+    },
+    {
+      type: 'input',
+      name: 'y',
+      attributes: {
+        type: 'number',
+        classes: ['form-control'],
+        label: 'Y',
+      },
+    },
+    {
+      type: 'input',
+      name: 'total',
+      attributes: {
+        type: 'number',
+        classes: ['form-control'],
+        label: 'X + Y',
+      },
+      preprocess: (field, fields, values) => {
+        if (values.touched === 'x' || values.touched === 'y') {
+          field.value = values.x + values.y;
+        }
+        return field;
+      },
+    },
+    {
+      type: 'select',
+      name: 'category',
+      attributes: {
+        classes: ['form-control'],
+        label: 'Category',
+      },
+      rules: ['required'],
+      extra: {
+        options: [
+          {
+            value: null,
+            title: 'None',
+          },
+          {
+            value: 1,
+            title: 'Users',
+          },
+          {
+            value: 2,
+            title: 'Posts',
+          },
+        ],
+      },
+    },
+    {
+      type: 'select',
+      name: 'items',
+      attributes: {
+        classes: ['form-control'],
+        label: 'Items',
+      },
+      extra: {},
+      preprocess: async (field, fields, values) => {
+        if (values.touched === 'category') {
+          loading = true;
+          field.extra.options =
+            values.category == 1 ? await fetchUsers() : await fetchPosts();
+          loading = false;
+        }
+        return field;
+      },
+    },
   ];
 
-  function onSubmit() {
-    const data = get(valuesForm);
-    console.log(`data.onSubmit`, data);
-  }
-
-  afterUpdate(() => {
-    data = get(valuesForm);
-  });
+  let result = {};
+  const onSubmit = async () => {
+    result = $valuesForm;
+  };
 </script>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <form on:submit|preventDefault={onSubmit}>
-        <Field {fields} />
-        <button class="btn btn-primary btn-lg btn-block" type="submit"
-          >Submit</button
-        >
-      </form>
-    </div>
-  </div>
-</div>
 
 <svelte:head>
   <link
@@ -154,13 +118,39 @@
   />
 </svelte:head>
 
+<div class="container">
+  <div class="row">
+    <h2>Svelte Formly 1.0.1</h2>
+    <i>Preprocess</i>
+  </div>
+
+  <div class="row">
+    <pre>
+			<code>{JSON.stringify(result, null, 2)}</code>
+		</pre>
+  </div>
+
+  <div class="row">
+    <form on:submit|preventDefault={onSubmit}>
+      <Field {fields} />
+      <button class="btn btn-primary" disabled={loading}
+        >{loading ? 'loading...' : 'Create'}</button
+      >
+    </form>
+  </div>
+</div>
+
 <style>
-  :global(.invalid-feedback) {
-    display: block !important;
+  .row {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ff3e00;
   }
   :global(.form-group) {
     margin-bottom: 20px;
-    padding: 20px;
-    /* border: solid 1px var(--theme-color-border); */
+  }
+  :global(.invalid-feedback) {
+    color: red;
+    display: block !important;
   }
 </style>
