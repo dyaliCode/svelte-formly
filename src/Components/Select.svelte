@@ -37,19 +37,16 @@
 
 <select
   name={field.name}
-  value={field.value}
   id={field.attributes.id}
   class={classe}
   required={isRequired(field)}
   disabled={field.attributes.disabled}
-  on:input={onChangeValue}
+  on:change={onChangeValue}
 >
   {#if field.extra}
     {#if field.extra.options}
       {#each field.extra.options as option}
-        <option value={option.value} selected={option.value === field.value}
-          >{option.title}</option
-        >
+        <option value={option.value}>{option.title}</option>
       {/each}
     {/if}
   {/if}

@@ -96,6 +96,7 @@
           loading = true;
           field.extra.options =
             values.category == 1 ? await fetchUsers() : await fetchPosts();
+          field.value = null;
           loading = false;
         }
         return field;

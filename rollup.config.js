@@ -25,11 +25,23 @@ const scssOptions = {
 
 const production = !process.env.ROLLUP_WATCH;
 
+const name = pkg.name
+  .replace(/^(@\S+\/)?(svelte-)?(\S+)/, "$3")
+  .replace(/^\w/, (m) => m.toUpperCase())
+  .replace(/-\w/g, (m) => m[1].toUpperCase());
+
 export default {
   input: !production ? "src/main.js" : "src/index.js",
   output: [
-    { file: pkg.module, format: "es" },
-    { file: mainpath, format: "iife" },
+    // { file: pkg.module, format: "es" },
+    // { file: mainpath, format: "iife" },
+    // { file: mainpath, format: "iife" },
+    {
+      sourcemap: true,
+      format: 'iife',
+      file: mainpath,
+      name
+    }
   ],
   plugins: [
     commonjs(),
