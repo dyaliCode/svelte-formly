@@ -2,104 +2,26 @@
   import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
 
-  // Fetch Users
-  const fetchUsers = async () => {
-    const res = await fetch(
-      'https://jsonplaceholder.cypress.io/users?_limit=10'
-    );
-    const data = await res.json();
-    return data.map((item) => ({ value: item.id, title: item.name }));
-  };
-
-  // Fetch posts
-  const fetchPosts = async () => {
-    const res = await fetch(
-      'https://jsonplaceholder.cypress.io/posts?_limit=10'
-    );
-    const data = await res.json();
-    return data.map((item) => ({ value: item.id, title: item.title }));
-  };
-
   let loading = false;
 
   // Fields
   const fields = [
     {
-      type: 'input',
-      name: 'x',
+      type: 'checkbox',
+      name: 'check',
       attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'X',
+        type: 'checkbox',
+        label:
+          'Checkbox with some really long text to see if it will wrap at the end of the box',
+        id: 'check',
+        classes: ['form-check-input', 'checker'],
       },
-      rules: ['required'],
-    },
-    {
-      type: 'input',
-      name: 'y',
-      attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'Y',
-      },
-    },
-    {
-      type: 'input',
-      name: 'total',
-      attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'X + Y',
-      },
-      preprocess: (field, fields, values) => {
-        if (values.touched === 'x' || values.touched === 'y') {
-          field.value = values.x + values.y;
-        }
-        return field;
-      },
-    },
-    {
-      type: 'select',
-      name: 'category',
-      attributes: {
-        classes: ['form-control'],
-        label: 'Category',
-      },
-      rules: ['required'],
       extra: {
-        options: [
-          {
-            value: null,
-            title: 'None',
-          },
-          {
-            value: 1,
-            title: 'Users',
-          },
-          {
-            value: 2,
-            title: 'Posts',
-          },
-        ],
+        aligne: 'inline',
+        ite,
       },
-    },
-    {
-      type: 'select',
-      name: 'items',
-      attributes: {
-        classes: ['form-control'],
-        label: 'Items',
-      },
-      extra: {},
-      preprocess: async (field, fields, values) => {
-        if (values.touched === 'category') {
-          loading = true;
-          field.extra.options =
-            values.category == 1 ? await fetchUsers() : await fetchPosts();
-          field.value = null;
-          loading = false;
-        }
-        return field;
+      prefix: {
+        // classes: ['form-check'],
       },
     },
   ];
