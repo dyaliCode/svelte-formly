@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { validate } from '../Validation/index';
-  import { valuesForm } from '../lib/stores.js';
+  import { valuesForm, list_fields } from '../lib/stores.js';
   import { preprocessField } from '../lib/helpers.js';
 
   // Import components.
@@ -51,6 +51,7 @@
     isValidForm = dirty ? false : true;
     valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
+    list_fields.set(itemsField);
   };
 
   // Lifecycle.
@@ -75,10 +76,41 @@
     isValidForm = dirty ? false : true;
     valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
+
+    list_fields.set(itemsField);
   });
+
+  const addField = () => {
+    $list_fields.map((field) => {
+      if (field.name === 'y') {
+        const search = searchInField(field.name);
+        // console.log('search:', search);
+        // console.log('search.length:', search.length);
+        const newField = { ...field };
+
+        newField.name = `${field.name}-${$list_fields.length}`;
+        // newField.attributes.label = `${newField.attributes.label} ${search.length}`;
+
+        const index = $list_fields.indexOf(field);
+        console.log(`index`, index);
+
+        const fields = $list_fields;
+        console.log(`fields`, fields);
+        fields.splice(index + 1, 0, newField);
+        console.log(`fields`, fields);
+
+        // fields.push(newField);
+        list_fields.set(fields);
+      }
+    });
+  };
+
+  const searchInField = (name) => {
+    return $list_fields.filter((field) => field.name === name);
+  };
 </script>
 
-{#each listFields as field (field.name)}
+{#each $list_fields as field (field.name)}
   <Tag
     tag={field.prefix ? (field.prefix.tag ? field.prefix.tag : 'div') : 'div'}
     classes={field.prefix
@@ -97,6 +129,7 @@
     <!-- Field -->
     {#if field.type === 'input'}
       <Input {field} on:changeValue={changeValueHander} />
+      <button on:click={addField}>Add</button>
     {:else if field.type === 'textarea'}
       <Textarea {field} on:changeValue={changeValueHander} />
     {:else if field.type === 'select'}

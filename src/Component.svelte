@@ -1,24 +1,5 @@
 <script>
-  import { get } from 'svelte/store';
   import { valuesForm, Field } from './index';
-
-  // Fetch Users
-  const fetchUsers = async () => {
-    const res = await fetch(
-      'https://jsonplaceholder.cypress.io/users?_limit=10'
-    );
-    const data = await res.json();
-    return data.map((item) => ({ value: item.id, title: item.name }));
-  };
-
-  // Fetch posts
-  const fetchPosts = async () => {
-    const res = await fetch(
-      'https://jsonplaceholder.cypress.io/posts?_limit=10'
-    );
-    const data = await res.json();
-    return data.map((item) => ({ value: item.id, title: item.title }));
-  };
 
   let loading = false;
 
@@ -32,7 +13,6 @@
         classes: ['form-control'],
         label: 'X',
       },
-      rules: ['required'],
     },
     {
       type: 'input',
@@ -43,107 +23,21 @@
         label: 'Y',
       },
     },
-    {
-      type: 'input',
-      name: 'total',
-      attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'X + Y',
-      },
-      preprocess: (field, fields, values) => {
-        if (values.touched === 'x' || values.touched === 'y') {
-          field.value = values.x + values.y;
-        }
-        return field;
-      },
-    },
-    {
-      type: 'select',
-      name: 'category',
-      attributes: {
-        classes: ['form-control'],
-        label: 'Category',
-      },
-      rules: ['required'],
-      extra: {
-        options: [
-          {
-            value: null,
-            title: 'None',
-          },
-          {
-            value: 1,
-            title: 'Users',
-          },
-          {
-            value: 2,
-            title: 'Posts',
-          },
-        ],
-      },
-    },
-    {
-      type: 'select',
-      name: 'items',
-      attributes: {
-        classes: ['form-control'],
-        label: 'Items',
-      },
-      extra: {},
-      preprocess: async (field, fields, values) => {
-        if (values.touched === 'category') {
-          loading = true;
-          field.extra.options =
-            values.category == 1 ? await fetchUsers() : await fetchPosts();
-          field.value = null;
-          loading = false;
-        }
-        return field;
-      },
-    },
-    {
-      type: 'checkbox',
-      name: 'choose',
-      attributes: {
-        label: 'Checkbox',
-        id: 'choose',
-        classes: [''],
-      },
-      extra: {
-        items: [
-          {
-            name: 'item1',
-            value: 'value1',
-            title: 'Value 1',
-          },
-          {
-            name: 'item2',
-            value: 'value2',
-            title: 'Value 2',
-          },
-        ],
-      },
-    },
-    {
-      type: 'file', // required
-      name: 'name_file', // require
-      attributes: {
-        id: 'my-custom-field', // optional
-        classes: ['form-control'], // optional
-        label: 'Image', // optional
-      },
-      extra: {
-        multiple: true, // optional
-        showPreview: true, // optional
-      },
-      rules: ['file'],
-      file: {
-        // need to add this attribute object if you need a file rule
-        types: 'jpg,gif,png',
-        maxsize: 5,
-      },
-    },
+    // {
+    //   type: 'input',
+    //   name: 'total',
+    //   attributes: {
+    //     type: 'number',
+    //     classes: ['form-control'],
+    //     label: 'X * Y',
+    //   },
+    //   preprocess: (field, fields, values) => {
+    //     if (values.touched === 'x' || values.touched === 'y') {
+    //       field.value = values.x * values.y;
+    //     }
+    //     return field;
+    //   },
+    // },
   ];
 
   let result = {};
@@ -160,16 +54,18 @@
     crossorigin="anonymous"
   />
 </svelte:head>
-
-<code>
-  <pre>
-    {JSON.stringify($valuesForm.values.name_file ? $valuesForm.values.name_file[0].name : null, null, 2)}
-  </pre>
-</code>
 <div class="container">
   <div class="row">
-    <h2>Svelte Formly 1.1.1</h2>
+    <h2>Svelte Formly 2.0.0</h2>
     <i>Preprocess</i>
+  </div>
+
+  <div class="row">
+    <code>
+      <pre>
+        {JSON.stringify($valuesForm, null, 2)}
+      </pre>
+    </code>
   </div>
 
   <div class="row">
