@@ -1,129 +1,157 @@
 <script>
   import { get } from 'svelte/store';
-
   import { valuesForm, Field } from './index';
+
+  // Fetch Users
+  const fetchUsers = async () => {
+    const res = await fetch(
+      'https://jsonplaceholder.cypress.io/users?_limit=10'
+    );
+    const data = await res.json();
+    return data.map((item) => ({ value: item.id, title: item.name }));
+  };
+
+  // Fetch posts
+  const fetchPosts = async () => {
+    const res = await fetch(
+      'https://jsonplaceholder.cypress.io/posts?_limit=10'
+    );
+    const data = await res.json();
+    return data.map((item) => ({ value: item.id, title: item.title }));
+  };
+
+  let loading = false;
+
+  // Fields
   const fields = [
     {
       type: 'input',
-      name: 'First name',
+      name: 'x',
       attributes: {
-        type: 'text',
-        label: 'First name',
-        id: 'firstname',
+        type: 'number',
         classes: ['form-control'],
+        label: 'X',
       },
-      prefix: {
-        classes: ['form-group', 'col-4'],
+      rules: ['required'],
+    },
+    {
+      type: 'input',
+      name: 'y',
+      attributes: {
+        type: 'number',
+        classes: ['form-control'],
+        label: 'Y',
       },
     },
     {
       type: 'input',
-      name: 'lastname',
+      name: 'total',
       attributes: {
-        type: 'text',
-        label: 'Last name',
-        id: 'lastname',
+        type: 'number',
         classes: ['form-control'],
+        label: 'X + Y',
       },
-      prefix: {
-        classes: ['form-group', 'col-4'],
+      preprocess: (field, fields, values) => {
+        if (values.touched === 'x' || values.touched === 'y') {
+          field.value = values.x + values.y;
+        }
+        return field;
       },
     },
     {
-      type: 'checkbox',
-      name: 'check',
+      type: 'select',
+      name: 'category',
       attributes: {
-        label:
-          'Checkbox with some really long text to see if it will wrap at the end of the box',
-        id: 'check',
-        classes: ['form-check-input', 'checker'],
+        classes: ['form-control'],
+        label: 'Category',
       },
+      rules: ['required'],
       extra: {
-        // 					aligne: 'inline',
-        items: [
+        options: [
           {
-            name: 'name1',
-            title: 'Name 1',
-            value: 1,
+            value: null,
+            title: 'None',
           },
           {
-            name: 'name2',
-            title: 'Name 2',
+            value: 1,
+            title: 'Users',
+          },
+          {
             value: 2,
+            title: 'Posts',
           },
         ],
       },
-      prefix: {
-        classes: ['mb-3', 'form-group'],
+    },
+    {
+      type: 'select',
+      name: 'items',
+      attributes: {
+        classes: ['form-control'],
+        label: 'Items',
+      },
+      extra: {},
+      preprocess: async (field, fields, values) => {
+        if (values.touched === 'category') {
+          loading = true;
+          field.extra.options =
+            values.category == 1 ? await fetchUsers() : await fetchPosts();
+          field.value = null;
+          loading = false;
+        }
+        return field;
       },
     },
   ];
 
-  let message = '';
-  let values = {};
-  let color = '#ff3e00';
-
-  function onSubmit() {
-    const data = get(valuesForm);
-    if (data.valid) {
-      message = JSON.stringify(data, null, 2);
-    } else {
-      message = 'Your form is not valid!';
-    }
-  }
+  let result = {};
+  const onSubmit = async () => {
+    result = $valuesForm;
+  };
 </script>
 
 <svelte:head>
   <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+    crossorigin="anonymous"
   />
 </svelte:head>
 
 <div class="container">
-  <h1 style="--theme-color: {color}">Svelte Formly</h1>
-  <h3>
-    <code>
-      <pre>
-        {message}
-      </pre>
-    </code>
-  </h3>
-  <form
-    on:submit|preventDefault={onSubmit}
-    class="custom-form"
-    style="--theme-color: {color}"
-  >
-    <Field {fields} />
-    <button class="btn btn-primary" type="submit">Submit</button>
-  </form>
+  <div class="row">
+    <h2>Svelte Formly 1.0.1</h2>
+    <i>Preprocess</i>
+  </div>
 
-  <span id="to-avoid-svelte-repl-errors" class="inline checker" />
+  <div class="row">
+    <pre>
+			<code>{JSON.stringify(result, null, 2)}</code>
+		</pre>
+  </div>
+
+  <div class="row">
+    <form on:submit|preventDefault={onSubmit}>
+      <Field {fields} />
+      <button class="btn btn-primary" disabled={loading}
+        >{loading ? 'loading...' : 'Create'}</button
+      >
+    </form>
+  </div>
 </div>
 
 <style>
-  .inline {
-    display: inline;
+  .row {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ff3e00;
   }
-  .checker {
-    width: 20px !important;
-    height: 20px !important;
+  :global(.form-group) {
+    margin-bottom: 20px;
   }
-  .checker:before {
-    display: inline;
-  }
-  .custom-form :global(.form-group) {
-    padding: 10px;
-    border: solid 1px var(--theme-color);
-    margin-bottom: 10px;
-  }
-  .custom-form :global(.custom-form-group) {
-    padding: 10px;
-    background: var(--theme-color);
-    color: white;
-    margin-bottom: 10px;
-  }
-  .custom-form :global(.class-description) {
-    color: var(--theme-color);
+  :global(.invalid-feedback) {
+    color: red;
+    display: block !important;
   }
 </style>
