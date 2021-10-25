@@ -25,7 +25,6 @@ export function getFileExtension (file) {
  * @param {array} allowedFileTypes list allowed types file.
  */
 export function types (file, allowedFileTypes) {
-  console.log(`allowedFileTypes`, allowedFileTypes)
   if (!allowedFileTypes.includes(getFileExtension(file))) {
     return false
   }
