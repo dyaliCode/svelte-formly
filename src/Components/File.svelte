@@ -64,6 +64,7 @@
 <input
   type="file"
   name={field.name}
+  id={field.attributes.id}
   class={classe}
   {multiple}
   on:input={onChangerValue}

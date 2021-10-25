@@ -102,6 +102,48 @@
         return field;
       },
     },
+    {
+      type: 'checkbox',
+      name: 'choose',
+      attributes: {
+        label: 'Checkbox',
+        id: 'choose',
+        classes: [''],
+      },
+      extra: {
+        items: [
+          {
+            name: 'item1',
+            value: 'value1',
+            title: 'Value 1',
+          },
+          {
+            name: 'item2',
+            value: 'value2',
+            title: 'Value 2',
+          },
+        ],
+      },
+    },
+    {
+      type: 'file', // required
+      name: 'name_file', // require
+      attributes: {
+        id: 'my-custom-field', // optional
+        classes: ['form-control'], // optional
+        label: 'Image', // optional
+      },
+      extra: {
+        multiple: true, // optional
+        showPreview: true, // optional
+      },
+      rules: ['file'],
+      file: {
+        // need to add this attribute object if you need a file rule
+        types: 'jpg,gif,png',
+        maxsize: 5,
+      },
+    },
   ];
 
   let result = {};
@@ -119,9 +161,14 @@
   />
 </svelte:head>
 
+<code>
+  <pre>
+    {JSON.stringify($valuesForm.values.name_file ? $valuesForm.values.name_file[0].name : null, null, 2)}
+  </pre>
+</code>
 <div class="container">
   <div class="row">
-    <h2>Svelte Formly 1.0.1</h2>
+    <h2>Svelte Formly 1.1.1</h2>
     <i>Preprocess</i>
   </div>
 
@@ -132,7 +179,7 @@
   </div>
 
   <div class="row">
-    <form on:submit|preventDefault={onSubmit}>
+    <form on:submit|preventDefault={onSubmit} class="custom-form">
       <Field {fields} />
       <button class="btn btn-primary" disabled={loading}
         >{loading ? 'loading...' : 'Create'}</button
@@ -153,5 +200,8 @@
   :global(.invalid-feedback) {
     color: red;
     display: block !important;
+  }
+  .custom-form :global(.form-check) {
+    padding-left: 0;
   }
 </style>
