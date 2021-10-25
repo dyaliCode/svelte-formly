@@ -53,11 +53,6 @@
   });
 </script>
 
-<pre>
-  <code>
-    {JSON.stringify(field.extra.items, null, 2)}
-  </code>
-</pre>
 {#each field.extra.items as item, i}
   <div
     class={field.extra.aligne === 'inline' ? 'form-check-inline' : 'form-check'}

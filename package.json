@@ -1,6 +1,6 @@
 {
   "name": "svelte-formly",
-  "svelte": "src/index.js",
+  "svelte": "src/main.js",
   "main": "dist/svelteformly.js",
   "module": "dist/svelteformly.es.js",
   "jsnext:main": "dist/svelteformly.es.js",
