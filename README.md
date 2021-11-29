@@ -24,7 +24,7 @@ npm i svelte-formly
 
 ## Usage
 
-```javascript
+```svelte
 <script>
   import { get } from "svelte/store";
   import { valuesForm, Field } from "svelte-formly";
@@ -149,7 +149,7 @@ npm i svelte-formly
 </script>
 ```
 
-```css
+```svelte
 <style>
   * {
     color: var(--theme-color);
@@ -171,7 +171,7 @@ npm i svelte-formly
 </style>
 ```
 
-```html
+```svelte
 <h1 style="--theme-color: {color}">Svelte Formly</h1>
 <h3>{message}</h3>
 <form
@@ -190,7 +190,7 @@ npm i svelte-formly
 
 npm i -D svelte-formly
 
-```javascript
+```svelte
 <script>
   import { get } from "svelte/store";
   import { Field, valuesForm } from 'svelte-formly';
@@ -232,7 +232,7 @@ npm i -D svelte-formly
 </script>
 ```
 
-```html
+```svelte
 <form on:submit|preventDefault="{onSubmit}">
   <svelte:component this="{Field}" {fields} />
   <button type="submit">Submit</button>
@@ -245,7 +245,7 @@ npm i -D svelte-formly
 
 Inputs : text, password, email, number, tel
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -275,7 +275,7 @@ Inputs : text, password, email, number, tel
 
 Textarea
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -303,7 +303,7 @@ Textarea
 
 Select
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -338,7 +338,7 @@ Select
 
 Checkbox
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -374,7 +374,7 @@ Checkbox
 
 Radio
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -410,7 +410,7 @@ Radio
 
 Color
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -436,7 +436,7 @@ Color
 
 Range
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -465,7 +465,7 @@ Range
 
 Autocomplete
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -510,7 +510,7 @@ Autocomplete
 
 File
 
-```javascript
+```svelte
 <script>
   fields = [
     {
@@ -540,7 +540,7 @@ File
 
 List rules to validate form.
 
-```javascript
+```svelte
 <script>
   const fields = [
     {
@@ -562,7 +562,7 @@ List rules to validate form.
 
 Validation with custom rule
 
-```javascript
+```svelte
 <script>
   import { get } from "svelte/store";
   import { Field, valuesForm } from "svelte-formly";
