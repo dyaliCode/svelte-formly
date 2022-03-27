@@ -1,14 +1,14 @@
 <script>
-  import { createEventDispatcher, afterUpdate } from 'svelte';
-  import clsx from 'clsx';
+  import { createEventDispatcher, afterUpdate } from "svelte";
+  import clsx from "clsx";
 
-  import { isRequired } from '../lib/helpers';
+  import { isRequired } from "../lib/helpers";
 
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
-    id: '',
-    classes: '',
+    id: "",
+    classes: "",
     disabled: false,
   };
   const fieldAttributes = field.attributes ? field.attributes : {};
@@ -22,7 +22,7 @@
 
   // Change value.
   function onChangeValue(event) {
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: event.target.value,
     });
@@ -46,7 +46,9 @@
   {#if field.extra}
     {#if field.extra.options}
       {#each field.extra.options as option}
-        <option value={option.value}>{option.title}</option>
+        <option value={option.value} selected={option.value === field.value}
+          >{option.title}</option
+        >
       {/each}
     {/if}
   {/if}

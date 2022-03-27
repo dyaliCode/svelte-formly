@@ -1,11 +1,11 @@
 <script>
-  import { get } from 'svelte/store';
-  import { valuesForm, Field } from './index';
+  import { get } from "svelte/store";
+  import { valuesForm, Field } from "./index";
 
   // Fetch Users
   const fetchUsers = async () => {
     const res = await fetch(
-      'https://jsonplaceholder.cypress.io/users?_limit=10'
+      "https://jsonplaceholder.cypress.io/users?_limit=10"
     );
     const data = await res.json();
     return data.map((item) => ({ value: item.id, title: item.name }));
@@ -14,7 +14,7 @@
   // Fetch posts
   const fetchPosts = async () => {
     const res = await fetch(
-      'https://jsonplaceholder.cypress.io/posts?_limit=10'
+      "https://jsonplaceholder.cypress.io/posts?_limit=10"
     );
     const data = await res.json();
     return data.map((item) => ({ value: item.id, title: item.title }));
@@ -25,74 +25,75 @@
   // Fields
   const fields = [
     {
-      type: 'input',
-      name: 'x',
+      type: "input",
+      name: "x",
       attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'X',
+        type: "number",
+        classes: ["form-control"],
+        label: "X",
       },
-      rules: ['required'],
+      rules: ["required"],
     },
     {
-      type: 'input',
-      name: 'y',
+      type: "input",
+      name: "y",
       attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'Y',
+        type: "number",
+        classes: ["form-control"],
+        label: "Y",
       },
     },
     {
-      type: 'input',
-      name: 'total',
+      type: "input",
+      name: "total",
       attributes: {
-        type: 'number',
-        classes: ['form-control'],
-        label: 'X + Y',
+        type: "number",
+        classes: ["form-control"],
+        label: "X + Y",
       },
       preprocess: (field, fields, values) => {
-        if (values.touched === 'x' || values.touched === 'y') {
+        if (values.touched === "x" || values.touched === "y") {
           field.value = values.x + values.y;
         }
         return field;
       },
     },
     {
-      type: 'select',
-      name: 'category',
+      type: "select",
+      name: "category",
+      value: 1,
       attributes: {
-        classes: ['form-control'],
-        label: 'Category',
+        classes: ["form-control"],
+        label: "Category",
       },
-      rules: ['required'],
+      rules: ["required"],
       extra: {
         options: [
           {
             value: null,
-            title: 'None',
+            title: "None",
           },
           {
             value: 1,
-            title: 'Users',
+            title: "Users",
           },
           {
             value: 2,
-            title: 'Posts',
+            title: "Posts",
           },
         ],
       },
     },
     {
-      type: 'select',
-      name: 'items',
+      type: "select",
+      name: "items",
       attributes: {
-        classes: ['form-control'],
-        label: 'Items',
+        classes: ["form-control"],
+        label: "Items",
       },
       extra: {},
       preprocess: async (field, fields, values) => {
-        if (values.touched === 'category') {
+        if (values.touched === "category" || values.category) {
           loading = true;
           field.extra.options =
             values.category == 1 ? await fetchUsers() : await fetchPosts();
@@ -103,45 +104,80 @@
       },
     },
     {
-      type: 'checkbox',
-      name: 'choose',
+      type: "checkbox",
+      name: "choose",
       attributes: {
-        label: 'Checkbox',
-        id: 'choose',
-        classes: [''],
+        label: "Checkbox",
+        id: "choose",
+        classes: [""],
       },
       extra: {
         items: [
           {
-            name: 'item1',
-            value: 'value1',
-            title: 'Value 1',
+            name: "item1",
+            value: "value1",
+            title: "Value 1",
           },
           {
-            name: 'item2',
-            value: 'value2',
-            title: 'Value 2',
+            name: "item2",
+            value: "value2",
+            title: "Value 2",
           },
         ],
       },
     },
     {
-      type: 'file', // required
-      name: 'name_file', // require
+      type: "file", // required
+      name: "name_file", // require
       attributes: {
-        id: 'my-custom-field', // optional
-        classes: ['form-control'], // optional
-        label: 'Image', // optional
+        id: "my-custom-field", // optional
+        classes: ["form-control"], // optional
+        label: "Image", // optional
       },
       extra: {
         multiple: true, // optional
         showPreview: true, // optional
       },
-      rules: ['file'],
+      rules: ["file"],
       file: {
         // need to add this attribute object if you need a file rule
-        types: 'jpg,gif,png',
+        types: "jpg,gif,png",
         maxsize: 5,
+      },
+    },
+    {
+      type: "autocomplete", // required
+      name: "name-field-autocomplete", // required
+      value: [
+        {
+          value: 1,
+          title: "item 1",
+        },
+      ],
+      attributes: {
+        id: "id-field-autocomplete", // required
+      },
+      extra: {
+        multiple: true, // optional
+        loadItemes: [
+          // list items with id and title attributes.
+          {
+            value: 1,
+            title: "item 1",
+          },
+          {
+            value: 2,
+            title: "item 2",
+          },
+          {
+            value: 3,
+            title: "item 3",
+          },
+          {
+            value: 4,
+            title: "item 4",
+          },
+        ],
       },
     },
   ];
@@ -163,7 +199,13 @@
 
 <code>
   <pre>
-    {JSON.stringify($valuesForm.values.name_file ? $valuesForm.values.name_file[0].name : null, null, 2)}
+    {JSON.stringify(
+      $valuesForm.values.name_file
+        ? $valuesForm.values.name_file[0].name
+        : null,
+      null,
+      2
+    )}
   </pre>
 </code>
 <div class="container">
@@ -182,7 +224,7 @@
     <form on:submit|preventDefault={onSubmit} class="custom-form">
       <Field {fields} />
       <button class="btn btn-primary" disabled={loading}
-        >{loading ? 'loading...' : 'Create'}</button
+        >{loading ? "loading..." : "Create"}</button
       >
     </form>
   </div>

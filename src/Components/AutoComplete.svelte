@@ -1,14 +1,14 @@
 <script>
-  import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
+  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
 
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
-    id: '',
+    id: "",
     spellcheck: false,
-    autocorrect: 'off',
-    autocomplete: 'off',
-    placeholder: 'Tap here...',
+    autocorrect: "off",
+    autocomplete: "off",
+    placeholder: "Tap here...",
   };
   const fieldAttributes = field.attributes ? field.attributes : {};
   field.attributes = { ...defaultAttributes, ...fieldAttributes };
@@ -22,7 +22,24 @@
 
   let items = field.extra.loadItemes;
   let itemsFiltered = [];
-  let itemsSelected = [];
+
+  let itemsSelectedFilterer = () => {
+    if (field.value && Array.isArray(field.value) && field.value.length) {
+      const defaultValues = field.value.filter((item) => {
+        const oldSelected = items.filter(
+          (s) => s.value === item.value && s.title === item.title
+        );
+        if (oldSelected.length) {
+          return oldSelected[0];
+        }
+      });
+      return defaultValues;
+    } else {
+      return [];
+    }
+  };
+  let itemsSelected = itemsSelectedFilterer();
+
   let hideListItems = true;
   let useFilter = false;
   let value = null;
@@ -42,17 +59,17 @@
     }
 
     // Affect values.
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: itemsSelected,
     });
 
-    value = '';
+    value = "";
 
     // placeholder
     field.attributes.placeholder = field.extra.multiple
       ? field.attributes.placeholder
-      : '';
+      : "";
   };
 
   // Delete tag
@@ -64,7 +81,7 @@
     }
 
     // Affect values.
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: itemsSelected,
     });
@@ -79,7 +96,7 @@
     }
 
     // Affect values.
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: itemsSelected,
     });
@@ -92,7 +109,7 @@
       hideListItems = false;
       const filtered = items.filter((entry) => {
         return Object.values(entry).some(
-          (val) => typeof val === 'string' && val.includes(keyword)
+          (val) => typeof val === "string" && val.includes(keyword)
         );
       });
       if (filtered.length > 0) {
