@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";
   import clsx from "clsx";
 
-  import { isRequired, inArray } from "../lib/helpers";
+  import { isRequired } from "../lib/helpers";
 
   // Declar variables.
   export let field = {};
@@ -17,6 +17,10 @@
   let classe = null;
   let defaulClasses = null;
   let multiple = false;
+
+  if (field.extra) {
+    multiple = field.extra.multiple ? field.extra.multiple : null;
+  }
 
   // Dispatch.
   const dispatch = createEventDispatcher();
@@ -56,9 +60,6 @@
     return option_value === field_value;
   }
 
-  if (field.extra) {
-    multiple = field.extra.multiple ? field.extra.multiple : null;
-  }
   // Lifecycle.
   onMount(() => {
     if (field.default_value) {
