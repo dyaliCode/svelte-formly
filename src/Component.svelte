@@ -213,7 +213,7 @@
     {
       type: "select",
       name: "city",
-      default_value: [1, 2],
+      // default_value: [2],
       attributes: {
         classes: ["form-control"],
         label: "City",

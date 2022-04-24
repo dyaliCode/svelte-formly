@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount, afterUpdate } from "svelte";
   import clsx from "clsx";
 
-  import { isRequired } from "../lib/helpers";
+  import { isRequired, inArray } from "../lib/helpers";
 
   // Declar variables.
   export let field = {};
@@ -28,7 +28,8 @@
       let values = [];
       const selectedOptions = event.currentTarget.selectedOptions;
       for (let i = 0; i < selectedOptions.length; i++) {
-        values.push(selectedOptions[i].value);
+        const value_item = selectedOptions[i].value;
+        values = { ...values, value_item };
       }
       value = values;
     } else {
@@ -46,16 +47,25 @@
       if (field_value && field_value.length) {
         const res = field_value.indexOf(option_value) != -1;
         return res;
+      } else if (field.default_value && field.default_value.length) {
+        const res = field.default_value.indexOf(option_value) != -1;
+        return res;
       }
       return null;
     }
     return option_value === field_value;
   }
 
+  if (field.extra) {
+    multiple = field.extra.multiple ? field.extra.multiple : null;
+  }
   // Lifecycle.
   onMount(() => {
-    if (field.extra) {
-      multiple = field.extra.multiple ? field.extra.multiple : null;
+    if (field.default_value) {
+      dispatch("changeValue", {
+        name: field.name,
+        value: field.default_value,
+      });
     }
   });
 
