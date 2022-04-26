@@ -209,32 +209,63 @@
   //   },
   // ];
 
+  // const fields = [
+  //   {
+  //     type: "select",
+  //     name: "city",
+  //     // default_value: [2],
+  //     attributes: {
+  //       classes: ["form-control"],
+  //       label: "City",
+  //     },
+  //     rules: ["required"],
+  //     extra: {
+  //       multiple: true,
+  //       options: [
+  //         {
+  //           value: null,
+  //           title: "None",
+  //         },
+  //         {
+  //           value: 1,
+  //           title: "Agadir",
+  //         },
+  //         {
+  //           value: 2,
+  //           title: "Casablanca",
+  //         },
+  //       ],
+  //     },
+  //   },
+  // ];
+
   const fields = [
     {
-      type: "select",
-      name: "city",
-      // default_value: [2],
+      type: "input",
+      name: "firstname",
       attributes: {
+        type: "text",
         classes: ["form-control"],
-        label: "City",
+        placeholder: "Tap your first name",
       },
-      rules: ["required"],
-      extra: {
-        multiple: true,
-        options: [
-          {
-            value: null,
-            title: "None",
-          },
-          {
-            value: 1,
-            title: "Agadir",
-          },
-          {
-            value: 2,
-            title: "Casablanca",
-          },
-        ],
+      rules: ["required", "min:6"],
+      messages: {
+        required: "Firstname field is required!",
+        min: "First name field must have more that 6 caracters!",
+      },
+    },
+    {
+      type: "input",
+      name: "password",
+      attributes: {
+        type: "password",
+        classes: ["form-control"],
+        placeholder: "Tap your password",
+      },
+      rules: ["required", "min:6"],
+      messages: {
+        required: "password field is required!",
+        min: "Password field must have more that 6 caracters!",
       },
     },
   ];
