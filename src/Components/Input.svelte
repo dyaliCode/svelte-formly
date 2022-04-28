@@ -45,7 +45,7 @@
   type={field.attributes.type}
   name={field.name}
   value={field.value}
-  id={field.attributes.id}
+  id={field.attributes.id ? field.attributes.id : field.name}
   class={clsx(field.attributes.classes)}
   placeholder={field.attributes.placeholder}
   required={isRequired(field)}
