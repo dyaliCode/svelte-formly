@@ -1,7 +1,6 @@
 <script>
-  import { onMount } from "svelte";
   import { validate } from "../Validation/index";
-  import { valuesForm } from "../lib/stores.js";
+  import { valuesForm, fieldsStore } from "../lib/stores.js";
   import { preprocessField } from "../lib/helpers.js";
 
   // Import components.
@@ -43,7 +42,6 @@
         return field;
       })
     );
-    console.log("mylist", mylist);
     const dirty = mylist.find((item) => {
       if (item.validation) {
         return item.validation.dirty === true;
@@ -52,8 +50,10 @@
     isValidForm = dirty ? false : true;
     valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
+    fieldsStore.set(itemsField);
   };
 
+  // Init.
   Promise.all(
     fields.map(async (field) => {
       values = { ...values, [field.name]: field.value };
@@ -74,9 +74,10 @@
     isValidForm = isValid ? false : true;
     valuesForm.set({ values, valid: isValidForm });
     itemsField = data;
+    fieldsStore.set(itemsField);
   });
 
-  // For SEO
+  // For SEO.
   valuesForm.set({ values, valid: isValidForm });
   itemsField = fields;
 </script>
