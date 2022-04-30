@@ -37,7 +37,7 @@
     if (items.length > 0) {
       dispatch('changeValue', {
         name: field.name,
-        value: items[0].value,
+        value: field.value ? field.value : items[0].value,
       });
     }
     if (field.attributes) {
