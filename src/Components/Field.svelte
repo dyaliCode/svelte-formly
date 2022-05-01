@@ -80,6 +80,7 @@
   // For SEO.
   valuesForm.set({ values, valid: isValidForm });
   itemsField = fields;
+  fieldsStore.set(fields);
 </script>
 
 {#each itemsField as field (field.name)}

@@ -1,6 +1,6 @@
 <script>
   import { get } from "svelte/store";
-  import { valuesForm, Step } from "./index";
+  import { valuesForm, Step, Field } from "./index";
 
   // Fetch Users
   const fetchUsers = async () => {
@@ -296,7 +296,9 @@
 
   let result = {};
   const onSubmit = async () => {
+    console.log("onSubmit");
     result = $valuesForm;
+    console.log("result", result);
   };
 </script>
 
@@ -335,6 +337,7 @@
   <div class="row">
     <form on:submit|preventDefault={onSubmit} class="custom-form">
       <Step {fields} />
+      <button type="button" on:click={onSubmit}>Submit</button>
     </form>
   </div>
 </div>
