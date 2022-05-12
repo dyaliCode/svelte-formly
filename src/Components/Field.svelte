@@ -1,8 +1,13 @@
 <script>
   import { validate } from "../Validation/index";
-  import { valuesForm, fieldsStore } from "../lib/stores.js";
+  import {
+    valuesForm,
+    fieldsStore,
+    values_form,
+    fields_store,
+  } from "../lib/stores.js";
   import { preprocessField } from "../lib/helpers.js";
-
+  import { get } from "svelte/store";
   // Import components.
   import Tag from "./Tag.svelte";
   import Input from "./Input.svelte";
@@ -16,8 +21,9 @@
 
   // Declar variables;
   export let fields = [];
+  export let name = "";
   let isValidForm = true;
-  let values = {};
+  let values = [];
   let itemsField = [];
   $: listFields = itemsField;
 
@@ -51,6 +57,20 @@
     valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
     fieldsStore.set(itemsField);
+
+    fields_store.update((n) => {
+      if (!n.length || !n[name]) {
+        n.push(itemsField);
+      }
+      return n;
+    });
+
+    values_form.update((n) => {
+      if (!n.length || !n[name]) {
+        n[`${name}`] = { form: name, values, valid: isValidForm };
+      }
+      return n;
+    });
   };
 
   // Init.
@@ -75,13 +95,36 @@
     valuesForm.set({ values, valid: isValidForm });
     itemsField = data;
     fieldsStore.set(itemsField);
+
+    fields_store.update((n) => {
+      if (!n.length || !n[name]) {
+        n.push(itemsField);
+      }
+      return n;
+    });
+
+    values_form.update((n) => {
+      if (!n.length || !n[name]) {
+        n[`${name}`] = { form: name, values, valid: isValidForm };
+      }
+      return n;
+    });
   });
 
-  // For SEO.
-  valuesForm.set({ values, valid: isValidForm });
-  itemsField = fields;
-  fieldsStore.set(fields);
+  // // For SEO.
+  // valuesForm.set({ values, valid: isValidForm });
+  // itemsField = fields;
+  // fieldsStore.set(fields);
 </script>
+
+<h2>{name}</h2>
+<h3>Valid {$values_form[name]?.valid}</h3>
+<pre>
+  <code>
+    {JSON.stringify($values_form[name], null, 2)}
+  </code>
+</pre>
+<hr />
 
 {#each itemsField as field (field.name)}
   <Tag
@@ -130,7 +173,7 @@
       {/if}
     {/if}
     <!-- Error messages -->
-    {#if !isValidForm}
+    {#if !$values_form[name]?.valid}
       {#if field.validation.errors.length > 0}
         {#each field.validation.errors as error}
           <Message {error} messages={field.messages ? field.messages : []} />

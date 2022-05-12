@@ -11,7 +11,11 @@ export const valuesForm = writable({
   values: {}
 })
 
+
 export const fieldsStore = writable([])
+
+export const values_form = writable([])
+export const fields_store = writable([])
 
 export const settingStore = writable({
   style: null

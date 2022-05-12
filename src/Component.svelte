@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import { get } from "svelte/store";
   import { valuesForm, Step, Field } from "./index";
 
@@ -336,7 +336,7 @@
 
   <div class="row">
     <form on:submit|preventDefault={onSubmit} class="custom-form">
-      <Step {fields} />
+      <Field {fields} />
       <button type="button" on:click={onSubmit}>Submit</button>
     </form>
   </div>
@@ -358,4 +358,30 @@
   .custom-form :global(.form-check) {
     padding-left: 0;
   }
-</style>
+</style> -->
+<script>
+  import Form1 from "./Form1.svelte";
+  import Form2 from "./Form2.svelte";
+
+  let values = {};
+
+  function submitFormHandler(event) {
+    values[event.detail.name] = event.detail.values;
+  }
+</script>
+
+<!-- <svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+  />
+</svelte:head> -->
+
+<!-- <h2>Values</h2> -->
+<!-- <pre>
+  <code>{JSON.stringify(values, null, 2)}</code>
+</pre> -->
+<hr />
+<Form1 />
+<hr />
+<Form2 />
