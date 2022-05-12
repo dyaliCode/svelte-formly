@@ -41,7 +41,6 @@
   });
 </script>
 
-field.value: {field.value}
 <input
   type={field.attributes.type}
   name={field.name}

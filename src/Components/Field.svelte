@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { validate } from "../Validation/index";
   import {
     valuesForm,
@@ -7,7 +8,7 @@
     fields_store,
   } from "../lib/stores.js";
   import { preprocessField } from "../lib/helpers.js";
-  import { get } from "svelte/store";
+
   // Import components.
   import Tag from "./Tag.svelte";
   import Input from "./Input.svelte";
@@ -26,6 +27,10 @@
   let values = [];
   let itemsField = [];
   $: listFields = itemsField;
+  let form = { fields: [], values: null };
+
+  // Dispatch.
+  const dispatch = createEventDispatcher();
 
   // Change values.
   const changeValueHander = async (event) => {
@@ -34,6 +39,7 @@
       [event.detail.name]: event.detail.value,
       touched: event.detail.name,
     };
+
     let mylist = await Promise.all(
       listFields.map(async (field) => {
         if (field.name == event.detail.name) {
@@ -48,28 +54,40 @@
         return field;
       })
     );
+
     const dirty = mylist.find((item) => {
       if (item.validation) {
         return item.validation.dirty === true;
       }
     });
+
     isValidForm = dirty ? false : true;
     valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
     fieldsStore.set(itemsField);
 
-    fields_store.update((n) => {
-      if (!n.length || !n[name]) {
-        n.push(itemsField);
+    fields_store.update((data) => {
+      if (!data.length || !data[name]) {
+        data.push(itemsField);
       }
-      return n;
+      return data;
     });
 
-    values_form.update((n) => {
-      if (!n.length || !n[name]) {
-        n[`${name}`] = { form: name, values, valid: isValidForm };
-      }
-      return n;
+    values_form.update((data) => {
+      data.map((item) => {
+        if (item.form === name) {
+          item = { form: name, values, valid: isValidForm };
+        }
+        return item;
+      });
+      form = {
+        fields: itemsField,
+        values: { form: name, values, valid: isValidForm },
+      };
+
+      // Dispatch.
+      dispatch("form_values", form);
+      return data;
     });
   };
 
@@ -91,23 +109,30 @@
         return item.validation.dirty === true;
       }
     });
+
     isValidForm = isValid ? false : true;
     valuesForm.set({ values, valid: isValidForm });
     itemsField = data;
     fieldsStore.set(itemsField);
 
-    fields_store.update((n) => {
-      if (!n.length || !n[name]) {
-        n.push(itemsField);
+    fields_store.update((data) => {
+      if (!data.length || !data[name]) {
+        data.push(itemsField);
       }
-      return n;
+      return data;
     });
 
-    values_form.update((n) => {
-      if (!n.length || !n[name]) {
-        n[`${name}`] = { form: name, values, valid: isValidForm };
-      }
-      return n;
+    values_form.update((data) => {
+      data.push({ form: name, values, valid: isValidForm });
+      form = {
+        fields: itemsField,
+        values: { form: name, values, valid: isValidForm },
+      };
+
+      // Dispatch.
+      dispatch("form_values", form);
+
+      return data;
     });
   });
 
@@ -116,15 +141,6 @@
   // itemsField = fields;
   // fieldsStore.set(fields);
 </script>
-
-<h2>{name}</h2>
-<h3>Valid {$values_form[name]?.valid}</h3>
-<pre>
-  <code>
-    {JSON.stringify($values_form[name], null, 2)}
-  </code>
-</pre>
-<hr />
 
 {#each itemsField as field (field.name)}
   <Tag

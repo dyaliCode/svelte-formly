@@ -1,38 +1,29 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import { get } from "svelte/store";
-  import { values_form, Field } from "./index";
-
-  // Dispatch.
-  const dispatch = createEventDispatcher();
+  import { Field } from "./index";
 
   let message = "";
-  let values = {};
+  let data = {};
   let color = "#ff3e00";
 
-  function onSubmit() {
-    const d = get(values_form);
-    console.log("d", d);
-    d.map((item) => {
-      console.log("item", item);
-      return item;
-    });
-    // console.log("vls", vls);
-    // console.log("d", d);
-
-    // const data = get(values_form);
-    // if (data.valid) {
-    //   message = JSON.stringify(data, null, 4);
-    // } else {
-    //   message = "Your form is not valid!";
-    // }
-    // console.log("form1", data.values);
+  function getValuesForm(event) {
+    data = event.detail;
   }
 
+  function onSubmit() {
+    console.log("data", data);
+    const { values } = data;
+    if (values.valid) {
+      message = JSON.stringify(values, null, 4);
+    } else {
+      message = "Your form is not valid!";
+    }
+  }
+
+  const form_name = "form1";
   const fields1 = [
     {
       type: "input",
-      name: "First name",
+      name: "first-name",
       value: "first-name",
       attributes: {
         type: "text",
@@ -43,7 +34,7 @@
       prefix: {
         classes: ["form-group", "col-4"],
       },
-      rules: ["required"],
+      rules: ["required", "min:20"],
     },
     {
       type: "input",
@@ -62,14 +53,20 @@
   ];
 </script>
 
-<!-- <h4 style="--theme-color: {color}">Form1</h4> -->
+<h4 style="--theme-color: {color}">{form_name}</h4>
+
+<pre>
+  <code>
+    {message}
+  </code>
+</pre>
 
 <form
   on:submit|preventDefault={onSubmit}
   class="custom-form"
   style="--theme-color: {color}"
 >
-  <Field fields={fields1} name="form1" />
+  <Field fields={fields1} name={form_name} on:form_values={getValuesForm} />
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 

@@ -7,26 +7,23 @@
   const dispatch = createEventDispatcher();
 
   let message = "";
-  let values = {};
+  let data = {};
   let color = "#ff3e00";
 
+  function getValuesForm(event) {
+    data = event.detail;
+  }
+
   function onSubmit() {
-    const data = get(values_form["form2"]);
-    if (data.valid) {
-      message = JSON.stringify(data, null, 4);
+    const { values } = data;
+    if (values.valid) {
+      message = JSON.stringify(values, null, 4);
     } else {
       message = "Your form is not valid!";
     }
-
-    console.log("form2", data.values);
-
-    // Dispatch.
-    // 		dispatch("submitForm", {
-    //       name: 'form2',
-    //       values: data.values,
-    //     });
   }
 
+  const form_name = "form2";
   const fields2 = [
     {
       type: "checkbox",
@@ -87,14 +84,19 @@
   ];
 </script>
 
-<!-- <h4 style="--theme-color: {color}">Form2</h4> -->
+<h4 style="--theme-color: {color}">{form_name}</h4>
 
+<pre>
+  <code>
+    {message}
+  </code>
+</pre>
 <form
   on:submit|preventDefault={onSubmit}
   class="custom-form"
   style="--theme-color: {color}"
 >
-  <Field fields={fields2} name="form2" />
+  <Field fields={fields2} name={form_name} on:form_values={getValuesForm} />
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 
