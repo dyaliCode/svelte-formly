@@ -46,7 +46,7 @@
           field.value = event.detail.value;
         }
         if (field.preprocess) {
-          const fnc = field.preprocess;
+          // const fnc = field.preprocess;
           field = await preprocessField(field, listFields, values);
           values[`${field.name}`] = field.value;
         }
@@ -96,7 +96,7 @@
     fields.map(async (field) => {
       values = { ...values, [field.name]: field.value };
       if (field.preprocess) {
-        const fnc = field.preprocess;
+        // const fnc = field.preprocess;
         field = await preprocessField(field, fields, values);
       }
       field = await validate(field);
@@ -131,15 +131,33 @@
 
       // Dispatch.
       dispatch("form_values", form);
-
       return data;
     });
   });
 
-  // // For SEO.
-  // valuesForm.set({ values, valid: isValidForm });
-  // itemsField = fields;
-  // fieldsStore.set(fields);
+  // For SEO.
+  valuesForm.set({ values, valid: isValidForm });
+  itemsField = fields;
+  fieldsStore.set(fields);
+
+  fields_store.update((data) => {
+    if (!data.length || !data[name]) {
+      data.push(itemsField);
+    }
+    return data;
+  });
+
+  values_form.update((data) => {
+    data.push({ form: name, values, valid: isValidForm });
+    form = {
+      fields: itemsField,
+      values: { form: name, values, valid: isValidForm },
+    };
+
+    // Dispatch.
+    dispatch("form_values", form);
+    return data;
+  });
 </script>
 
 {#each itemsField as field (field.name)}
@@ -189,7 +207,7 @@
       {/if}
     {/if}
     <!-- Error messages -->
-    {#if !$values_form[name]?.valid}
+    {#if !form.values.valid}
       {#if field.validation.errors.length > 0}
         {#each field.validation.errors as error}
           <Message {error} messages={field.messages ? field.messages : []} />

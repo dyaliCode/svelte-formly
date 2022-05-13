@@ -1,10 +1,5 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import { get } from "svelte/store";
-  import { values_form, Field } from "./index";
-
-  // Dispatch.
-  const dispatch = createEventDispatcher();
+  import { Field } from "./index";
 
   let message = "";
   let data = {};
