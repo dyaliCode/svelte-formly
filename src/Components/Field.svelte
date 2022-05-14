@@ -1,12 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { validate } from "../Validation/index";
-  import {
-    valuesForm,
-    fieldsStore,
-    values_form,
-    fields_store,
-  } from "../lib/stores.js";
+  import { values_form, fields_store } from "../lib/stores.js";
   import { preprocessField } from "../lib/helpers.js";
 
   // Import components.
@@ -46,7 +41,6 @@
           field.value = event.detail.value;
         }
         if (field.preprocess) {
-          // const fnc = field.preprocess;
           field = await preprocessField(field, listFields, values);
           values[`${field.name}`] = field.value;
         }
@@ -62,9 +56,7 @@
     });
 
     isValidForm = dirty ? false : true;
-    valuesForm.set({ values, valid: isValidForm });
     itemsField = mylist;
-    fieldsStore.set(itemsField);
 
     fields_store.update((data) => {
       if (!data.length || !data[name]) {
@@ -81,8 +73,7 @@
         return item;
       });
       form = {
-        fields: itemsField,
-        values: { form: name, values, valid: isValidForm },
+        data: { form: name, values, valid: isValidForm },
       };
 
       // Dispatch.
@@ -96,7 +87,6 @@
     fields.map(async (field) => {
       values = { ...values, [field.name]: field.value };
       if (field.preprocess) {
-        // const fnc = field.preprocess;
         field = await preprocessField(field, fields, values);
       }
       field = await validate(field);
@@ -111,53 +101,45 @@
     });
 
     isValidForm = isValid ? false : true;
-    valuesForm.set({ values, valid: isValidForm });
     itemsField = data;
-    fieldsStore.set(itemsField);
 
+    // Update fields store.
+    fields_form_update();
+    // Update values store.
+    values_form_update();
+  });
+
+  // For SEO.
+  itemsField = fields;
+
+  // Update fields store.
+  fields_form_update();
+  // Update values store.
+  values_form_update();
+
+  // Update fields form
+  function fields_form_update() {
     fields_store.update((data) => {
       if (!data.length || !data[name]) {
         data.push(itemsField);
       }
       return data;
     });
+  }
 
+  // Update values form.
+  function values_form_update() {
     values_form.update((data) => {
       data.push({ form: name, values, valid: isValidForm });
       form = {
-        fields: itemsField,
-        values: { form: name, values, valid: isValidForm },
+        data: { form: name, values, valid: isValidForm },
       };
 
       // Dispatch.
       dispatch("form_values", form);
       return data;
     });
-  });
-
-  // For SEO.
-  valuesForm.set({ values, valid: isValidForm });
-  itemsField = fields;
-  fieldsStore.set(fields);
-
-  fields_store.update((data) => {
-    if (!data.length || !data[name]) {
-      data.push(itemsField);
-    }
-    return data;
-  });
-
-  values_form.update((data) => {
-    data.push({ form: name, values, valid: isValidForm });
-    form = {
-      fields: itemsField,
-      values: { form: name, values, valid: isValidForm },
-    };
-
-    // Dispatch.
-    dispatch("form_values", form);
-    return data;
-  });
+  }
 </script>
 
 {#each itemsField as field (field.name)}
@@ -207,7 +189,7 @@
       {/if}
     {/if}
     <!-- Error messages -->
-    {#if !form.values.valid}
+    {#if !form.data.valid}
       {#if field.validation.errors.length > 0}
         {#each field.validation.errors as error}
           <Message {error} messages={field.messages ? field.messages : []} />

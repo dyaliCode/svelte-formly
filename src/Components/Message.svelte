@@ -24,7 +24,6 @@
     } else {
       message += rules[rule] ? rules[rule] : rules["custom_rule"];
     }
-    console.log("message", message);
     return message;
   }
 </script>
