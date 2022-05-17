@@ -1,12 +1,12 @@
 <script>
-  import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
-  import clsx from 'clsx';
+  import { createEventDispatcher, onMount } from "svelte";
+  import clsx from "clsx";
 
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
-    id: '',
-    classes: '',
+    id: "",
+    classes: "",
     disabled: null,
   };
   const fieldAttributes = field.attributes ? field.attributes : {};
@@ -28,7 +28,7 @@
   function onChangerValue(event) {
     files = Array.from(event.target.files);
     if (files.length > 0) {
-      dispatch('changeValue', {
+      dispatch("changeValue", {
         name: field.name,
         value: files,
       });
@@ -46,7 +46,7 @@
       newValue = files;
     }
 
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: newValue,
     });

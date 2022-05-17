@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
 
   // Declar variables.
   export let field = {};

@@ -17,62 +17,55 @@
     }
   }
 
-  const form_name = "form2";
-  const fields2 = [
+  const form_name = "form1";
+  const fields1 = [
     {
-      type: "checkbox",
-      name: "check1",
-      value: "value1",
+      type: "input",
+      name: "first-name",
+      value: "first-name",
       attributes: {
-        id: "check1",
-        label: "Checkbox Default:",
-        classes: ["checker"],
-      },
-      rules: ["required"],
-      extra: {
-        items: [
-          {
-            name: "item1",
-            value: "value1",
-            title: "Value 1",
-          },
-          {
-            name: "item2",
-            value: "value2",
-            title: "Value 2",
-          },
-        ],
+        type: "text",
+        label: "First name",
+        id: "firstname",
+        classes: ["form-control"],
       },
       prefix: {
-        classes: ["form-group mb-3"],
+        classes: ["form-group", "col-4"],
+      },
+      rules: ["required", "min:20"],
+      messages: {
+        min: "minim 20",
       },
     },
     {
-      type: "checkbox",
-      name: "check2",
-      value: "value2",
+      type: "input",
+      name: "lastname",
+      value: "last-name",
       attributes: {
-        id: "check2",
-        label: "Checkbox Inline:",
-        classes: ["checker"],
-      },
-      extra: {
-        aligne: "inline",
-        items: [
-          {
-            name: "item1",
-            value: "value1",
-            title: "Value 1",
-          },
-          {
-            name: "item2",
-            value: "value2",
-            title: "Value 2",
-          },
-        ],
+        type: "text",
+        label: "Last name",
+        id: "lastname",
+        classes: ["form-control"],
       },
       prefix: {
-        classes: ["form-group mb-3"],
+        classes: ["form-group", "col-4"],
+      },
+    },
+    {
+      type: "input",
+      name: "email",
+      attributes: {
+        type: "email",
+        label: "E-mail",
+        id: "email",
+        classes: ["form-control"],
+      },
+      prefix: {
+        classes: ["form-group", "col-4"],
+      },
+      rules: ["required", "email"],
+      messages: {
+        email: "email format not valid!",
       },
     },
   ];
@@ -85,12 +78,13 @@
     {message}
   </code>
 </pre>
+
 <form
   on:submit|preventDefault={onSubmit}
   class="custom-form"
   style="--theme-color: {color}"
 >
-  <Field fields={fields2} name={form_name} on:form_values={getValuesForm} />
+  <Field fields={fields1} name={form_name} on:Values={getValuesForm} />
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 

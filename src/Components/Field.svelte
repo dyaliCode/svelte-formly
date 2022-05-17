@@ -77,7 +77,7 @@
       };
 
       // Dispatch.
-      dispatch("form_values", form);
+      dispatch("Values", form);
       return data;
     });
   };
@@ -141,7 +141,7 @@
       };
 
       // Dispatch.
-      dispatch("form_values", form);
+      dispatch("Values", form);
       return data;
     });
   }
