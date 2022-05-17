@@ -1,4 +1,4 @@
 import Field from './Components/Field.svelte'
-import { valuesForm } from './lib/stores'
+import { values_form } from './lib/stores';
 
-export { Field, valuesForm }
+export { Field, values_form }

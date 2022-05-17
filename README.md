@@ -22,13 +22,13 @@ by [@kamalkech](https://github.com/kamalkech)
 
 npm i svelte-formly
 
-## Usage
+## Usage for svelte & sveltekit
 
 ```svelte
 <script>
-  import { get } from "svelte/store";
-  import { valuesForm, Field } from "svelte-formly";
+  import { Field } from "svelte-formly";
 
+  const form_name = 'my_form';
   const fields = [
     {
       type: 'input',
@@ -37,8 +37,8 @@ npm i svelte-formly
         type: 'color',
         label: 'Color Form',
         id: 'color',
-        classes: ['class-field-color'],
-      },
+        classes: ['class-field-color']
+      }
     },
     {
       type: 'input',
@@ -49,101 +49,105 @@ npm i svelte-formly
         label: 'Username',
         id: 'firstname',
         classes: ['form-control'],
-        placeholder: 'Tap your first name',
+        placeholder: 'Tap your first name'
       },
       rules: ['required', 'min:6'],
       messages: {
         required: 'Firstname field is required!',
-        min: 'First name field must have more that 6 caracters!',
-      },
+        min: 'First name field must have more that 6 caracters!'
+      }
     },
     {
       prefix: {
-        classes: ['custom-form-group'],
+      	classes: ['custom-form-group']
       },
       type: 'input',
       name: 'lastname',
       value: '',
       attributes: {
-        type: 'text',
-        id: 'lastname',
-        placeholder: 'Tap your lastname',
-        classes: ['form-control'],
+      	type: 'text',
+      	id: 'lastname',
+      	placeholder: 'Tap your lastname',
+      	classes: ['form-control']
       },
       description: {
-        classes: ['custom-class-desc'],
-        text: 'Custom text for description',
-      },
+      	classes: ['custom-class-desc'],
+      	text: 'Custom text for description'
+      }
     },
     {
       type: 'input',
       name: 'email',
       value: '',
       attributes: {
-        type: 'email',
-        id: 'email',
-        placeholder: 'Tap your email',
+      	type: 'email',
+      	id: 'email',
+      	placeholder: 'Tap your email'
       },
-      rules: ['required', 'email'],
+      rules: ['required', 'email']
     },
     {
       type: 'radio',
       name: 'gender',
       extra: {
-        items: [
+      	items: [
           {
             id: 'female',
             value: 'female',
-            title: 'Female',
+            title: 'Female'
           },
           {
             id: 'male',
             value: 'male',
-            title: 'Male',
-          },
-        ],
-      },
+            title: 'Male'
+          }
+      	]
+      }
     },
     {
       type: 'select',
       name: 'city',
       value: 1,
       attributes: {
-        id: 'city',
-        label: 'City',
+      	id: 'city',
+      	label: 'City'
       },
       rules: ['required'],
       extra: {
-        options: [
+      	options: [
           {
             value: null,
-            title: 'All',
+            title: 'All'
           },
           {
             value: 1,
-            title: 'Agadir',
+            title: 'Agadir'
           },
           {
             value: 2,
-            title: 'Casablanca',
-          },
-        ],
-      },
-    },
+            title: 'Casablanca'
+          }
+      	]
+      }
+    }
   ];
 
-  let message = "";
-  let values = {};
-  let color = "#ff3e00";
+  let message = '';
+  let data = {};
+  let color = '#ff3e00';
+
+  function getValuesForm(event) {
+    data = event.detail.data;
+  }
 
   function onSubmit() {
-    const data = get(valuesForm);
+    const { values } = data;
     if (data.valid) {
-      values = data.values;
       color = values.color ? values.color : color;
-      message = "Congratulation! now your form is valid";
+      message = 'Congratulation! now your form is valid';
     } else {
-      message = "Your form is not valid!";
+      color = 'red';
+      message = 'Your form is not valid!';
     }
   }
 </script>
@@ -179,63 +183,8 @@ npm i svelte-formly
   class="custom-form"
   style="--theme-color: {color}"
 >
-  <Field {fields} />
+  <Field {fields} name={form_name} on:Values={getValuesForm} />
   <button class="btn btn-primary" type="submit">Submit</button>
-</form>
-```
-
-<hr>
-
-## For Sapper
-
-npm i -D svelte-formly
-
-```svelte
-<script>
-  import { get } from "svelte/store";
-  import { Field, valuesForm } from 'svelte-formly';
-
-  const fields = [
-    {
-      type: "input",
-      name: "username",
-      attributes: {
-        type: "text",
-        id: "username",
-      },
-      rules: ["required"],
-      messages: {
-        required: "Username is required!"
-      }
-    },
-    {
-      type: "input",
-      name: "email",
-      attributes: {
-        type: "email",
-        id: "email",
-      },
-      rules: ["required", "email"],
-      messages: {
-        required: "E-mail is required!"
-      }
-    }
-  ];
-
-  function onSubmit() {
-    const data = get(valuesForm);
-    if (data.valid) {
-      const values = data.values;
-      console.log('values', values);
-    }
-  }
-</script>
-```
-
-```svelte
-<form on:submit|preventDefault="{onSubmit}">
-  <svelte:component this="{Field}" {fields} />
-  <button type="submit">Submit</button>
 </form>
 ```
 
@@ -565,7 +514,7 @@ Validation with custom rule
 ```svelte
 <script>
   import { get } from "svelte/store";
-  import { Field, valuesForm } from "svelte-formly";
+  import { Field, values_form } from "svelte-formly";
 
   const fields = [
     {
@@ -592,7 +541,7 @@ Validation with custom rule
 
   // Custom rule to force field
   function notEqual() {
-    const values = get(valuesForm).values;
+    const values = get(values_form).values;
     if (values.firstname === values.lastname) {
       return false;
     }

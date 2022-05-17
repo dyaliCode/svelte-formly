@@ -1,20 +1,20 @@
 <script>
-  import { afterUpdate, createEventDispatcher } from 'svelte';
-  import clsx from 'clsx';
+  import { afterUpdate, createEventDispatcher } from "svelte";
+  import clsx from "clsx";
 
-  import { isRequired, scanValue } from '../lib/helpers';
+  import { isRequired, scanValue } from "../lib/helpers";
 
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
-    type: 'text',
-    id: '',
-    classes: '',
+    type: "text",
+    id: "",
+    classes: "",
     min: null,
     max: null,
     step: null,
-    autocomplete: 'off',
-    placeholder: '',
+    autocomplete: "off",
+    placeholder: "",
     disabled: false,
     readonly: false,
   };
@@ -29,7 +29,7 @@
 
   // Change value field.
   function onChangerValue(event) {
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: scanValue(field.attributes.type, event.target.value),
     });
@@ -45,7 +45,7 @@
   type={field.attributes.type}
   name={field.name}
   value={field.value}
-  id={field.attributes.id}
+  id={field.attributes.id ? field.attributes.id : field.name}
   class={clsx(field.attributes.classes)}
   placeholder={field.attributes.placeholder}
   required={isRequired(field)}

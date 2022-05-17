@@ -11,6 +11,13 @@ function isArray (arr) {
   return Array.isArray(arr)
 }
 
+function inArray(arr, element) {
+  if (arr.indexOf(element) != -1) {
+    return true;
+  }
+  return false;
+}
+
 function setAttributes (el, attrs) {
   for (var key in attrs) {
     el.setAttribute(key, attrs[key])
@@ -74,6 +81,7 @@ export {
   addDomElement,
   getDefaultMessageError,
   isArray,
+  inArray,
   isRequired,
   preprocessField,
   scanValue

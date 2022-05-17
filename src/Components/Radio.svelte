@@ -1,11 +1,11 @@
 <script>
-  import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
-  import clsx from 'clsx';
+  import { afterUpdate, createEventDispatcher, onMount } from "svelte";
+  import clsx from "clsx";
 
   // Declar variables.
   export let field = {};
   const defaultAttributes = {
-    classes: '',
+    classes: "",
   };
   let classe = null;
   let defaulClasses = null;
@@ -26,7 +26,7 @@
 
   // Change value.
   function onChangeValue(event) {
-    dispatch('changeValue', {
+    dispatch("changeValue", {
       name: field.name,
       value: event.target.value,
     });
@@ -35,9 +35,9 @@
   // Insert default value.
   onMount(() => {
     if (items.length > 0) {
-      dispatch('changeValue', {
+      dispatch("changeValue", {
         name: field.name,
-        value: items[0].value,
+        value: field.value == undefined ? items[0].value : field.value,
       });
     }
     if (field.attributes) {
@@ -57,9 +57,9 @@
 
 {#each items as item, i}
   <div
-    class={field.extra.aligne === 'inline'
-      ? 'form-check form-check-inline'
-      : 'form-check'}
+    class={field.extra.aligne === "inline"
+      ? "form-check form-check-inline"
+      : "form-check"}
   >
     <input
       type="radio"
