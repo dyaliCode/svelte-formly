@@ -46,7 +46,6 @@
           field.value = event.detail.value;
         }
         if (field.preprocess) {
-          // const fnc = field.preprocess;
           field = await preprocessField(field, listFields, values);
           values[`${field.name}`] = field.value;
         }
@@ -82,7 +81,7 @@
       });
       form = {
         fields: itemsField,
-        values: { form: name, values, valid: isValidForm },
+        data: { form: name, values, valid: isValidForm },
       };
 
       // Dispatch.
@@ -126,7 +125,7 @@
       data.push({ form: name, values, valid: isValidForm });
       form = {
         fields: itemsField,
-        values: { form: name, values, valid: isValidForm },
+        data: { form: name, values, valid: isValidForm },
       };
 
       // Dispatch.
@@ -151,7 +150,7 @@
     data.push({ form: name, values, valid: isValidForm });
     form = {
       fields: itemsField,
-      values: { form: name, values, valid: isValidForm },
+      data: { form: name, values, valid: isValidForm },
     };
 
     // Dispatch.
@@ -207,7 +206,7 @@
       {/if}
     {/if}
     <!-- Error messages -->
-    {#if !form.values.valid}
+    {#if !form.data.valid}
       {#if field.validation.errors.length > 0}
         {#each field.validation.errors as error}
           <Message {error} messages={field.messages ? field.messages : []} />

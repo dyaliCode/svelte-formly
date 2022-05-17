@@ -362,6 +362,7 @@
 <script>
   import Form1 from "./Form1.svelte";
   import Form2 from "./Form2.svelte";
+  import Form3 from "./Form3.svelte";
 
   let values = {};
 
@@ -381,7 +382,9 @@
 <!-- <pre>
   <code>{JSON.stringify(values, null, 2)}</code>
 </pre> -->
-<hr />
+<!-- <hr />
 <Form1 />
 <hr />
-<Form2 />
+<Form2 /> -->
+<hr />
+<Form3 />
