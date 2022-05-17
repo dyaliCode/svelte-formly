@@ -6,14 +6,12 @@
   let color = "#ff3e00";
 
   function getValuesForm(event) {
-    data = event.detail;
+    data = event.detail.data;
   }
 
   function onSubmit() {
-    console.log("data", data);
-    const { values } = data;
-    if (values.valid) {
-      message = JSON.stringify(values, null, 4);
+    if (data.valid) {
+      message = JSON.stringify(data, null, 4);
     } else {
       message = "Your form is not valid!";
     }
@@ -35,6 +33,9 @@
         classes: ["form-group", "col-4"],
       },
       rules: ["required", "min:20"],
+      messages: {
+        min: "minim 20",
+      },
     },
     {
       type: "input",
@@ -48,6 +49,23 @@
       },
       prefix: {
         classes: ["form-group", "col-4"],
+      },
+    },
+    {
+      type: "input",
+      name: "email",
+      attributes: {
+        type: "email",
+        label: "E-mail",
+        id: "email",
+        classes: ["form-control"],
+      },
+      prefix: {
+        classes: ["form-group", "col-4"],
+      },
+      rules: ["required", "email"],
+      messages: {
+        email: "email format not valid!",
       },
     },
   ];

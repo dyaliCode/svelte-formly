@@ -6,13 +6,12 @@
   let color = "#ff3e00";
 
   function getValuesForm(event) {
-    data = event.detail;
+    data = event.detail.data;
   }
 
   function onSubmit() {
-    const { values } = data;
-    if (values.valid) {
-      message = JSON.stringify(values, null, 4);
+    if (data.valid) {
+      message = JSON.stringify(data, null, 4);
     } else {
       message = "Your form is not valid!";
     }

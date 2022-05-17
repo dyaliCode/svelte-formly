@@ -360,10 +360,8 @@
   }
 </style> -->
 <script>
-  import { values_form } from "./index";
   import Form1 from "./Form1.svelte";
   import Form2 from "./Form2.svelte";
-  import Form3 from "./Form3.svelte";
 
   let values = {};
 
@@ -379,13 +377,11 @@
   />
 </svelte:head> -->
 
-<h2>Values</h2>
-<pre>
-  <code>{JSON.stringify($values_form, null, 2)}</code>
-</pre>
+<!-- <h2>Values</h2> -->
+<!-- <pre>
+  <code>{JSON.stringify(values, null, 2)}</code>
+</pre> -->
 <hr />
 <Form1 />
 <hr />
 <Form2 />
-<hr />
-<Form3 />

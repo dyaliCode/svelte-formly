@@ -130,12 +130,8 @@
   // Update values form.
   function values_form_update() {
     values_form.update((data) => {
-      data.map((item) => {
-        if (item.form === name) {
-          item = { form: name, values, valid: isValidForm };
-        }
-        return item;
-      });
+      console.log("data", data);
+      data.push({ form: name, values, valid: isValidForm });
       form = {
         data: { form: name, values, valid: isValidForm },
       };
