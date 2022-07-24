@@ -19,4 +19,4 @@ npm install svelte-formly
 
 ## Documentation
 
-[Link Documentation](https://documentation-svelte-formly.vercel.app/)
+[Link Documentation](https://svelte-formly-ts-documentation.netlify.app)
