@@ -12,11 +12,10 @@ by [@kamalkech](https://github.com/kamalkech)
 
 - ⚡️ Generate dynamic and reactive forms.
 - 😍 Easy to extend with custom field type, custom validation.
-- ✔️ Compatible with Svelte, Svetelkit, Sapper, Routify
 
 ## Installation
 
-npm i svelte-formly
+npm install svelte-formly
 
 ## Documentation
 
