@@ -1,4 +1,8 @@
+.DS_Store
 node_modules
-# package-lock.json
-dist
-docs/index.js
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example

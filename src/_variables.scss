@@ -1,0 +1,12 @@
+:root {
+	--primary: #ff3e00;
+	--primary-hover: #ff4000c0;
+	$info: #ff3e00;
+}
+[data-theme='light'],
+:root:not([data-theme='dark']) {
+	--primary: #ff3e00;
+	--primary-hover: #ff4000c0;
+	--primary-focus: rgba(236, 70, 28, 0.125);
+	--primary-inverse: #fff;
+}
