@@ -147,9 +147,8 @@
 		// Update form.
 		storeForms.save(current_form);
 
-		if (realtime) {
-			dispatch('update', { ...current_form.values, valid: current_form.valid });
-		}
+		dispatch('update', { ...current_form.values, valid: current_form.valid });
+		
 	};
 
 	// Submit form.
