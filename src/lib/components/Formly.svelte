@@ -65,6 +65,8 @@
 
 	// Props.
 	export let fields: IField[] = [];
+
+	export let defaultButtons = true;
 	export let btnSubmit: IBtnSubmit = {
 		text: 'Submit'
 	};
@@ -193,6 +195,7 @@
 					<Dirty {field} />
 				{/if}
 			{/each}
+			{#if defaultButtons}
 			<button
 				type="submit"
 				class={btnSubmit.classes && btnSubmit.classes?.length ? btnSubmit.classes?.join(' ') : null}
@@ -204,6 +207,7 @@
 				class={btnReset.classes && btnReset.classes?.length ? btnReset.classes?.join(' ') : null}
 				>{btnReset.text}</button
 			>
+			{/if}
 		</form>
 	{/if}
 {/if}
