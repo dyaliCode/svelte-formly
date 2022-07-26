@@ -15,7 +15,7 @@ by [@kamalkech](https://github.com/kamalkech)
 
 ## Documentation
 
-[Link Documentation](https://svelte-formly-ts-documentation.netlify.app)
+[Link Documentation](https://svelte.formly-js.com/)
 
 ## Quick Installation
 
