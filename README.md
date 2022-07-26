@@ -27,48 +27,48 @@ npm install svelte-formly
 
 ```typescript
 <script lang="ts">
-	import { Formly, type IField } from 'svelte-formly';
+  import { Formly, type IField } from 'svelte-formly';
 
-	const form_name = 'formly_usage';
-	const fields: IField[] = [
-		{
-			type: 'input', // required
-			name: 'firstname', // required
-			attributes: {
-				type: 'text',
-				id: 'firstname', // required
-				classes: ['form-control'],
-				placeholder: 'Tap your first name'
-			},
-			rules: ['required', 'min:3', 'max:10'],
-			messages: {
-				required: 'The firstname is required',
-				min: 'Your firstname is too short min=3',
-				max: 'Your firstname is too long max=10'
-			}
-		},
-		{
-			type: 'input', // required
-			name: 'password', // required
-			attributes: {
-				type: 'password',
-				id: 'password', // required
-				classes: ['form-control'],
-				placeholder: 'Tap your password',
-				autocomplete: 'off'
-			},
-			rules: ['required', 'min:6', 'max:10'],
-			messages: {
-				required: 'The password is required',
-				min: 'Your password is too short min=6',
-				max: 'Your password is too long max=10'
-			}
-		}
-	];
+  const form_name = 'formly_usage';
+  const fields: IField[] = [
+    {
+      type: 'input', // required
+      name: 'firstname', // required
+      attributes: {
+        type: 'text',
+        id: 'firstname', // required
+        classes: ['form-control'],
+        placeholder: 'Tap your first name'
+      },
+      rules: ['required', 'min:3', 'max:10'],
+      messages: {
+        required: 'The firstname is required',
+        min: 'Your firstname is too short min=3',
+        max: 'Your firstname is too long max=10'
+      }
+    },
+    {
+      type: 'input', // required
+      name: 'password', // required
+      attributes: {
+        type: 'password',
+        id: 'password', // required
+        classes: ['form-control'],
+        placeholder: 'Tap your password',
+        autocomplete: 'off'
+      },
+      rules: ['required', 'min:6', 'max:10'],
+      messages: {
+        required: 'The password is required',
+        min: 'Your password is too short min=6',
+        max: 'Your password is too long max=10'
+      }
+    }
+  ];
 
-	const onSubmit = ({ detail }: any) => {
-		console.log('values:', detail);
-	};
+  const onSubmit = ({ detail }: any) => {
+    console.log('values:', detail);
+  };
 </script>
 
 <Formly {fields} {form_name} on:submit={onSubmit} />
