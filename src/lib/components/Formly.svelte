@@ -75,7 +75,6 @@
 	};
 
 	export let form_name: string = '';
-	export let realtime: boolean = false;
 	let _formEl: HTMLFormElement;
 
 	// Dispatch values.
