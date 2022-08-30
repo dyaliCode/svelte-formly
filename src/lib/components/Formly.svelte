@@ -65,6 +65,8 @@
 
 	// Props.
 	export let fields: IField[] = [];
+
+	export let defaultButtons = true;
 	export let btnSubmit: IBtnSubmit = {
 		text: 'Submit'
 	};
@@ -73,7 +75,6 @@
 	};
 
 	export let form_name: string = '';
-	export let realtime: boolean = false;
 	let _formEl: HTMLFormElement;
 
 	// Dispatch values.
@@ -145,9 +146,8 @@
 		// Update form.
 		storeForms.save(current_form);
 
-		if (realtime) {
-			dispatch('update', { ...current_form.values, valid: current_form.valid });
-		}
+		dispatch('update', { ...current_form.values, valid: current_form.valid });
+		
 	};
 
 	// Submit form.
@@ -163,6 +163,8 @@
 		});
 		await storeForms.resetValues(form_name);
 		current_form.values = values;
+
+		dispatch('reset', { ...values, valid: current_form.valid });
 	};
 </script>
 
@@ -193,6 +195,7 @@
 					<Dirty {field} />
 				{/if}
 			{/each}
+			{#if defaultButtons}
 			<button
 				type="submit"
 				class={btnSubmit.classes && btnSubmit.classes?.length ? btnSubmit.classes?.join(' ') : null}
@@ -204,6 +207,7 @@
 				class={btnReset.classes && btnReset.classes?.length ? btnReset.classes?.join(' ') : null}
 				>{btnReset.text}</button
 			>
+			{/if}
 		</form>
 	{/if}
 {/if}
