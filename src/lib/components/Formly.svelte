@@ -163,6 +163,8 @@
 		});
 		await storeForms.resetValues(form_name);
 		current_form.values = values;
+
+		dispatch('reset', { ...values, valid: current_form.valid });
 	};
 </script>
 
